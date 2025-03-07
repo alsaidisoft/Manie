@@ -8,12 +8,13 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Install DocFX
       run: |
         wget https://github.com/dotnet/docfx/releases/latest/download/docfx-linux-x64.zip
         unzip docfx-linux-x64.zip -d docfx
+        chmod +x docfx/docfx
         echo "$(pwd)/docfx" >> $GITHUB_PATH
 
     - name: Build Documentation
