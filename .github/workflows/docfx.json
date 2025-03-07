@@ -4,6 +4,7 @@
     "output": "_site",
     "globalMetadata": {},
     "xref": [],
-    "xrefTags": []
+    "xrefTags": [],
+    "warningsAsErrors": false
   }
 }
