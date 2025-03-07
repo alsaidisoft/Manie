@@ -1,5 +1,4 @@
 name: Generate DocFX Documentation
-
 on: [push, pull_request]
 
 jobs:
