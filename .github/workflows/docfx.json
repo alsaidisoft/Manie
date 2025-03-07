@@ -1,0 +1,9 @@
+{
+  "build": {
+    "content": [{ "files": ["**/*.cs"] }],
+    "output": "_site",
+    "globalMetadata": {},
+    "xref": [],
+    "xrefTags": []
+  }
+}
