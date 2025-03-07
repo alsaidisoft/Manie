@@ -1,0 +1,1469 @@
+﻿@using System.Threading.Tasks;
+@using APP.Filters;
+@using System;
+@using System.Collections.Generic;
+@using System.Web.Mvc;
+@using System.Web.UI.WebControls;
+@using APP.Util;
+@using portal.Controllers;
+@using Newtonsoft.Json;
+@using SecurityClearanceWebApp.Models;
+@model SecurityClearanceWebApp.Models.GroupPermitsForCompanies
+
+@{
+    ViewBag.Title = "CompanyPermitEdit";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var agree = Resources.Common.ResourceManager.GetString("error_agree" + "_" + ViewBag.lang);
+    var main_z = Resources.Passes.ResourceManager.GetString("main_zone" + "_" + ViewBag.lang);
+    var sub_z = Resources.Passes.ResourceManager.GetString("sub_zone" + "_" + ViewBag.lang);
+    var remove = Resources.Passes.ResourceManager.GetString("Remove" + "_" + ViewBag.lang);
+    var all = Resources.Passes.ResourceManager.GetString("All" + "_" + ViewBag.lang);
+    var choose_sub_z = Resources.Passes.ResourceManager.GetString("choose_sub_zone_again" + "_" + ViewBag.lang);
+    var no_file_ = Resources.Passes.ResourceManager.GetString("not_allowed_m_ten" + "_" + ViewBag.lang);
+    var no_zone_ = Resources.Passes.ResourceManager.GetString("not_allowed_m_50" + "_" + ViewBag.lang);
+    var no_file_format = Resources.Passes.ResourceManager.GetString("file_format" + "_" + ViewBag.lang);
+    var doc = Resources.Passes.ResourceManager.GetString("document_type" + "_" + ViewBag.lang);
+    var choose_car_again = Resources.Passes.ResourceManager.GetString("Choose_car_again" + "_" + ViewBag.lang);
+    var required = Resources.Common.ResourceManager.GetString("required" + "_" + ViewBag.lang);
+    var documents = Resources.Passes.ResourceManager.GetString("main_docs" + "_" + ViewBag.lang);
+    var relative = Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang);
+    var identity = Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang);
+    var no_persons = Resources.Passes.ResourceManager.GetString("Not_allowed_50_person" + "_" + ViewBag.lang);
+    var gender = Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang);
+    var add_employees = Resources.Passes.ResourceManager.GetString("add_employee" + "_" + ViewBag.lang);
+    var expired = Resources.Common.ResourceManager.GetString("expired" + "_" + ViewBag.lang);
+    var countinue = Resources.Common.ResourceManager.GetString("countinue" + "_" + ViewBag.lang);
+    var returned = "-" + Resources.Passes.ResourceManager.GetString("returned" + "_" + ViewBag.lang);
+    var controller = "Mypasses";
+    string barcode = Guid.NewGuid().ToString().Substring(0, 5);
+    var col = 12;
+
+
+    int access = Model.ACCESS_TYPE_CODE.Value;
+    string permit = Model.CARD_FOR_CODE.ToString();
+
+    ViewData["access"] = access.ToString();
+    string currentUser = (new UserInfo()).getSNO();
+
+
+
+
+
+}
+
+
+<style>
+    .hidden {
+        display: none;
+    }
+
+    .k-tooltip-validation {
+        background-color: #d34545 !important;
+        border: 1px solid #ff0000 !important;
+        border-radius: 5px !important;
+        padding: 3px !important;
+        margin-top: 3px !important;
+    }
+
+    .datepicker_recurring_start_sub {
+        width: 100% !important;
+    }
+
+    .error {
+        border-color: red;
+    }
+
+    .error-message {
+        color: red;
+        display: none;
+    }
+</style>
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="col-md-@col">
+        @if (ViewBag.RESPO_STATE > 1)
+        {
+            if (ViewBag.RESPO_STATE == 11)
+            {
+                @*<div class="col-md-12">
+                        @Html.Partial("TempRnoTabs")
+                    </div>*@
+            }
+            else
+            {
+                @Html.Partial("Index")
+            }
+
+            controller = ViewBag.controllerName;
+
+        }
+
+        @if (ViewBag.RESPO_STATE > 1)
+        {
+            <div class="page-path">
+                <a href="@Url.Action("CompanyPermitDetails", "Permitsdtl", new { id = @ViewBag.CompanyPassCode, tab = @ViewBag.activetab })">
+                    <i class="fa fa-eye"></i>
+                    @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)
+                </a>
+                <span>/</span>
+                <a href="@Url.Action("CompanyPermitDelete", "Permitsdtl", new { id = @ViewBag.CompanyPassCode, tab = @ViewBag.activetab })">
+                    <i class="fa fa-trash"></i>
+                    @Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)
+                </a>
+                <span>/</span>
+                <a href="@Url.Action("Comments", "Permitsdtl", new { id = @ViewBag.Permit_code_emp, tab = @ViewBag.activetab })">
+                    <i class="fa fa-comment"></i>
+                    @Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)
+                </a>
+                <span>/</span>
+                <a>
+                    <i class="fa fa-edit"></i>
+                    @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)
+                </a>
+            </div>
+        }
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="card shadow-sm">
+                    <div class="card-header text-primary">
+                        <h5>
+                            <i class="fa fa-edit"></i>
+                            @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)
+                        </h5>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-9 text-primary">
+                                <h4>
+                                    <i class="@ViewBag.PassIcon"></i>&nbsp;
+                                    @ViewBag.PassAccessName
+                                </h4>
+                            </div>
+                            <div class="col-md-3 @align">
+                                <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                    <i class="fa fa-backward"></i>
+                                    @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                                </a>
+                            </div>
+                            <div class="col-md-10"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        @{
+                            if (TempData["Success"] != null)
+                            {
+                                <p class="alert alert-success">@TempData["Success"]</p>
+                            }
+                            if (TempData["Erorr"] != null)
+                            {
+                                <p class="alert alert-danger">@TempData["Erorr"]</p>
+                            }
+                            if (ViewBag.JundStop != "")
+                            {
+                                <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> @ViewBag.JundStop</p>
+                            }
+                        }
+
+                        @using (Html.BeginForm("CompanyPermitEdit", null, FormMethod.Post, new { enctype = "multipart/form-data", id = "myForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                    <div class="row">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                        @if (ViewBag.CRDBY != currentUser.ToUpper())
+                        {
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">@Resources.Passes.ResourceManager.GetString("requested_by" + "_" + ViewBag.lang)</div>
+                                    <div class="card-body">
+                                        <input type="hidden" value="@ViewBag.CRDBY" class="service-number-field" />
+                                    </div>
+                                </div>
+
+                                <br />
+                            </div>
+                        }
+                        <div class="col-md-12">
+                            <span class="alert-warning p-1 rounded">
+                                <b class="text-danger"> * </b>@Resources.Passes.ResourceManager.GetString("required_fields" + "_" + ViewBag.lang)
+                            </span>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-12">
+                            <input type="hidden" value="@Model.UNIT_A" name="RESPONSIBLE" />
+                            <input type="hidden" value="@ViewBag.CompanyPassCode" name="COMPANY_PASS_CODE" />
+                            <input type="hidden" value="@ViewBag.activetab" name="tab" />
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    @Resources.Passes.ResourceManager.GetString("main_info" + "_" + ViewBag.lang)
+                                </div>
+
+                                <div class="row p-2">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Resources.Settings.ResourceManager.GetString("Force" + "_" + ViewBag.lang) <b class="text-danger"> * </b>
+                                            <select name="FORCE_ID" class="form-control" id="FORCEID">
+                                                @foreach (var force in ViewBag.FORCE_CODE)
+                                                {
+                                                    <option value="@force.Value">@force.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang) <b class="text-danger"> * </b>
+
+                                            @Html.DropDownList("STATION_CODE", null, htmlAttributes: new { @class = "form-control", id = "STATION", @Style = "width:100%", @required = "" })
+                                            @Html.ValidationMessageFor(model => model.STATION_CODE, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("main_permits_type" + "_" + ViewBag.lang) <b class="text-danger"> * </b>
+
+                                            @Html.DropDownList("ACCESS_TYPE_CODE", null, htmlAttributes: new { @class = "form-control", id = "MAINACCESS", @Style = "width:100%", @required = "" })
+                                            @Html.ValidationMessageFor(model => model.ACCESS_TYPE_CODE, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Resources.Settings.ResourceManager.GetString("card_for" + "_" + ViewBag.lang) <b class="text-danger"> * </b>
+
+                                            @Html.DropDownList("CARD_FOR_CODE", null, htmlAttributes: new { @class = "form-control", id = "SUBACCESS", @Style = "width:100%", @required = "" })
+                                            @Html.ValidationMessageFor(model => model.CARD_FOR_CODE, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("respo_unit" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                @Html.EditorFor(model => model.UNIT_A, new { htmlAttributes = new { @class = "form-control", @required = "", @ReadOnly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.UNIT_A, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                @Html.DropDownList("COMPANY_CODE", null, htmlAttributes: new { @class = "form-control", id = "COMPANYCODE", style = "width:100%", required = "required" })
+
+                                @Html.ValidationMessageFor(model => model.COMPANY_CODE, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @if ((ViewBag.CISOPENED != true && (ViewBag.RESPO_STATE <= 1 || (ViewBag.RESPO_STATE >= 5 && ViewBag.RESPO_STATE <= 11))))
+                        {
+                            <div class="col-md-12">
+                                <div class="form-group">
+
+                                    @Resources.Passes.ResourceManager.GetString("Workflow_respo" + "_" + ViewBag.lang) <b class="text-danger"> * </b>
+
+
+                                    @Html.DropDownList("WORKFLOW_RESPO_CODE", null, htmlAttributes: new { @class = "form-control", id = "WORKFLOWRESPOCODE", style = "width:100%", required = "required" })
+                                    @Html.ValidationMessageFor(model => model.WORKFLOW_RESPO_CODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(model => model.WORKFLOW_RESPO_CODE)
+
+                        }
+                        @if (ViewBag.CSTATUS != true)
+                        {
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button type="button" id="addPassButton" class="btn btn-primary details btn-block">
+                                    <i class="fa fa-plus-circle"></i>
+                                    @Resources.Passes.ResourceManager.GetString("add_employee" + "_" + ViewBag.lang)
+                                </button>
+                            </div>
+                        </div>
+                        }
+                        <div class="col-md-12">
+                            <div id="passesContainer">
+                                @for (int i = 1; i < Model.permits.Count; i++)
+                                {
+                                    @Html.Partial("_PassForm", Model.permits[i], new ViewDataDictionary { { "index", i } })
+
+
+
+                                }
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12">
+                            <hr />
+                            <h4 class="text-primary">
+                                @Resources.Passes.ResourceManager.GetString("employees" + "_" + ViewBag.lang)
+                            </h4>
+                            @foreach (var listEmloyees in ViewBag.GetEmployees)
+                            {
+                                <div class="col-md-12">
+                                    <div class="alert alert-dark mt-1 btn-block">
+                                        <i class="fa fa-user p-1"></i> @(Language.GetCurrentLang() == "en" ? @listEmloyees.RA42_CARD_FOR_MST.CARD_FOR_E +" - "+@listEmloyees.NAME_E : @listEmloyees.RA42_CARD_FOR_MST.CARD_FOR_A + " - " + @listEmloyees.NAME_A)
+
+                                        <a href="~/@ViewBag.lang/Permitsdtl/Details/@listEmloyees.PERMIT_CODE" class="btn btn-primary details btn-sm"><i class="fa fa-eye"></i></a>
+
+                                        @if (ViewBag.RESPO_STATE > 1 || ViewBag.CREJECTED == true)
+                                        {
+                                            <a href="~/@ViewBag.lang/Permitsdtl/Edit/@listEmloyees.PERMIT_CODE" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a href="~/@ViewBag.lang/Permitsdtl/Delete/@listEmloyees.PERMIT_CODE" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+
+
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        @if (ViewBag.Is_General != true)
+                        {
+                            <div class="col-md-6">
+
+                                <div class="col-md-12">
+                                    <h5 class="alert alert-primary text-center">
+                                        <i class="fa fa-arrows-alt p-1"></i>  @main_z
+                                    </h5>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="dvContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="col-md-12">
+                                    <h5 class="alert bg-dark text-white text-center">
+                                        <i class="fa fa-file-pdf p-1"></i> @documents
+                                    </h5>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="fContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                @foreach (var listZones in ViewBag.GetZones)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="alert alert-dark  mt-1 btn-block"><i class="fa fa-arrows-alt p-1"></i> @(Language.GetCurrentLang() == "en" ? listZones.RA42_ZONE_AREA_MST.ZONE_NAME_E : listZones.RA42_ZONE_AREA_MST.ZONE_NAME) <span id="deletzone"><a href="" id="@listZones.ZONE_MASTER_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span></div>
+                                    </div>
+                                    <span style="display:none" id="zz_@listZones.ZONE_CODE">@listZones.ZONE_CODE</span>
+
+                                }
+                                @if (ViewBag.GetZones.Count == 0)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="alert alert-danger"><i class="fa fa-exclamation"></i> @Resources.Passes.ResourceManager.GetString("zones_not_complete" + "_" + ViewBag.lang)</div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="col-lg-6">
+                                @{
+                                    int[] a = new int[100];
+                                    int x = 0;
+
+                                }
+                                @if (ViewBag.GetFiles.Count != 0)
+                                {
+                                    foreach (var listFiles in ViewBag.GetFiles)
+                                    {
+
+                                        if (listFiles.FILE_TYPE != null)
+                                        {
+                                            if (!string.IsNullOrWhiteSpace(listFiles.FILE_TYPE_TEXT))
+                                            {
+                                                bool check = DateTime.TryParse(listFiles.FILE_TYPE_TEXT, out DateTime dateTime);
+                                                if (check == true)
+                                                {
+                                                    var exp = countinue;
+                                                    var div = "alert-success";
+                                                    DateTime d = Convert.ToDateTime(listFiles.FILE_TYPE_TEXT);
+                                                    if (d < DateTime.Now)
+                                                    {
+                                                        exp = expired;
+                                                        div = "alert-danger";
+                                                    }
+                                                    <div class="col-md-12">
+                                                        <div class="alert alert-dark mt-1 btn-block"><i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E : @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <span class="@div p-1 rounded">@exp | @listFiles.FILE_TYPE_TEXT </span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a> <span id="deletfile"><a href="" id="@listFiles.FILE_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span></div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-md-12">
+                                                        <div class="alert alert-dark mt-1 btn-block"><i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E : @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) | <span style="color: #007bff !important;">@listFiles.FILE_TYPE_TEXT</span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a> <span id="deletfile"><a href="" id="@listFiles.FILE_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span></div>
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-dark mt-1 btn-block"><i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E : @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a> <span id="deletfile"><a href="" id="@listFiles.FILE_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span></div>
+                                                </div>
+                                            }
+
+
+
+                                            {
+                                                a[x] = listFiles.FILE_TYPE;
+                                                x++;
+                                            }
+                                            <span style="display:none" id="ff_@listFiles.FILE_TYPE">@listFiles.FILE_TYPE</span>
+
+                                        }
+                                    }
+
+                                    if (ViewBag.PASS_FILES != ViewBag.GetFiles.Count)
+                                    {
+                                        <div class="col-md-12 p-4">
+                                            <h5>
+                                                <i class="fa fa-file-alt"></i>
+                                                @Resources.Passes.ResourceManager.GetString("documents_not_fit" + "_" + ViewBag.lang)
+                                            </h5>
+                                        </div>
+
+
+                                        foreach (var fileType in ViewBag.PASS_FILES_2)
+                                        {
+
+
+
+                                            var json = JsonConvert.SerializeObject(fileType, Formatting.Indented);
+                                            var json2 = @"[" + json + "]";
+                                            var data = JsonConvert.DeserializeObject<List<dynamic>>(json2);
+                                            int k = Convert.ToInt32(data[0].FILE_TYPE_CODE);
+                                            if (!a.ToList().Contains(k))
+                                            {
+
+
+                                                <div class="col-md-12">
+                                                    <div class="btn btn-outline-danger mt-1 btn-block"><i class="fa fa-exclamation-triangle p-1"></i> @(Language.GetCurrentLang() == "en" ? data[0].FILE_TYPE_E : data[0].FILE_TYPE)</div>
+                                                </div>
+
+
+
+                                            }
+
+                                        }
+                                    }
+                                }
+                                @if (ViewBag.GetFiles.Count == 0)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="alert alert-danger"><i class="fa fa-exclamation"></i> @Resources.Passes.ResourceManager.GetString("documents_not_complete" + "_" + ViewBag.lang)</div>
+                                    </div>
+                                }
+
+                            </div>
+                        }
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                @Html.TextAreaFor(model => model.PURPOSE_OF_PASS, new { @class = "form-control", @required = "", @ReadOnly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.PURPOSE_OF_PASS, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                @Html.TextAreaFor(model => model.REMARKS, new { @class = "form-control", @ReadOnly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.REMARKS, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @if (ViewBag.RESPO_STATE == 4)
+                        {
+                            if (Model.BARCODE == null)
+                            {
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Barcode" + "_" + ViewBag.lang)
+                                        @if (Model.BARCODE != null)
+                                        {
+                                            <input class="form-control text-box single-line"
+                                                   value="@Model.BARCODE"
+                                                   name="BARCODE" type="hidden" readonly />
+                                            <br />
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control text-box single-line"
+                                                   value="@barcode"
+                                                   name="BARCODE" type="hidden" readonly />
+                                            <br />
+                                        }
+                                        <img id="barcode3" />
+                                        @Html.ValidationMessageFor(model => model.BARCODE, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-12"><hr /></div>
+
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(model => model.BARCODE)
+
+                            }
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(model => model.BARCODE)
+
+                        }
+
+                        <div class="col-md-12">
+                            <h4>
+                                @Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)
+                            </h4>
+
+                            <div class="form-group">
+                                <label class="control-label">
+                                    @Resources.Passes.ResourceManager.GetString("Add_comment" + "_" + ViewBag.lang)
+                                </label>
+                                <textarea name="COMMENT" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        @if (ViewBag.COMMENTS != null)
+                        {
+
+                            foreach (var comment in ViewBag.COMMENTS)
+                            {
+                                <div class="col-md-12">
+                                    <div class="form-group">
+
+                                        <div class="card-body" style="background: #c8d0d1; border-radius:5px;">
+                                            <p class="bg-white p-1 rounded">
+                                                @{
+
+                                                    string name = Resources.Passes.ResourceManager.GetString("Autho_type" + "_" + ViewBag.lang) + ": " + (new UserInfo()).WorkFlowType(comment.CRD_BY) + " - " + (new UserInfo()).FULL_NAME(comment.CRD_BY);
+
+                                                    @name
+
+                                                }
+                                                - @Resources.Passes.ResourceManager.GetString("Crd_comment_date" + "_" + ViewBag.lang) - @comment.CRD_DT
+
+                                            </p>
+                                            <br />
+                                            @comment.COMMENT
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <div class="col-md-12">
+
+                            <div class="form-group @align">
+                                @if (ViewBag.CSTATUS == true)
+                                {
+
+                                    if (ViewBag.RESPO_STATE != 0)
+                                    {
+                                        if (ViewBag.RESPO_STATE != 1)
+                                        {
+                                            <button type="submit" value="Approve" class="btn btn-success" name="approvebtn">
+                                                <i class="fa fa-check-circle"></i>
+                                                @Resources.Common.ResourceManager.GetString("approve" + "_" + ViewBag.lang)
+                                            </button>
+                                        }
+                                    }
+                                }
+
+                                else
+                                {
+                                    if (ViewBag.RESPO_STATE == 2 || ViewBag.RESPO_STATE == 3 || ViewBag.RESPO_STATE == 4)
+                                    {
+
+                                        <button type="submit" value="Reject" class="btn btn-danger" name="rejectbtn">
+                                            <i class="fa fa-minus-circle"></i>
+                                            @Resources.Common.ResourceManager.GetString("reject" + "_" + ViewBag.lang)
+
+                                        </button>
+
+                                        <button type="submit" value="Approve" class="btn btn-success" name="approvebtn">
+                                            <i class="fa fa-check-circle"></i>
+                                            @Resources.Common.ResourceManager.GetString("approve" + "_" + ViewBag.lang)
+                                        </button>
+                                    }
+
+                                    if (ViewBag.RESPO_STATE <= 1)
+                                    {
+                                        if (ViewBag.CREJECTED == true)
+                                        {
+                                            <button type="submit" value="Approve" class="btn btn-success" name="approvebtn">
+                                                <i class="fa fa-check-circle"></i>
+                                                @Resources.Common.ResourceManager.GetString("approve" + "_" + ViewBag.lang)
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            if (ViewBag.CISOPENED != true)
+                                            {
+                                                <button type="submit" value="Approve" class="btn btn-success" name="approvebtn">
+                                                    <i class="fa fa-check-circle"></i>
+                                                    @Resources.Common.ResourceManager.GetString("approve" + "_" + ViewBag.lang)
+                                                </button>
+                                            }
+                                        }
+                                    }
+
+
+                                }
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+
+
+@section Scripts {
+    <link href="~/Content/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/select2.min.js"></script>
+    <link href="~/Content/Kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/Kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="~/Scripts/Kendo/js/kendo.all.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            try {
+                AddFiles();
+                AddZones();
+            } catch {
+                console.log("add files and zones successfully!");
+            }
+
+            $("#myForm").kendoValidator({
+                messages: {
+                    required: "@required"
+                }
+            });
+
+
+             $('#deletfile a').click(function (e) {
+     e.preventDefault();
+
+     var id = $(this).attr("Id");
+
+     var MSG = confirm("@Resources.Passes.ResourceManager.GetString("File_confirm_delete" + "_" + ViewBag.lang)");
+
+     if (MSG) {
+
+         $.ajax({
+             type: "POST",
+             url: '@Url.Action("DeleteFile")',
+             data: { id: id },
+             dataType: "json",
+             success: function () {
+                 setTimeout(function () { location.reload(); }, 1);
+             },
+             error: function () {
+                 alert("@Resources.Passes.ResourceManager.GetString("Error_delete_file" + "_" + ViewBag.lang)");
+             }
+         });
+     }
+ })
+
+ $('#deletzone a').click(function (e) {
+     e.preventDefault();
+
+     var id = $(this).attr("Id");
+
+     var MSG = confirm("@Resources.Passes.ResourceManager.GetString("Area_confirm_delete" + "_" + ViewBag.lang)");
+
+     if (MSG) {
+
+         $.ajax({
+             type: "POST",
+             url: '@Url.Action("DeleteZone")',
+             data: { id: id },
+             dataType: "json",
+             success: function () {
+                 setTimeout(function () { location.reload(); }, 1);
+             },
+             error: function () {
+                 alert("@Resources.Passes.ResourceManager.GetString("Error_delete_area" + "_" + ViewBag.lang)");
+             }
+         });
+     }
+ })
+
+            $("#UNIT").kendoComboBox({
+                filter: "contains",
+                change: function (e) {
+                    var widget = e.sender;
+
+                    if (widget.value() && widget.select() === -1) {
+                        //custom has been selected
+                        widget.value(""); //reset widget
+                        //widget.trigger("change");
+                    }
+                }
+            });
+            $("#WORKFLOWRESPOCODE").kendoComboBox({
+                filter: "contains",
+                change: function (e) {
+                    var widget = e.sender;
+
+                    if (widget.value() && widget.select() === -1) {
+                        //custom has been selected
+                        widget.value(""); //reset widget
+                        //widget.trigger("change");
+                    }
+                }
+            });
+            $("#COMPANYCODE").kendoComboBox({
+                filter: "contains",
+                optionLabel: "--اختر--",
+                change: function (e) {
+                    var widget = e.sender;
+
+                    if (widget.value() && widget.select() === -1) {
+                        //custom has been selected
+                        widget.value(""); //reset widget
+                        //widget.trigger("change");
+                    }
+                }
+            });
+
+
+        });
+    </script>
+
+
+
+    <script>
+
+
+
+
+
+        function AddZones() {
+
+
+         var zones = JSON.parse('@Html.Raw(Json.Encode(ViewBag.ZONE_CODE))');
+
+         var dvContainer = document.getElementById("dvContainer");
+         var div = document.createElement("DIV");
+         div.className = "bg-light rounded";
+         //Add data
+         for (var i = 0; i < zones.length; i++) {
+             var z_id = "#zz_" + zones[i].Value;
+             var zz = $(z_id).text();
+             console.log(zz);
+             if (zz != zones[i].Value) {
+             var ddlZones = document.createElement("INPUT");
+             ddlZones.type = "checkbox"
+             ddlZones.name = "ZONE[]"
+             ddlZones.className = "m-2";
+             ddlZones.id = "zone" + i;
+             ddlZones.value = zones[i].Value;
+
+             var Sub_ddlZones = document.createElement("INPUT");
+             Sub_ddlZones.type = "text"
+             Sub_ddlZones.name = "SUB_ZONE[]"
+             Sub_ddlZones.value = 0;
+             Sub_ddlZones.hidden = true;
+
+             var label = document.createElement("label");
+             //Set zone Name in Text part.
+             label.htmlFor = "zone" + i;
+             label.appendChild(document.createTextNode(zones[i].Text));
+             //Set value in Value part.
+             //Add to DIV.
+
+             var br2 = document.createElement("br");
+
+             div.appendChild(ddlZones);
+             div.appendChild(label);
+             div.appendChild(Sub_ddlZones);
+             div.appendChild(br2);
+             dvContainer.appendChild(div);
+         }
+
+         }
+
+
+     }
+
+
+
+function AddFiles() {
+     //Build an array containing Customer records.
+
+
+         var file_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.FILE_TYPES))');
+
+
+
+         //Reference the container DIV.
+         var fContainer = document.getElementById("fContainer")
+         //Add  to DIV.
+         var div = document.createElement("DIV");
+         div.className = "bg-light p-2 rounded";
+         div.id = "file_div";
+
+
+
+
+         //Add the Options to the DropDownList.
+         for (var i = 0; i < file_types.length; i++) {
+             //Create  element.
+             var f_id = "#ff_" + file_types[i].Value;
+             var ff = $(f_id).text();
+             console.log(ff);
+             if (ff != file_types[i].Value) {
+                 var val = file_types[i].Text.split(/-(.*)/)[1];
+                 console.log(val);
+                 var val2 = file_types[i].Text.replace(/\-.*/g, "$'");
+
+
+
+                 var files = document.createElement("INPUT");
+                 files.name = "files";
+                 files.type = "file";
+                 files.id = "file_" + file_types[i].Value + "_" + val;
+                 files.className = "form-control m-1";
+                 files.onchange = function () { setFileType(this.id); };
+
+
+                 var label = document.createElement("label");
+                 //Set file Name in Text part.
+                 label.htmlFor = "file_types_text" + i;
+                 label.appendChild(document.createTextNode(val2));
+
+                 var div_after = document.createElement("DIV");
+                 div_after.id = "lbl" + file_types[i].Value;
+                 var br2 = document.createElement("br");
+
+                 //div.appendChild(file_types_codes);
+                 div.appendChild(label);
+                 div.appendChild(files);
+                 div.appendChild(div_after);
+                 div.appendChild(br2);
+                 fContainer.appendChild(div);
+
+             }
+         }
+
+
+ }
+
+ function setFileType(id) {
+     console.log(id);
+     var file_id = id.split('_')[1];
+     console.log(file_id);
+     var val = id.split('_')[2];
+     console.log(val);
+
+     var file_types_codes = document.createElement("INPUT");
+     file_types_codes.type = "text";
+     file_types_codes.name = "FILE_TYPES[]";
+     file_types_codes.value = file_id;
+     file_types_codes.hidden = true;
+     var fContainer = document.getElementById("fContainer");
+     fContainer.appendChild(file_types_codes);
+
+
+     var file_types_text = document.createElement("INPUT");
+     file_types_text.type = "text";
+     file_types_text.name = "FILE_TYPES_TEXT[]";
+     file_types_text.autocomplete = "off";
+     file_types_text.placeholder = "@Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)";
+     file_types_text.className = "col-md-12 form-control mr-1";
+
+
+             if (val == 1) {
+                 file_types_text.placeholder = "@Resources.Passes.ResourceManager.GetString("worker_id_card_expaired" + "_" + ViewBag.lang)";
+                 file_types_text.className = "col-md-12 form-control mr-1 datepicker_recurring_start";
+                 var dateToday = new Date();
+                 var yrRange = dateToday.getFullYear() + ":" + (dateToday.getFullYear() + 8);
+
+                 $('body').on('focus', ".datepicker_recurring_start", function () {
+                     $(this).datepicker(
+                         {
+                         dateFormat: "dd/mm/yy",
+                         yearRange: yrRange,
+                         changeMonth: true,
+                         numberOfMonths: 1,
+                         changeYear: true,
+                     }
+                     );
+                 });
+
+     }
+     var z = "lbl" + file_id;
+     var file_div = document.getElementById(z);
+     file_div.appendChild(file_types_text);
+
+
+ }
+
+
+       
+        function showpreview(input,index) {
+
+       if (input.files && input.files[0]) {
+
+           var val = $(input).val().toLowerCase(),
+               regex = new RegExp("(.*?)\.(gif|jpg|jpeg|JPEG|GIF|JPG)$");
+
+           if (!(regex.test(val))) {
+               $(input).val('');
+               $('#imagePreview_' + index).css('display', 'none');
+
+               alert('@no_file_format');
+
+           }
+           else {
+               var reader = new FileReader();
+               reader.onload = function (e) {
+                   $('#imagePreview_' + index).css('display', 'inline');
+                   $('#imagePreview_' + index).attr('src', e.target.result);
+               }
+               reader.readAsDataURL(input.files[0]);
+           }
+       }
+   }
+
+
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            var passIndex = @Model.permits.Count;
+            $("#addPassButton").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("GetPassForm", "Permitsdtl")',
+                    type: 'GET',
+                    data: { index: passIndex,station:@Model.STATION_CODE,permit:@Model.CARD_FOR_CODE },
+                    success: function (data) {
+                        $("#passesContainer").append(data);
+                        passIndex++;
+
+                        //add company permit withoutcar docs by defualt
+                        AddEmployeeFilesWithoutCar(passIndex);
+                        const newInputs = $("#subForm_" + passIndex).find('input, select');
+
+                        newInputs.each(function (index, input) {
+                            const name = input.name.replace(/(\[\d*\])$/, '');
+                            var iii = passIndex - 1;
+                            input.name = `${name}[${iii}]`;
+                        });
+                        $("#PASSTYPECODE_" + passIndex).kendoComboBox({
+                            filter: "contains",
+                            change: function (e) {
+                                var widget = e.sender;
+
+                                if (widget.value() && widget.select() === -1) {
+                                    //custom has been selected
+                                    widget.value(""); //reset widget
+                                    //widget.trigger("change");
+                                }
+                            }
+                        });
+
+
+
+
+                        $("#IDENTITY_" + passIndex).kendoComboBox({
+                            filter: "contains",
+                            change: function (e) {
+                                var widget = e.sender;
+
+                                if (widget.value() && widget.select() === -1) {
+                                    //custom has been selected
+                                    widget.value(""); //reset widget
+                                    //widget.trigger("change");
+                                }
+                            }
+                        });
+
+
+                        $("#PLATECHARCODE_" + passIndex).kendoComboBox({
+                            filter: "contains",
+                            change: function (e) {
+                                var widget = e.sender;
+
+                                if (widget.value() && widget.select() === -1) {
+                                    //custom has been selected
+                                    widget.value(""); //reset widget
+                                    //widget.trigger("change");
+                                }
+                            }
+                        });
+                        $("#CARCOLOR_" + passIndex).kendoComboBox({
+                            filter: "contains",
+                            change: function (e) {
+                                var widget = e.sender;
+
+                                if (widget.value() && widget.select() === -1) {
+                                    //custom has been selected
+                                    widget.value(""); //reset widget
+                                    //widget.trigger("change");
+                                }
+                            }
+                        });
+                        $("#catigory_" + passIndex).kendoComboBox({
+                            filter: "contains",
+                            change: function (e) {
+                                var widget = e.sender;
+
+                                if (widget.value() && widget.select() === -1) {
+                                    //custom has been selected
+                                    widget.value(""); //reset widget
+                                    //widget.trigger("change");
+                                }
+                            }
+                        });
+                        $("#GENDER_" + passIndex).kendoComboBox({
+                            filter: "contains",
+                            change: function (e) {
+                                var widget = e.sender;
+
+                                if (widget.value() && widget.select() === -1) {
+                                    //custom has been selected
+                                    widget.value(""); //reset widget
+                                    //widget.trigger("change");
+                                }
+                            }
+                        });
+                        $("#PLATECODE_" + passIndex).kendoComboBox({
+                            filter: "contains",
+                            change: function (e) {
+                                var widget = e.sender;
+
+                                if (widget.value() && widget.select() === -1) {
+                                    //custom has been selected
+                                    widget.value(""); //reset widget
+                                    //widget.trigger("change");
+                                }
+                            }
+                        });
+
+                        $("#expired_date_" + passIndex).kendoDatePicker({
+                            format: "dd/MM/yyyy"
+                        }).data("kendoDatePicker");
+                        //$("#expired_date_" + passIndex).attr("readonly", true);
+
+                        var today = new Date();
+                        var oneYearFromToday = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+
+                        var from = $("#DATE_FROM_" + passIndex).kendoDatePicker({
+                            min: today,
+                            change: fromChange,
+                            format: "dd/MM/yyyy"
+
+                        }).data("kendoDatePicker");
+
+                        var to = $("#DATE_TO_" + passIndex).kendoDatePicker({
+                            max: oneYearFromToday,
+                            change: toChange,
+                            format: "dd/MM/yyyy"
+
+                        }).data("kendoDatePicker");
+
+                        from.max(to.value());
+                        to.min(from.value());
+
+                        function fromChange() {
+                            var fromDate = from.value(),
+                                toDate = to.value();
+
+                            if (fromDate) {
+                                fromDate = new Date(fromDate);
+                                fromDate.setDate(fromDate.getDate());
+                                to.min(fromDate);
+                            } else if (toDate) {
+                                from.max(new Date(toDate));
+                            } else {
+                                to.min(new Date());
+                                from.max(new Date());
+                            }
+                        }
+
+                        function toChange() {
+                            var fromDate = from.value(),
+                                toDate = to.value();
+
+                            if (toDate) {
+                                toDate = new Date(toDate);
+                                toDate.setDate(toDate.getDate());
+                                from.max(toDate);
+                            } else if (fromDate) {
+                                to.min(new Date(fromDate));
+                            } else {
+                                to.min(new Date());
+                                from.max(new Date());
+                            }
+                        }
+                        $("#car_" + passIndex).empty();
+                        $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("GetCars")',
+
+                        dataType: 'json',
+
+                            data: { catigory: $("#catigory_" + passIndex).val() },
+
+
+                        success: function (states) {
+
+
+                        $.each(states, function (i, state) {
+                            //$("#car").append('<option value="' + state['VECHILE_NAME_CODE'] + '">"' + state['VECHILE_NAME'] + '"</option>');
+                            $("#car_" + passIndex).append('<option value="' + state['VECHILE_NAME_CODE'] + '">' +
+                                state['VECHILE_NAME'] + '</option>');
+
+                        });
+                        },
+                        error: function (ex) {
+                            console.log(ex);
+                        }
+                        });
+
+                    }
+                });
+            });
+
+
+        });
+
+        function OnCarCompanyChange(index) {
+
+            $("#car_" + index).empty();
+            $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetCars")',
+
+            dataType: 'json',
+
+                data: { catigory: $("#catigory_" + index).val() },
+
+
+            success: function (states) {
+
+
+            $.each(states, function (i, state) {
+                //$("#car").append('<option value="' + state['VECHILE_NAME_CODE'] + '">"' + state['VECHILE_NAME'] + '"</option>');
+                $("#car_" + index).append('<option value="' + state['VECHILE_NAME_CODE'] + '">' +
+                    state['VECHILE_NAME'] + '</option>');
+
+            });
+            },
+                error: function (ex) {
+                console.log(ex);
+            }
+            });
+            return false;
+        }
+
+
+
+
+        //function RemoveIncremental() {
+        //    const form = document.getElementById('myForm');
+
+        //    // Find all input elements within the form
+        //    const inputs = form.querySelectorAll('input');
+
+        //    // Loop through each input and update its name attribute
+        //    inputs.forEach((input) => {
+        //        // Extract current name attribute, e.g., NAME_E[]
+        //        const name = input.name.replace(/(\[\d*\])$/, '');
+
+        //        // Incremental index
+        //        input.name = `${name}[]`;
+        //    });
+        //}
+
+        function YesCar(index1) {
+            var docContainer = document.getElementById("fContainer_" + index1)
+            var div = document.getElementById("car_option_" + index1);
+            var is_yes_with_car = document.getElementById("yes_car_" + index1);
+            if (is_yes_with_car.checked) {
+                div.style.display = 'block';
+                document.getElementById("is_with_car_" + index1).value = "yes";
+                while (docContainer.firstChild) {
+                    docContainer.removeChild(docContainer.firstChild);
+                }
+                AddEmployeeFilesWithCar(index1);
+
+                const newInputs = $("#subForm_" + index1).find('input, select');
+
+                newInputs.each(function (index, input) {
+                    const name = input.name.replace(/(\[\d*\])$/, '');
+                    var iii = index1 - 1;
+                    input.name = `${name}[${iii}]`;
+                });
+
+            }
+            else {
+                div.style.display = 'none';
+                document.getElementById("is_with_car_" + index1).value = "no";
+                while (docContainer.firstChild) {
+                    docContainer.removeChild(docContainer.firstChild);
+                }
+                const newInputs = $("#subForm_" + index1).find('input, select');
+
+                newInputs.each(function (index, input) {
+                    const name = input.name.replace(/(\[\d*\])$/, '');
+                    var iii = index1 - 1;
+                    input.name = `${name}[${iii}]`;
+                });
+                AddEmployeeFilesWithoutCar(index1);
+
+
+            }
+        }
+
+         function AddEmployeeFilesWithCar(index) {
+ //Build an array containing Customer records.
+
+
+    var file_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.FILE_SUB_TYPES_WITHCAR))');
+
+
+
+     //Reference the container DIV.
+     var fContainer = document.getElementById("fContainer_" + index)
+     //Add  to DIV.
+     var div = document.createElement("DIV");
+     div.className = "p-2 rounded";
+     div.id = "file_div"+index;
+
+
+             var empNum = document.createElement("INPUT");
+             empNum.type = "text";
+             empNum.name = "FILE_INDEX[]";
+             empNum.value = index;
+             empNum.hidden = true;
+ //Add the Options to the DropDownList.
+ for (var i = 0; i < file_types.length; i++) {
+     //Create  element.
+     var val = file_types[i].Text.split(/-(.*)/)[1];
+     console.log(val);
+     var val2 = file_types[i].Text.replace(/\-.*/g, "$'");
+
+     var files = document.createElement("INPUT");
+     files.name = "subfiles[]";
+     files.type = "file";
+     files.id = index+"file_" + file_types[i].Value+"_"+val;
+     files.className = "form-control m-1";
+     files.onchange = function () { setSubFileType(this.id,index); };
+
+
+     var label = document.createElement("label");
+     //Set file Name in Text part.
+     label.htmlFor = index+"file_types_text" + i;
+     label.appendChild(document.createTextNode(val2));
+
+     var div_after = document.createElement("DIV");
+     div_after.id = index+"lbl" + file_types[i].Value;
+     var br2 = document.createElement("br");
+
+     //div.appendChild(file_types_codes);
+     div.appendChild(label);
+     div.appendChild(files);
+     div.appendChild(div_after);
+     div.appendChild(br2);
+     div.appendChild(empNum);
+     fContainer.appendChild(div);
+
+
+ }
+
+
+}
+
+         function AddEmployeeFilesWithoutCar(index) {
+         //Build an array containing Customer records.
+
+
+            var file_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.FILE_SUB_TYPES_WITHOUT_CAR))');
+
+
+
+             //Reference the container DIV.
+             var fContainer = document.getElementById("fContainer_" + index)
+             //Add  to DIV.
+             var div = document.createElement("DIV");
+             div.className = "p-2 rounded";
+             div.id = "file_div" + index;
+
+             var empNum = document.createElement("INPUT");
+             empNum.type = "text";
+             empNum.name = "FILE_INDEX[]";
+             empNum.value = index;
+             empNum.hidden = true;
+         //Add the Options to the DropDownList.
+         for (var i = 0; i < file_types.length; i++) {
+             //Create  element.
+             var val = file_types[i].Text.split(/-(.*)/)[1];
+             console.log(val);
+             var val2 = file_types[i].Text.replace(/\-.*/g, "$'");
+
+             var files = document.createElement("INPUT");
+             files.name = "subfiles[]";
+             files.type = "file";
+             files.id = index+"file_" + file_types[i].Value+"_"+val;
+             files.className = "form-control m-1";
+             files.onchange = function () { setSubFileType(this.id,index); };
+
+
+             var label = document.createElement("label");
+             //Set file Name in Text part.
+             label.htmlFor = index+"file_types_text" + i;
+             label.appendChild(document.createTextNode(val2));
+
+             var div_after = document.createElement("DIV");
+             div_after.id = index+"lbl" + file_types[i].Value;
+             var br2 = document.createElement("br");
+
+             //div.appendChild(file_types_codes);
+             div.appendChild(label);
+             div.appendChild(files);
+             div.appendChild(div_after);
+             div.appendChild(br2);
+             div.appendChild(empNum);
+             fContainer.appendChild(div);
+
+
+         }
+
+
+        }
+
+         function setSubFileType(id,index) {
+             console.log(id);
+             var file_id = id.split('_')[1];
+             console.log(file_id);
+             var val = id.split('_')[2];
+             console.log(val);
+
+             var fContainer = document.getElementById("fContainer_" + index);
+             var file_types_codes = document.createElement("INPUT");
+             file_types_codes.type = "text";
+             file_types_codes.name = "FILE_SUB_TYPES[]";
+             file_types_codes.value = file_id;
+             file_types_codes.hidden = true;
+             fContainer.appendChild(file_types_codes);
+
+
+             var file_types_text = document.createElement("INPUT");
+             file_types_text.type = "text";
+             file_types_text.name = "FILE_SUB_TYPES_TEXT[]";
+             file_types_text.autocomplete = "off";
+             file_types_text.placeholder = "@Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)";
+             file_types_text.className = "col-md-12 form-control mr-1";
+
+
+             if (val == 1) {
+                 file_types_text.placeholder = "@Resources.Passes.ResourceManager.GetString("worker_id_card_expaired" + "_" + ViewBag.lang)";
+                 file_types_text.className = "col-md-12 form-control mr-1 datepicker_recurring_start_sub";
+                 var dateToday = new Date();
+                 var yrRange = dateToday.getFullYear() + ":" + (dateToday.getFullYear() + 12);
+                 $('body').on('focus', ".datepicker_recurring_start_sub", function () {
+                     $(this).datepicker(
+                         {
+                         dateFormat: "dd/mm/yy",
+                         yearRange: yrRange,
+                         changeMonth: true,
+                         numberOfMonths: 1,
+                         changeYear: true,
+                     }
+                     );
+                 });
+
+
+             }
+             var z = index+"lbl" + file_id;
+             var file_div = document.getElementById(z);
+             file_div.appendChild(file_types_text);
+
+
+        }
+
+        function getRandomNumber() {
+            return Math.floor(Math.random() * 100000) + 1;
+        }
+
+    </script>
+
+
+
+    <script src="@Url.Content("~/Scripts/JsBarcode.all.js")"></script>
+    <script>
+        JsBarcode("#barcode3", "@barcode", {
+            format: "code39",
+            displayValue: false,
+            fontSize: 20,
+            height: 20,
+            width:1
+
+        });
+    </script>
+
+
+}
+

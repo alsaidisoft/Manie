@@ -1,0 +1,244 @@
+﻿@using APP.Util
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_AIR_CREW_PASS_DTL>
+
+@{
+    ViewBag.Title = "To print permits";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+
+<style>
+    td, th {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @Html.Partial("Index")
+
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                
+
+                        <div class="card-header text-primary">
+                            <h5>
+                                <i class="fa fa-vr-cardboard"></i>
+                                &nbsp;
+                                @Resources.Passes.ResourceManager.GetString("to_print" + "_" + ViewBag.lang)
+                            </h5>
+                        </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover table-responsive data-table text-center" id="tb">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th>#</th>
+
+                                    <th>
+                                        @Resources.Passes.ResourceManager.GetString("sympol" + "_" + ViewBag.lang)
+                                    </th>
+
+
+                                    <th>
+                                        
+                                            @Resources.Passes.ResourceManager.GetString("Name" + "_" + ViewBag.lang)
+                                        
+                                        
+
+                                    </th>
+
+                                    <th>
+                                        @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)
+
+                                       
+                                    </th>
+                                    <th>
+                                        
+                                            @Resources.Passes.ResourceManager.GetString("proffession" + "_" + ViewBag.lang)
+                                        
+                                     
+                                    </th>
+
+                                    <th>
+                                        @Resources.Passes.ResourceManager.GetString("Phone" + "_" + ViewBag.lang)
+                                    </th>
+
+
+                                    <th>
+                                        @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                                    </th>
+                                  
+                                    <th>
+                                        @Resources.Passes.ResourceManager.GetString("Status" + "_" + ViewBag.lang)
+                                    </th>
+                                    <th style="border-right:1px solid #ccc; width:20%">
+                                        @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int rowNo = 0;}
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    @{rowNo++;}
+                                    <td>@rowNo</td>
+
+
+
+
+
+                                    <td width="10%">
+                                        @Html.DisplayFor(modelItem => item.SERVICE_NUMBER) - @Html.DisplayFor(modelItem => item.CIVIL_NUMBER)
+                                    </td>
+
+
+                                    <td width="15%">
+                                        @{
+                                            string dash = " - ";
+                                        }
+                                        @if (Language.GetCurrentLang() == "en")
+                                        {
+                                            @Html.DisplayFor(modelItem => item.RANK_E) @dash @Html.DisplayFor(modelItem => item.NAME_E)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.RANK_A) @dash @Html.DisplayFor(modelItem => item.NAME_A)
+
+                                        }
+                                    </td>
+
+
+
+
+
+                                    <td>
+                                        @if (item.PERSONAL_IMAGE != null)
+                                        {
+                                            <img src="~/Files/Profiles/@item.PERSONAL_IMAGE" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100" />
+                                        }
+                                        else
+                                        {
+
+                                            var image = "http://mamrafowebgov01/images/" + item.SERVICE_NUMBER + ".gif";
+
+                                            <img src="@image" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100" />
+                                        }
+                                    </td>
+
+
+                                    <td>
+                                        @if (Language.GetCurrentLang() == "en")
+                                        {
+                                            @Html.DisplayFor(modelItem => item.PROFESSION_E)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.PROFESSION_A)
+
+                                        }
+                                    </td>
+
+
+
+
+
+                                    <td width="10%">
+                                        @Html.DisplayFor(modelItem => item.PHONE_NUMBER) - @Html.DisplayFor(modelItem => item.GSM)
+                                    </td>
+
+                                    <td width="15%">
+
+                                        @Html.DisplayFor(modelItem => item.PURPOSE_OF_PASS)
+
+                                    </td>
+
+
+
+                                    <td width="10%">
+
+
+
+                                        @if (item.REJECTED == true)
+                                        {
+                                            <div class="alert alert-danger text-center"><i class="fa fa-times-circle"></i> @Resources.Passes.ResourceManager.GetString("Reject" + "_" + ViewBag.lang)</div>
+                                        }
+                                        else
+                                        {
+
+                                            if (item.STATUS == true)
+                                            {
+
+                                                <div class="alert alert-success text-center">
+                                                    <i class="fa fa-check-circle"></i> @Resources.Passes.ResourceManager.GetString("Approve" + "_" + ViewBag.lang)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="alert alert-warning text-center">
+                                                    <i class="fa fa-hourglass-half"></i> @Resources.Passes.ResourceManager.GetString("Progress" + "_" + ViewBag.lang)
+                                                </div>
+                                            }
+                                        }
+                                    </td>
+
+
+                                    <td style="border-right:1px solid #ccc;" dir="ltr">
+
+                                        <div class="">
+                                            <div class="row justify-content-center">
+                                                <div class="btn-group p-2 justify-content-center">
+                                                    <a class="btn btn-info text-center" href="@Url.Action("Comments", ViewBag.controllerName,  new { id=item.AIR_CREW_PASS_CODE })" title="@Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)">
+                                                        <i class="fa fa-comment"></i>@item.countCommennts(item.AIR_CREW_PASS_CODE)
+
+                                                    </a>
+
+                                                    <a class="btn btn-primary details text-center" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("Details", ViewBag.controllerName,  new { id=item.AIR_CREW_PASS_CODE })">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                    <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("Edit", ViewBag.controllerName,  new { id=item.AIR_CREW_PASS_CODE })">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+
+                                                    <a class="btn btn-danger text-center" title="@Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)" href="@Url.Action("Delete", ViewBag.controllerName, new { id = item.AIR_CREW_PASS_CODE })">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                    @if (ViewBag.RESPO_STATE == 3)
+                                                    {
+                                                        if (item.STATUS == true)
+                                                        {
+
+
+
+                                                            <a class="btn btn-dark text-center" title="@Resources.Common.ResourceManager.GetString("Print" + "_" + ViewBag.lang)" href="@Url.Action("Card", ViewBag.controllerName, new { id = item.AIR_CREW_PASS_CODE })">
+                                                                <i class="fa fa-print"></i>
+                                                            </a>
+                                                        }
+
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

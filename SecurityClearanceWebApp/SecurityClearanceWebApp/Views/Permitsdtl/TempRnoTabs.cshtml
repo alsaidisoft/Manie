@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Tabs";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+
+<style>
+    td, th {
+        text-align: center !important;
+    }
+</style>
+
+
+
+@if ((ViewBag.RESPO_STATE > 1 && ViewBag.RESPO_STATE <= 4) || ViewBag.RESPO_STATE == 11)
+{
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row justify-content-center align-self-center">
+                            <div class="btn-group">
+                                @if (ViewBag.FORCE_TYPE_CODE == 3)
+                                {
+                                    <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "_search_by_car")
+                                { <text>active</text>} " href="@Url.Action("_search_by_car", "Permitsdtl", null)">
+                                        <i class="fa fa-search"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("search_by_car" + "_" + ViewBag.lang)
+                                    </a>
+
+                                    <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "VisitorFromRno")
+                                { <text>active</text>} " href="~/@ViewBag.lang/Permitsdtl/Create?type=9&&permit=16&&station=@ViewBag.STATION_CODE_TYPE">
+                                        <i class="fa fa-search"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("visitor_from_mod" + "_" + ViewBag.lang)
+                                    </a>
+                                    <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "FamilyTemporary")
+                                { <text>active</text>} " href="~/@ViewBag.lang/Permitsdtl/Create?type=9&&permit=13&&station=@ViewBag.STATION_CODE_TYPE">
+                                        <i class="fa fa-users"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("visitor_family_temp" + "_" + ViewBag.lang)
+                                    </a>
+                                    <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "MedicalCenterTemporary")
+                                { <text>active</text>} "href="~/@ViewBag.lang/Permitsdtl/Create?type=9&&permit=11&&station=@ViewBag.STATION_CODE_TYPE">
+                                        <i class="fa fa-clinic-medical"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("medical" + "_" + ViewBag.lang)
+                                    </a>
+                                    <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "VisitorTemporary")
+                                { <text>active</text>} " href="~/@ViewBag.lang/Permitsdtl/Create?type=9&&permit=14&&station=@ViewBag.STATION_CODE_TYPE">
+                                        <i class="fa fa-user-clock"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("temp_visitor" + "_" + ViewBag.lang)
+                                    </a>
+
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+else
+{
+
+
+
+    if (ViewBag.RESPO_STATE > 1 && ViewBag.RESPO_STATE <= 4)
+    {
+        var url = Url.RequestContext.RouteData.Values["id"];
+        var id = int.Parse(url.ToString());
+    <div class="col-md-12 @align">
+        <a href="~/@ViewBag.lang/Mypasses/Select/@id" class="btn btn-outline-dark">
+            <i class="fa fa-backward"></i>
+            @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+        </a>
+    </div>
+    }
+}
+

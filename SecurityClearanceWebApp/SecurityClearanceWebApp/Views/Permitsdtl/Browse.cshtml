@@ -1,0 +1,690 @@
+﻿@using SecurityClearanceWebApp.Util;
+@using System.Globalization
+
+@{
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var app_name = Resources.Common.ResourceManager.GetString("app_name" + "_" + ViewBag.lang);
+    var expired = Resources.Common.ResourceManager.GetString("expired" + "_" + ViewBag.lang);
+    var countinue = Resources.Common.ResourceManager.GetString("countinue" + "_" + ViewBag.lang);
+    var delivered = Resources.Passes.ResourceManager.GetString("delivery_status" + "_" + ViewBag.lang);
+    var not_delivered = Resources.Passes.ResourceManager.GetString("not_delivered" + "_" + ViewBag.lang);
+    var first = Resources.Passes.ResourceManager.GetString("first_page" + "_" + ViewBag.lang);
+    var next = Resources.Passes.ResourceManager.GetString("next_page" + "_" + ViewBag.lang);
+    var perviues = Resources.Passes.ResourceManager.GetString("previous" + "_" + ViewBag.lang);
+    var last = Resources.Passes.ResourceManager.GetString("last_page" + "_" + ViewBag.lang);
+    var urlHttp = Resources.Common.ResourceManager.GetString("urlHttp" + "_" + ViewBag.lang);
+    var returned = Resources.Passes.ResourceManager.GetString("returned" + "_" + ViewBag.lang);
+
+    string type = Request.QueryString["type"];
+    string tab = Request.QueryString["tab"];
+
+
+}
+
+<style>
+    td, th {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    td {
+        border-right: 1px solid #ddd !important;
+    }
+
+    .alert-success {
+        font-size: 16px !important;
+    }
+
+    .pagination {
+        float: left !important;
+        direction: ltr;
+    }
+
+    #tb_processing {
+        position: relative;
+        margin: 0 auto;
+        top: 10%;
+        transform: translate(-450%);
+        z-index: 17;
+        text-align: center !important;
+    }
+</style>
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @Html.Partial("Index")
+
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="@ViewBag.IconTab"></i>
+                        &nbsp;
+                        @Resources.Passes.ResourceManager.GetString(ViewBag.activetab + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+                <div class="card-body">
+
+                    <div class="bg-light rounded p-2 m-1 border">
+                        <h5>@Resources.Passes.ResourceManager.GetString("Search_pass" + "_" + ViewBag.lang): </h5>
+                        <table id="searchTable" class="ui celled table">
+                            <thead></thead>
+                        </table>
+                    </div>
+                    @if (tab == "ToPrint" || tab == "printed_permits")
+                    {
+
+                        if (ViewBag.FORCE_TYPE_CODE == 2 || ViewBag.FORCE_TYPE_CODE == 4)
+                        {
+                            <form id="send-selected-form" action="PrintAllCards" method="get" style="display:none;">
+                                <input type="hidden" id="selected-ids" name="selectedIds" />
+                            </form>
+                            <div class="col-md-12 text-left">
+                                <button id="send-selected" class="btn btn-dark float-left"><i class="fa fa-print"></i> @Resources.Passes.ResourceManager.GetString("print_all" + "_" + ViewBag.lang)</button>
+                            </div>
+                        }
+
+                    }
+                    <table id="tb" class="table @*table-striped*@ table-bordered table-hover mt-3" style="width:100%; display:table !important;">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th></th>
+                                <th>#</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("access_type" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("respo_unit" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("Service_number" + "_" + ViewBag.lang) </th>
+                                <th>@Resources.Passes.ResourceManager.GetString("Civil_number" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("rank" + "_" + ViewBag.lang)</th>
+                                <th width="15%">@Resources.Passes.ResourceManager.GetString("Name" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("Phone" + "_" + ViewBag.lang)</th>
+                                <th width="15%">@Resources.Passes.ResourceManager.GetString("car_details" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)</th>
+                                <th width="15%">@Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("your_request_now" + "_" + ViewBag.lang)</th>
+                                <th width="10%">@Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang)</th>
+                                <th width="10%">@Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)</th>
+                                <th width="10%">@Resources.Passes.ResourceManager.GetString("Falied_pass" + "_" + ViewBag.lang)</th>
+
+                                <th width="10%">@Resources.Passes.ResourceManager.GetString("Status" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("status_returned" + "_" + ViewBag.lang)</th>
+                                <th style="border-right:1px solid #ccc; width:50%">
+                                    @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+                                </th>
+                                <!-- Add other columns as needed -->
+                            </tr>
+
+
+                        </thead>
+                        <tfoot style="display:none">
+                            <tr>
+                                <th>@Resources.Passes.ResourceManager.GetString("respo_unit" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("Service_number" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("Civil_number" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("Plate_char_number" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("Phone" + "_" + ViewBag.lang)</th>
+                                <th>@Resources.Passes.ResourceManager.GetString("Name" + "_" + ViewBag.lang)</th>
+                                @if (type == "5" || type == "6" || tab == "AllPermits")
+                                {
+
+                                    <th>@Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)</th>
+                                }
+                                @if (tab == "AllPermits")
+                                {
+
+                                    <th>@Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)</th>
+                                }
+
+                            </tr>
+                        </tfoot>
+                    </table>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var lang = '@ViewBag.lang';
+            var force_type_code = '@ViewBag.FORCE_TYPE_CODE';
+            var access = '@type';
+            var tab = '@tab';
+             var l = {}
+            var is_expired = false;
+            var is_expired_one_month = false;
+                     if (lang == "ar") {
+                     l = {
+                     "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                     "sLoadingRecords": "جارٍ التحميل...",
+                     "sProcessing": "يتم التحميل <img style='width:30px; height:30px;' src='@Url.Content("~/Content/images/loadingNew.gif")' />",
+                     "sLengthMenu": "أظهر _MENU_ مدخلات",
+                     "sZeroRecords": "لم يعثر على أية سجلات",
+                     "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                     "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                     "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                     "sInfoPostFix": "",
+                     "sSearch": "ابحث:",
+                     "sUrl": "",
+                     "oPaginate": {
+                         "sFirst": "الأول",
+                         "sPrevious": "السابق",
+                         "sNext": "التالي",
+                         "sLast": "الأخير"
+                     },
+                     "oAria": {
+                         "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                         "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                             }
+                         }
+                     }
+                        var empTable = $("#tb").DataTable({
+                            "ajax": {
+                                "url": "./GetList/",
+                                "data": { id: access, tab: tab },
+                                "type": "POST",
+                                "datatype": "json"
+                            },
+                            "columns": [
+                                {
+                                    "name": "Id",
+                                    "data": function (data, type, row, meta) {
+                                        if (data.ControllerName == "Permitsdtl") {
+                                            return `<input type="checkbox" value="${data.Id}" class="row-checkbox" />`;
+                                        }
+                                        else {
+                                            return "";
+                                        }
+                                    },
+                                    orderable: false // Disable sorting on the checkbox column
+                                },
+                                { "data": "Id", "name": "Id" },
+                                { "data": "PermitType", "name": "PermitType" },
+                                { "data": "Unit", "name": "Unit" },
+                                { "data": "ServiceNumber", "name": "ServiceNumber" },
+                                { "data": "CivilNumber", "name": "CivilNumber" },
+                                { "data": "Rank", "name": "Rank" },
+                                { "data": "Name", "name": "Name" },
+
+
+                         {
+
+                             "data": function (data, type, row, meta) {
+                                 var link = "";
+
+                                 if (data.PesronalImage != null) {
+
+
+                                     link = '<img src="@urlHttp@app_name/Files/Profiles/' + data.PesronalImage + '" onerror="this.onerror = null; this.src=@Url.Content("~/Content/images/adminpic.png")"  width="100" height="100"/>';
+
+                                 }
+                                 else {
+                                     var image = new Image();
+                                     var url = 'http://mamrafowebgov01/images/' + data.ServiceNumber + '.gif';
+                                     image.src = url;
+
+                                     if (image.width == 0) {
+                                         link = '<img src="@Url.Content("~/Content/images/adminpic.png")"    width="100" height="100"/>';
+
+                                     }
+                                     else {
+                                         link = '<img src="' + url + '"    width="100" height="100"/>';
+
+                                     }
+                                 }
+                                 data = link;
+
+
+                                 return data;
+                             }, "name": "Id"
+                         },
+
+                         {
+                             "data": function (data, type, row, meta) {
+
+                                 d = "";
+                                 if (data.Phone != null) {
+                                     d = data.Phone + ' - ';
+                                 }
+                                 data = d+data.Gsm ;
+
+
+                                 return data;
+                             }, "name": "Id"
+                                },
+                         {
+                             "data": function (data, type, row, meta) {
+
+
+
+                                 d = "";
+                                 if (data.CarName != "-") {
+                                     d = '<div>@Resources.Passes.ResourceManager.GetString("Vechile_cat" + "_" + ViewBag.lang): '+data.CarName+'<br>';
+                                     d += '@Resources.Passes.ResourceManager.GetString("Vechile_name" + "_" + ViewBag.lang): ' + data.CarType + '<br>';
+                                     d += '@Resources.Passes.ResourceManager.GetString("Vechile_color" + "_" + ViewBag.lang): ' + data.CarColor + '<br>';
+                                     d += '@Resources.Passes.ResourceManager.GetString("car_number" + "_" + ViewBag.lang): <br>'+data.PlateNumber;
+                                     d += '</div>';
+                                 }
+                                 else {
+                                     d = data.PlateNumber;
+                                 }
+                                 data = d;
+
+
+
+
+                                 return data;
+                             }, "name": "Id"
+                                },
+
+                                {"data": "StationName", "name": "StationName"},
+                                { "data": "Company", "name": "Company" },
+                                { "data": "PurposeOfPass", "name": "PurposeOfPass" },
+                                { "data": "Workflow", "name": "Workflow" },
+
+                                {
+                                    "data": function (data, type, row, meta) {
+                                        var d = data.IssueingDate;
+
+
+                                        data = d.substring(0, 10);
+
+                                        return data;
+                                    }, "name": "IssueingDate"
+                                },
+
+                                 {
+                                  "data": function (data, type, row, meta) {
+                                         var d = "";
+
+                                         if (data.ExpiredDate != null) {
+
+                                             jd = dtConvFromJSONNoTime(data.ExpiredDate);
+                                             d = jd;
+
+
+
+                                         }
+                                         else {
+
+                                              d = '';
+
+                                         }
+                                         data = d;
+
+                                         return data;
+                                     }, "name": "ExpiredDate"
+                                 },
+                         {
+                          "data": function (data, type, row, meta) {
+                                 var d = "";
+
+                                 if (data.ExpiredDate != null) {
+
+                                     jd = dtConvFromJSONNoTime(data.ExpiredDate);
+                                     is_expired_one_month = isExpiringWithinOneMonth(jd);
+                                     var today = new Date();
+                                     var dd = String(today.getDate()).padStart(2, '0');
+                                     var mm = String(today.getMonth() + 1).padStart(2, '0');
+                                     var yy = today.getFullYear();
+
+                                     today = yy + '-' + mm + '-' + dd;
+                                     j =  Date.parse(jd);
+                                     t =  Date.parse(today);
+                                     if (t <= j) {
+                                         d = '<div class="alert alert-primary p-2 text-center"><i class="fa fa-clock"></i> @countinue</div>';
+                                         is_expired = false;
+
+                                     }
+                                     else {
+                                         d = '<div class="alert alert-danger p-2 text-center"><i class="fa fa-clock"></i> @expired</div>';
+                                         is_expired = true;
+                                     }
+
+
+
+                                 }
+                                 else {
+
+                                      d = '';
+
+                                 }
+                                 data = d;
+
+                                 return data;
+                             }, "name": "ExpiredDate"
+                         },
+                         {
+
+                             "data": function (data, type, row, meta) {
+                                 var d = "";
+
+                                 if (data.Rejected == true) {
+
+
+                                     d = '<div class="alert alert-danger p-2 text-center "><i class="fa fa-times-circle"></i> @Resources.Passes.ResourceManager.GetString("Reject" + "_" + ViewBag.lang)</div>';
+
+                                 }
+                                 else {
+                                     if (data.Status == true) {
+
+                                         d = '<div class="alert alert-success p-2 text-center"><i class="fa fa-check-circle"></i> @Resources.Passes.ResourceManager.GetString("Approve" + "_" + ViewBag.lang)</div>';
+
+
+                                     } else {
+
+                                         d = '<div class="alert alert-warning p-2 text-center"><i class="fa fa-hourglass-half"></i> @Resources.Passes.ResourceManager.GetString("Progress" + "_" + ViewBag.lang)</div>';
+
+                                     }
+
+                                 }
+                                 data = d;
+
+
+                                 return data;
+                             }, "name": "Id"
+
+
+                                },
+                                { "data": function (data, type, row, meta) {
+                                        var d = "";
+
+                                    if (data.Returned == true) {
+
+
+                                                d = '<div class="text-center"> @returned</div>';
+
+
+                                        }
+                                    else {
+                                        if (data.ControllerName == "Permitsdtl") {
+                                            d = Return(data.Id, 1000);
+                                        } else {
+                                            d = Return(data.Id, data.AccessNumber);
+                                        }
+                                        }
+                                        data = d;
+
+                                        return data;
+                                    }, "name": "Id"},
+                                {
+
+                                 "data": function (data, type, row, meta) {
+                                        var link = "";
+                                        var editlink = '<a href="../' + data.ControllerName + '/' + editAction + '/?id=' + editId + '&&tab=' + tab + '" class="btn btn-warning text-center"><i class="fa fa-edit"></i></a>';
+                                        var ex = "";
+                                        var editId = data.Id;
+                                        var editAction = "Edit";
+                                        if (data.CompanyPermitId != 0) {
+                                            editId = data.CompanyPermitId;
+                                            if (data.ControllerName == "Permitsdtl") {
+                                                editAction = "CompanyPermitEdit";
+                                            }
+                                        }
+                                        if (data.Status == true) {
+                                            link = '<a href="../' + data.ControllerName + '/card/?id=' + data.Id + '&&tab=' + tab + '" class="btn btn-dark text-center"><i class="fa fa-id-card-alt"></i></a>';
+                                            if ((is_expired == true || is_expired_one_month == true) && data.Printed == true && data.ControllerName =="Permitsdtl") {
+                                                if (tab == "printed_permits" || tab == "AllPermits") {
+                                                    ex = '<a href="../' + data.ControllerName + '/Renew/?id=' + data.Id + '&&tab=' + tab + '" class="btn btn-success text-center" title="@Resources.Passes.ResourceManager.GetString("renew" + "_" + ViewBag.lang)"><i class="fa fa-paste"></i></a>';
+                                                }
+                                            }
+                                            if ((is_expired == true || is_expired_one_month == true) && data.Printed == true) {
+                                                if (tab == "printed_permits" || tab == "AllPermits") {
+                                                    editlink = "";
+                                                }
+
+                                            }
+                                        }
+
+
+                                        //getComments(data.Id, data.AccessNumber, data.ControllerName);
+
+                                        data = ' <div class="btn-group" dir="ltr">' + link + '<a href="../' + data.ControllerName + '/Comments/?id=' + data.Id + '&&tab=' + tab + '" class="btn btn-info text-center"><i class="fa fa-comment"></i>' + data.Comments + '</a><a href="../' + data.ControllerName + '/Details/?id=' + data.Id + '&&tab=' + tab + '" class="btn btn-primary details text-center"><i class="fa fa-eye"></i></a>' + editlink +'<a href="../' + data.ControllerName + '/Delete/?id=' + data.Id + '&&tab=' + tab + '" class="btn btn-danger text-center"><i class="fa fa-trash"></i></a>' + ex + '</div>';
+
+
+                                      return data;
+                             }, "name": "Id"
+                         }
+
+
+
+
+
+                            ],
+                    columnDefs: [
+                        {
+                            targets: 0, // Apply to the first column
+                            title: `<input type="checkbox" id="master-checkbox" />`, // Add master checkbox in the header
+                            orderable: false // Disable ordering on this column
+                        }
+                    ],
+                     //"stateSave": true,
+                     "scrollCollapse": "true",
+                     "serverSide": "true",
+                     "scrollX": "true",
+                     "order": [[1, "ASC"]],
+                     "lengthMenu": [[10, 25, 50, 250, -1], [10, 25, 50, 250]],
+                     "processing": "true",
+                     "bInfo": "true",
+
+                         "language": l
+
+                     ,
+
+                            "dom": '<"top"l>rt<"bottom"ip><"clear">',
+                            "fnInitComplete": function (oSettings, json) {
+                                addSearchControl(json);
+
+                                empTable.column(0).visible(false);
+                                empTable.column(15).visible(true);
+                                empTable.column(16).visible(true);
+                                empTable.column(19).visible(false);
+                                empTable.column(12).visible(false);
+                                empTable.column(18).visible(true);
+                                if (tab != "AllPermits") {
+                                    empTable.column(11).visible(false);
+                                    empTable.column(14).visible(false);
+                                    empTable.column(15).visible(false);
+                                }
+
+                                if (tab == "ToPrint" || tab == "NewPermits" || tab == "AuthoPermits" || tab == "printed_permits") {
+                                    if (tab == "ToPrint" || tab =="printed_permits") {
+                                        if (force_type_code == 2 || force_type_code == 4) {
+                                            empTable.column(0).visible(true);
+                                        }
+
+                                    }
+                                    empTable.column(15).visible(false);
+                                    empTable.column(16).visible(false);
+                                    empTable.column(17).visible(false);
+                                }
+                                if (access == "5" || access == "6") {
+                                    empTable.column(12).visible(true);
+                                    empTable.column(13).visible(true);
+                                    empTable.column(4).visible(false);
+                                    empTable.column(6).visible(false);
+
+                                }
+                                if (tab == "printed_permits") {
+                                    empTable.column(15).visible(true);
+                                    empTable.column(16).visible(true);
+                                    empTable.column(17).visible(true);
+                                    empTable.column(18).visible(false);
+                                    empTable.column(19).visible(true);
+
+
+                                }
+                            }
+
+
+
+
+                 });
+
+
+
+                        function addSearchControl(json) {
+                            $("#searchTable thead").append($("#tb tfoot tr:first").clone());
+                            $("#searchTable thead tr:eq(0) th").each(function (index) {
+
+                                var title = $('#tb tfoot th').eq($(this).index()).text();
+
+                                $(this).replaceWith('<th><input type="text" class="form-control text-center"  placeholder="' + title + '"></input></th>');
+
+                                var searchControl = $("#searchTable thead tr:eq(0) th:eq(" + index + ") input");
+                                searchControl.on('keyup', function () {
+                                    delay(function () {
+                                        empTable.column(index).search(searchControl.val()).draw();
+
+                                    }, 1000, this);
+                                });
+
+
+                            });
+                        }
+
+           const MAX_SELECTION = 10; // Maximum number of checkboxes allowed
+
+// Handle master checkbox click event
+$(document).on('click', '#master-checkbox', function () {
+    let isChecked = $(this).is(':checked');
+    if (isChecked) {
+        let selectableCount = $('.row-checkbox:checked').length + $('.row-checkbox:not(:checked)').length;
+        if (selectableCount > MAX_SELECTION) {
+            alert(`لا يمكن اختيار أكثر من ${MAX_SELECTION} تصريح`);
+            $(this).prop('checked', false); // Uncheck master checkbox
+        } else {
+            $('.row-checkbox:not(:checked)').slice(0, MAX_SELECTION - $('.row-checkbox:checked').length).prop('checked', true);
+        }
+    } else {
+        $('.row-checkbox').prop('checked', false);
+    }
+});
+
+// Optional: Handle individual checkbox click to sync with master checkbox
+$(document).on('click', '.row-checkbox', function () {
+    let selectedCount = $('.row-checkbox:checked').length;
+
+    if (selectedCount > MAX_SELECTION) {
+        alert(`You can select up to ${MAX_SELECTION} items only.`);
+        $(this).prop('checked', false); // Prevent selecting more than allowed
+    } else {
+        let allChecked = selectedCount === $('.row-checkbox').length;
+        $('#master-checkbox').prop('checked', allChecked);
+    }
+});
+
+// Send selected IDs when the button is clicked
+$('#send-selected').on('click', function () {
+    let selectedIds = [];
+    $('.row-checkbox:checked').each(function () {
+        selectedIds.push($(this).val()); // Collect selected checkbox values
+    });
+
+    if (selectedIds.length > 0) {
+        if (selectedIds.length <= MAX_SELECTION) {
+            // Populate the hidden input with selected IDs and submit the form
+            $('#selected-ids').val(selectedIds.join(',')); // Join IDs as a comma-separated string
+            $('#send-selected-form').submit(); // Submit the form
+        } else {
+            alert(`You can only select up to ${MAX_SELECTION} items.`);
+        }
+    } else {
+        alert('@Resources.Passes.ResourceManager.GetString("you_dont_choose" + "_" + ViewBag.lang)');
+    }
+});
+
+            function isExpiringWithinOneMonth(expiryDate) {
+                const currentDate = new Date();
+                const oneMonthBeforeExpiry = new Date(expiryDate);
+                oneMonthBeforeExpiry.setMonth(oneMonthBeforeExpiry.getMonth() - 1);
+
+                // Check if the current date is within the last month before the expiry date
+                return currentDate >= oneMonthBeforeExpiry && currentDate <= new Date(expiryDate);
+            }
+             function dtConvFromJSONNoTime(data) {
+                 jsonDate = data;
+                 var d = new Date(parseInt(jsonDate.substr(6)));
+                 d.toLocaleTimeString('en-GB');
+                 var m, day;
+                 m = d.getMonth() + 1;
+                 if (m < 10)
+                     m = '0' + m
+                 if (d.getDate() < 10)
+                     day = '0' + d.getDate()
+                 else
+                     day = d.getDate();
+                 var formattedDate = d.getFullYear() + "-" + m + "-" + day;
+
+
+                 //var formattedTime = hours + ":" + minutes + " " + PM_AM;
+                 formattedDate = formattedDate;
+                 return formattedDate;
+         }
+
+                    function Return(id, acc) {
+
+
+                        return '<a href="#" onclick="ret(' + id + ',' + acc +')"  class="btn btn-outline-dark" title="@Resources.Passes.ResourceManager.GetString("are_you_sure_you_want_return" + "_" + ViewBag.lang)"><i class="fa fa-check-circle"></i></a>';
+
+            }
+
+
+        });
+
+
+        function ret(id,acc) {
+            var MSG = confirm("@Resources.Passes.ResourceManager.GetString("are_you_sure_you_want_return" + "_" + ViewBag.lang)");
+
+                if (MSG) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Returned", "Mypasses",null)',
+                        data: { id: id, access: acc },
+                        dataType: "json",
+                        success: function () {
+                            setTimeout(function () { location.reload(); }, 1);
+                        },
+                        error: function () {
+                            alert("@Resources.Passes.ResourceManager.GetString("error" + "_" + ViewBag.lang)");
+                        }
+                    });
+               }
+            }
+
+
+
+
+
+        var delay = (function () {
+            var timer = 0;
+            return function (calback, ms, that) {
+                clearTimeout(timer);
+                timer = setTimeout(calback.bind(that), ms);
+            };
+        })();
+
+    </script>
+}

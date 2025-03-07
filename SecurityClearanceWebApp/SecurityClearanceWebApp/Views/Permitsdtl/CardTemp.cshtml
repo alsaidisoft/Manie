@@ -1,0 +1,1298 @@
+﻿@using Newtonsoft.Json;
+@using portal.Controllers;
+@using System.Data.Entity; 
+@using SecurityClearanceWebApp.Models;
+@using APP.Util;
+@model SecurityClearanceWebApp.Models.RA42_PERMITS_DTL
+
+@{
+    ViewBag.Title = "Card";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+    RA42_SECURITY_CLEARANCEEntities db = new RA42_SECURITY_CLEARANCEEntities();
+
+
+    string barcode = Guid.NewGuid().ToString().Substring(0, 5);
+    var app_name = Resources.Common.ResourceManager.GetString("app_name" + "_" + ViewBag.lang);
+    var required = Resources.Common.ResourceManager.GetString("required" + "_" + ViewBag.lang);
+    var choose_trans = Resources.Passes.ResourceManager.GetString("choose_transaction_type" + "_" + ViewBag.lang);
+    var expired = Resources.Common.ResourceManager.GetString("expired" + "_" + ViewBag.lang);
+    var countinue = Resources.Common.ResourceManager.GetString("countinue" + "_" + ViewBag.lang);
+    var urlHttp = Resources.Common.ResourceManager.GetString("urlHttp" + "_" + ViewBag.lang);
+    string currentUser = (new UserInfo()).getSNO();
+    int access = Model.RA42_ACCESS_TYPE_MST.ACCESS_SECRET_CODE.Value;
+    string permit = Model.RA42_CARD_FOR_MST.CARD_SECRET_CODE;
+
+    ViewData["access"] = access.ToString();
+
+}
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @if (ViewBag.RESPO_STATE == 11)
+        {
+            @Html.Partial("TempRnoTabs")
+           
+        }
+
+                <div class="col-md-12">
+                    <br />
+
+                    <div class="card shadow-sm">
+
+                        <div class="card-header text-primary">
+                            <h5>
+                                <i class="fa fa-id-card-alt"></i>
+                                @Resources.Passes.ResourceManager.GetString("crad_print" + "_" + ViewBag.lang)
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-9 text-primary">
+                                    <h4>
+                                        <i class="@Model.RA42_ACCESS_TYPE_MST.ICON"></i>&nbsp;
+                                        @(Language.GetCurrentLang() == "en" ? Model.RA42_CARD_FOR_MST.CARD_FOR_E : Model.RA42_CARD_FOR_MST.CARD_FOR_A)
+                                    </h4>
+                                </div>
+                                <div class="col-md-3 @align">
+                                    <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                        <i class="fa fa-backward"></i>
+                                        @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-md-6">
+
+
+                                    <div class="row">
+
+
+
+                                        <div class="col-md-12">
+                                            <span id="PERMIT_CODE" style="display: none;">@Model.PERMIT_CODE</span>
+
+                                            <div class="card">
+                                                <div class="card-header">@Resources.Passes.ResourceManager.GetString("requested_by" + "_" + ViewBag.lang)</div>
+                                                <div class="card-body">
+                                                    <input type="hidden" value="@Model.CRD_BY" class="service-number-field" />
+                                                </div>
+                                            </div>
+                                            <br />
+
+
+                                            @if (!string.IsNullOrWhiteSpace(Model.PERSONAL_IMAGE))
+                                            {
+                                                <div class="form-group">
+
+                                                    <div class="card ">
+                                                        <div class="card-header">@Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)</div>
+                                                        <div class="row p-4">
+                                                            <div class="col-2 text-center bg-light p-2">
+                                                                <div class="m-1"><img src="~/Files/Profiles/@Model.PERSONAL_IMAGE" id="original" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.jpg")'" width="100" height="100" /></div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <br />
+                                            }
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    @Resources.Passes.ResourceManager.GetString("main_info" + "_" + ViewBag.lang)
+                                                </div>
+
+                                                <div class="row p-2">
+
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            @Resources.Settings.ResourceManager.GetString("Force" + "_" + ViewBag.lang)
+                                                            <p class="text-primary">
+                                                                @(Language.GetCurrentLang() == "en" ? Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_E :
+Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_A)
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)                                                <p class="text-primary">
+                                                                @(Language.GetCurrentLang() == "en" ? Model.RA42_STATIONS_MST.STATION_NAME_E :
+Model.RA42_STATIONS_MST.STATION_NAME_A)
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            @Resources.Passes.ResourceManager.GetString("main_permits_type" + "_" + ViewBag.lang)                                                <p class="text-primary">
+                                                                @(Language.GetCurrentLang() == "en" ? Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E :
+Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE)
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            @Resources.Settings.ResourceManager.GetString("card_for" + "_" + ViewBag.lang)                                                <p class="text-primary">
+                                                                @(Language.GetCurrentLang() == "en" ? Model.RA42_CARD_FOR_MST.CARD_FOR_E :
+Model.RA42_CARD_FOR_MST.CARD_FOR_A)
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("hosted" + "_" + ViewBag.lang)
+                                                <p class="text-primary" id="responsible">@Model.RESPONSIBLE</p>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                        @if (Model.COMPANY_CODE != null)
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)
+                                                    <p class="text-primary" id="company">@(Language.GetCurrentLang() == "en" ? Model.RA42_COMPANY_MST.COMPANY_NAME_E : Model.RA42_COMPANY_MST.COMPANY_NAME)</p>
+                                                    <hr />
+                                                </div>
+                                            </div>
+
+                                        }
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Visitor_name" + "_" + ViewBag.lang)
+                                                <p class="text-primary" id="name">@Model.NAME_A</p>
+                                                <hr />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @if (Model.CARD_FOR_CODE == 16)
+                                                {
+                                                    @Resources.Passes.ResourceManager.GetString("Service_number" + "_" + ViewBag.lang)
+                                                    <p class="text-primary" id="numberc">@Model.SERVICE_NUMBER</p>
+                                                    <p style="display:none;" id="card_for">@Model.RA42_CARD_FOR_MST.CARD_SECRET_CODE</p>
+
+
+                                                }
+                                                else
+                                                {
+                                                    @Resources.Passes.ResourceManager.GetString("worker_identity_card" + "_" + ViewBag.lang)
+                                                    <p class="text-primary" id="numberc">@Model.CIVIL_NUMBER</p>
+
+
+                                                }
+                                                <hr />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang)
+                                                <p class="text-primary" id="identity">@(Language.GetCurrentLang() == "en" ? Model.RA42_IDENTITY_MST.IDENTITY_TYPE_E : Model.RA42_IDENTITY_MST.IDENTITY_TYPE_A)</p>
+                                                <hr />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang)
+                                                <p class="text-primary" id="gender">@(Language.GetCurrentLang() == "en" ? Model.RA42_GENDERS_MST.GENDER_E : Model.RA42_GENDERS_MST.GENDER_A)</p>
+                                                <hr />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Gsm" + "_" + ViewBag.lang)
+
+                                                <p class="text-primary">@Model.GSM</p>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                        @if (Model.RELATIVE_TYPE_CODE != null)
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang)
+                                                    <p class="text-primary">@(Language.GetCurrentLang() == "en" ? Model.RA42_RELATIVE_TYPE_MST.RELATIVE_TYPE_E : Model.RA42_RELATIVE_TYPE_MST.RELATIVE_TYPE)</p>
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("number_of_hosted" + "_" + ViewBag.lang)
+
+                                                <p class="text-primary" id="num_hosted">@Model.NUMBER_OF_HOSTED</p>
+                                                <hr />
+                                            </div>
+                                        </div>
+
+                                        @if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 14)
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("visitor_employer" + "_" + ViewBag.lang)
+                                                    <p class="text-primary">@Model.VISITOR_EMPLOYER</p>
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (Model.CARD_FOR_CODE == 11)
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("sn_host" + "_" + ViewBag.lang)
+                                                    <p class="text-primary">@Model.SN_FOR_THE_GUARDIAN</p>
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (Model.CARD_FOR_CODE == 14 || Model.CARD_FOR_CODE == 13)
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Building_num" + "_" + ViewBag.lang)
+                                                    <p class="text-primary">@Model.BUILDING_NUMBER</p>
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (Model.CARD_FOR_CODE == 14 || Model.CARD_FOR_CODE == 13)
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("host_phone_number" + "_" + ViewBag.lang)
+                                                    <p class="text-primary">@Model.PHONE_NUMBER</p>
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (Model.VECHILE_CODE != null)
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Vechile_cat" + "_" + ViewBag.lang)
+                                                    <p class="text-primary">@(Language.GetCurrentLang() == "en" ? Model.RA42_VECHILE_CATIGORY_MST.VECHILE_CAT_E : Model.RA42_VECHILE_CATIGORY_MST.VECHILE_CAT )</p>
+                                                    <hr />
+                                                </div>
+
+                                            </div>
+
+                                            if (Model.VECHILE_NAME_CODE != null)
+                                            {
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("Vechile_name" + "_" + ViewBag.lang)
+                                                        <p class="text-primary">@(Language.GetCurrentLang() == "en" ? Model.RA42_VECHILE_NAME_MST.VECHILE_NAME_E : Model.RA42_VECHILE_NAME_MST.VECHILE_NAME)</p>
+                                                        <hr />
+
+                                                    </div>
+                                                </div>
+
+                                                <p id="type" style="display: none">@(Language.GetCurrentLang() == "en" ? Model.RA42_VECHILE_CATIGORY_MST.VECHILE_CAT_E : Model.RA42_VECHILE_CATIGORY_MST.VECHILE_CAT ) - @(Language.GetCurrentLang() == "en" ? Model.RA42_VECHILE_NAME_MST.VECHILE_NAME_E : Model.RA42_VECHILE_NAME_MST.VECHILE_NAME)</p>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("Plate_type" + "_" + ViewBag.lang)
+                                                        <p class="text-primary">@(Language.GetCurrentLang() == "en" ? Model.RA42_PLATE_TYPE_MST.PLATE_TYPE_E : Model.RA42_PLATE_TYPE_MST.PLATE_TYPE)</p>
+                                                        <hr />
+
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Plate_number" + "_" + ViewBag.lang)
+                                                    <p class="text-primary">@Model.PLATE_NUMBER</p>
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                            if (Model.PLATE_CHAR_CODE != null)
+                                            {
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("Plate_char" + "_" + ViewBag.lang)
+                                                        <p class="text-primary">@(Language.GetCurrentLang() == "en" ? Model.RA42_PLATE_CHAR_MST.PLATE_CHAR_E : Model.RA42_PLATE_CHAR_MST.PLATE_CHAR)</p>
+                                                        <hr />
+
+                                                    </div>
+                                                </div>
+
+                                                <p id="char" style="display:none;">@(Language.GetCurrentLang() == "en" ? Model.RA42_PLATE_CHAR_MST.PLATE_CHAR_E : Model.RA42_PLATE_CHAR_MST.PLATE_CHAR)</p>
+                                                <p id="vechilnum" style="display: none">@Model.PLATE_NUMBER </p>
+                                            }
+                                            if (Model.VECHILE_COLOR_CODE != null)
+                                            {
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("Vechile_color" + "_" + ViewBag.lang)
+                                                        <p class="text-primary" id="color">@(Language.GetCurrentLang() == "en" ? Model.RA42_VECHILE_COLOR_MST.COLOR_E : Model.RA42_VECHILE_COLOR_MST.COLOR)</p>
+                                                        <hr />
+
+                                                    </div>
+                                                </div>
+                                            }
+                                            <span style="display:none" id="car_available">توجد مركبة</span>
+                                        }
+                                        else
+                                        {
+                                            <span id="type">-</span>
+                                            <span id="char"></span>
+                                            <span id="vechilnum"></span>
+                                            <span id="color">-</span>
+                                            <span style="display:none" id="car_available">نعم</span>
+
+                                        }
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                                                <p class="text-primary" id="purpose">@Model.PURPOSE_OF_PASS</p>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                                <p class="text-primary">@Model.REMARKS</p>
+                                                <hr />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    @Resources.Passes.ResourceManager.GetString("Duration" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="row p-2">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            @Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang)
+                                                            <p class="text-primary" id="frdate">
+                                                                @if (Model.DATE_FROM != null)
+                                                                {@Model.DATE_FROM.Value.ToString("dd/MM/yyyy")}
+                                                            else { }
+                                                            </p>
+                                                            <span style="display:none" id="today_date">@DateTime.Today.Date.ToString("dd/MM/yyyy")</span>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            @Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)
+
+                                                            <p class="text-primary" id="date">
+                                                                @if (Model.DATE_TO != null)
+                                                                {@Model.DATE_TO.Value.ToString("dd/MM/yyyy")}
+                                                            else { }
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @if (ViewBag.GetRelativs.Count > 0)
+                                        {
+                                            <div class="col-md-12">
+
+                                                <table class="table table-responsive table-striped table-bordered text-center mt-3">
+                                                    <thead class="bg-primary">
+                                                        <tr>
+                                                            @if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 13)
+                                                            {
+                                                                <th colspan="8">@Resources.Passes.ResourceManager.GetString("members_allowed" + "_" + ViewBag.lang)</th>
+                                                            }
+                                                            else
+                                                            {
+                                                                <th colspan="7">@Resources.Passes.ResourceManager.GetString("members_allowed" + "_" + ViewBag.lang)</th>
+
+                                                            }
+                                                        </tr>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th width="25%">@Resources.Common.ResourceManager.GetString("name" + "_" + ViewBag.lang)</th>
+                                                            <th width="15%">@Resources.Passes.ResourceManager.GetString("Civil_number" + "_" + ViewBag.lang)</th>
+                                                            <th>@Resources.Passes.ResourceManager.GetString("passport_number" + "_" + ViewBag.lang)</th>
+                                                            <th>@Resources.Passes.ResourceManager.GetString("Phone" + "_" + ViewBag.lang)</th>
+                                                            <th>@Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang)</th>
+                                                            <th width="30%">@Resources.Common.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)</th>
+                                                            @if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 13)
+                                                            {
+                                                                <th>@Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang)</th>
+                                                            }
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{int tt = 1;}
+                                                        @foreach (var mem in ViewBag.GetRelativs)
+                                                        {
+                                                            { tt = tt + 1; }
+                                                            <tr>
+                                                                <td>@mem.MEMBER_CODE</td>
+                                                                <td>
+                                                                    @if (!string.IsNullOrWhiteSpace(mem.PERSONAL_IMAGE))
+                                                                    {
+                                                                        <img src="@Url.Content("~/Files/Profiles/" + mem.PERSONAL_IMAGE)" width="50" height="50" />
+                                                                    } @mem.FULL_NAME
+
+                                                                </td>
+                                                                <td>@mem.CIVIL_NUMBER</td>
+                                                                <td>@mem.PASSPORT_NUMBER</td>
+                                                                <td>@mem.PHONE_NUMBER</td>
+                                                                <td>@mem.RA42_IDENTITY_MST.IDENTITY_TYPE_A</td>
+                                                                <td>@mem.REMARKS</td>
+                                                                @if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 13)
+                                                                {
+                                                                    <td>  @mem.RA42_RELATIVE_TYPE_MST.RELATIVE_TYPE</td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <span style="display:none" id="members">@tt</span>
+
+
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span style="display:none" id="members">1</span>
+
+                                        }
+                                        <div class="col-md-12 mt-2">
+                                            @{ var dash = " - "; }
+                                            @if (Model.CARD_FOR_CODE == 12)
+                                            {
+
+                                                <div class="col-md-12">
+                                                    <div class="card">
+                                                        <div class="card-header">@Resources.Passes.ResourceManager.GetString("approved_by_officer" + "_" + ViewBag.lang)</div>
+                                                        <div class="card-body">
+                                                            @if (!string.IsNullOrWhiteSpace(Model.AUTHO_SN))
+                                                            {
+                                                                @Model.AUTHO_RANK @dash @Model.AUTHO_NAME
+                                                                @dash <span class="text-success"><i class="fa fa-check-circle"></i> @Resources.Passes.ResourceManager.GetString("confirmed" + "_" + ViewBag.lang)</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="text-danger"><i class="fa fa-times-circle"></i> @Resources.Passes.ResourceManager.GetString("not_confirmed" + "_" + ViewBag.lang)</span>
+
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="col-12"><hr /></div>
+                                        <br />
+                                        <br />
+                                        <div class="col-lg-12">
+                                            <h4 class="text-primary">
+                                                @Resources.Passes.ResourceManager.GetString("Zones" + "_" + ViewBag.lang)
+                                            </h4>
+                                            @{
+                                                string zones = "";
+                                            }
+
+
+                                            @{
+
+                                                if (ViewBag.GetZones.Count > 0)
+                                                {
+                                                    var last_item = ViewBag.GetZones[ViewBag.GetZones.Count - 1];
+
+
+
+                                                    foreach (var listZones in ViewBag.GetZones)
+                                                    {
+                                                        <div class="col-md-12">
+                                                            <div class="alert alert-dark  mt-1 btn-block"><i class="fa fa-arrows-alt p-1"></i> @(Language.GetCurrentLang() == "en" ? listZones.RA42_ZONE_AREA_MST.ZONE_NAME_E : listZones.RA42_ZONE_AREA_MST.ZONE_NAME)</div>
+                                                        </div>
+                                                        if (listZones.RA42_ZONE_AREA_MST.ZONE_TYPE == "Z")
+                                                        {
+                                                            if (Model.RA42_STATIONS_MST.FORCE_ID == 3 || Model.RA42_STATIONS_MST.FORCE_ID == 4)
+                                                            {
+                                                                zones += listZones.RA42_ZONE_AREA_MST.ZONE_NAME;
+
+                                                                if (listZones != last_item)
+                                                                {
+                                                                    zones += ", ";
+                                                                }
+
+                                                            }
+                                                            else
+                                                            {
+                                                                zones += listZones.RA42_ZONE_AREA_MST.ZONE_TYPE.ToLower() + "" + listZones.RA42_ZONE_AREA_MST.ZONE_NUMBER;
+
+                                                                if (listZones != last_item)
+                                                                {
+                                                                    zones += ", ";
+                                                                }
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            if (Model.RA42_STATIONS_MST.FORCE_ID == 3 || Model.RA42_STATIONS_MST.FORCE_ID == 4)
+                                                            {
+                                                                zones += listZones.RA42_ZONE_AREA_MST.ZONE_NAME;
+
+                                                                if (listZones != last_item)
+                                                                {
+                                                                    zones += ", ";
+                                                                }
+
+                                                            }
+                                                            else
+                                                            {
+                                                                zones += listZones.RA42_ZONE_AREA_MST.ZONE_TYPE.ToLower() + "" + listZones.RA42_ZONE_AREA_MST.ZONE_NUMBER;
+
+                                                                if (listZones != last_item)
+                                                                {
+                                                                    zones += ", ";
+                                                                }
+                                                            }
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+
+
+
+                                            <span id="zones" style="display: none;">@zones</span>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <h4 class="text-primary">
+                                                @Resources.Passes.ResourceManager.GetString("Documents" + "_" + ViewBag.lang)
+                                            </h4>
+                                            @foreach (var listFiles in ViewBag.GetFiles)
+                                            {
+                                                if (listFiles.FILE_TYPE != null)
+                                                {
+                                                    if (!string.IsNullOrWhiteSpace(listFiles.FILE_TYPE_TEXT))
+                                                    {
+                                                        bool check = DateTime.TryParse(listFiles.FILE_TYPE_TEXT, out DateTime dateTime);
+                                                        if (check == true)
+                                                        {
+                                                            var exp = countinue;
+                                                            var div = "alert-success";
+                                                            DateTime d = Convert.ToDateTime(listFiles.FILE_TYPE_TEXT);
+                                                            if (d < DateTime.Now)
+                                                            {
+                                                                exp = expired;
+                                                                div = "alert-danger";
+                                                            }
+                                                            <div class="col-md-12">
+                                                                <div class="alert alert-dark mt-1 btn-block">
+                                                                    <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E : @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <span class="@div p-1 rounded">@exp | @listFiles.FILE_TYPE_TEXT </span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="col-md-12">
+                                                                <div class="alert alert-dark mt-1 btn-block">
+                                                                    <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E : @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) | <span class="text-primary details  rounded" style="color: #007bff !important;">@listFiles.FILE_TYPE_TEXT</span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-md-12">
+                                                            <div class="alert alert-dark mt-1 btn-block">
+                                                                <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E : @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            }
+
+
+                                        </div>
+
+
+                                        <div class="col-12"><hr /></div>
+                                        <div class="col-md-12">
+                                            @if (Model.BARCODE != null)
+                                            {
+                                                <img data-imageid="barcode-id-@Model.PERMIT_CODE" id="barcode-id-@Model.PERMIT_CODE" data-barcode="@Model.BARCODE" class="barcode-image" />
+                                            }
+                                        </div>
+                                        <div class="col-12"><hr /></div>
+                                        @{
+                                            var card_for = db.RA42_CARD_DESIGN_DTL.Where(a => a.RA42_CARD_FOR_MST.CARD_SECRET_CODE == Model.CARD_FOR_CODE.ToString() &&
+                                            a.ACCESS_TYPE_CODE == Model.ACCESS_TYPE_CODE && a.DLT_STS != true && a.FORCE_ID == Model.RA42_STATIONS_MST.FORCE_ID).FirstOrDefault();
+                                            if (card_for != null)
+                                            {
+                                                switch (card_for.RA42_CARD_FOR_MST.CARD_SECRET_CODE)
+                                                {
+                                                    case "11":
+                                                        <p id="front" style="display:none;">@card_for.BASE64_ENCODE_FRONT</p>
+                                                        <p id="back" style="display:none;">@card_for.BASE64_ENCODE_BACK</p>
+                                                        <p id="form_layout" style="display:none;">@card_for.BASE64_ENCODE_TEMP</p>
+                                                        <p id="CARD_SECRET_CODE" style="display:none;">@card_for.RA42_CARD_FOR_MST.CARD_SECRET_CODE</p>
+                                                        <p id="access_type_a" style="display: none;"> تصريح دخول المركز الطبي </p>
+                                                        <p id="access_type_e" style="display: none;">Medical center permit </p>
+                                                        break;
+                                                    case "12":
+                                                        <p id="front" style="display:none;">@card_for.BASE64_ENCODE_FRONT</p>
+                                                        <p id="back" style="display:none;">@card_for.BASE64_ENCODE_BACK</p>
+                                                        <p id="form_layout" style="display:none;">@card_for.BASE64_ENCODE_TEMP</p>
+                                                        <p id="CARD_SECRET_CODE" style="display:none;">@card_for.RA42_CARD_FOR_MST.CARD_SECRET_CODE</p>
+                                                        <p id="access_type_a" style="display: none;">  تصريح شركات مؤقت </p>
+                                                        <p id="access_type_e" style="display: none;">Temporary companies permit </p>
+                                                        break;
+                                                    case "13":
+                                                        <p id="front" style="display:none;">@card_for.BASE64_ENCODE_FRONT</p>
+                                                        <p id="back" style="display:none;">@card_for.BASE64_ENCODE_BACK</p>
+                                                        <p id="form_layout" style="display:none;">@card_for.BASE64_ENCODE_TEMP</p>
+                                                        <p id="CARD_SECRET_CODE" style="display:none;">@card_for.RA42_CARD_FOR_MST.CARD_SECRET_CODE</p>
+                                                        <p id="access_type_a" style="display: none;"> تصريح عائلة مؤقت </p>
+                                                        <p id="access_type_e" style="display: none;"> Temporary family permit</p>
+                                                        break;
+
+                                                    case "14":
+                                                        <p id="front" style="display:none;">@card_for.BASE64_ENCODE_FRONT</p>
+                                                        <p id="back" style="display:none;">@card_for.BASE64_ENCODE_BACK</p>
+                                                        <p id="form_layout" style="display:none;">@card_for.BASE64_ENCODE_TEMP</p>
+                                                        <p id="CARD_SECRET_CODE" style="display:none;">@card_for.RA42_CARD_FOR_MST.CARD_SECRET_CODE</p>
+                                                        <p id="access_type_a" style="display: none;">  تصريح زائر مؤقت </p>
+                                                        <p id="access_type_e" style="display: none;">Temporary visitor permit </p>
+                                                        break;
+
+                                                    default:
+                                                        <p id="front" style="display:none;">@card_for.BASE64_ENCODE_FRONT</p>
+                                                        <p id="back" style="display:none;">@card_for.BASE64_ENCODE_BACK</p>
+                                                        <p id="form_layout" style="display:none;">@card_for.BASE64_ENCODE_TEMP</p>
+                                                        <p id="CARD_SECRET_CODE" style="display:none;">@card_for.RA42_CARD_FOR_MST.CARD_SECRET_CODE</p>
+                                                        <p id="access_type_a" style="display: none;"> تصريح زائر </p>
+                                                        <p id="access_type_e" style="display: none;">Visitor permit </p>
+                                                        break;
+
+                                                }
+                                            }
+
+                                            var force = Model.RA42_STATIONS_MST.RA42_FORCES_MST.LOGO;
+                                            var phone = Model.RA42_STATIONS_MST.PHONE_NUMBER;
+                                            var force_name_a = Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_A;
+                                            var force_name_e = Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_E;
+                                            var directorate_a = Model.RA42_STATIONS_MST.RA42_FORCES_MST.DIRECTORATE_A;
+                                            var directorate_e = Model.RA42_STATIONS_MST.RA42_FORCES_MST.DIRECTORATE_E;
+                                            var access_type_a = Model.RA42_CARD_FOR_MST.CARD_FOR_A;
+                                            var access_type_e = Model.RA42_CARD_FOR_MST.CARD_FOR_E;
+
+
+
+                                        }
+                                        <p id="card_for" style="display:none;">@card_for.RA42_CARD_FOR_MST.CARD_SECRET_CODE</p>
+                                        <p id="force_logo" style="display: none;">@force</p>
+                                        <p id="force_a" style="display: none;">@force_name_a</p>
+                                        <p id="force_e" style="display: none;">@force_name_e</p>
+                                        <p id="directorate_a" style="display: none;">@directorate_a</p>
+                                        <p id="directorate_e" style="display: none;">@directorate_e</p>
+                                        <p id="phone_num" style="display: none;">@phone</p>
+                                        @{
+
+                                            var signature = db.RA42_AUTHORAIZATION_SIGNAURE_MST.Where(a => a.RA42_STATIONS_MST.STATION_CODE == Model.STATION_CODE && a.DLT_STS != true).OrderByDescending(a => a.AUTHO_SIGNATURE_CODE).FirstOrDefault();
+                                            var sign = "";
+                                            if (signature != null)
+                                            {
+                                                sign = @urlHttp + @app_name + "/Files/Signatures/" + signature.SIGNATURE;
+                                            }
+                                        }
+
+                                        <p><img src="@sign" style="display: none;" id="signature" /></p>
+
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="col-md-6 border-right">
+                                    @{
+                                        if (TempData["Success"] != null)
+                                        {
+                                            <p class="alert alert-success">@TempData["Success"]</p>
+                                        }
+                                        if (TempData["Erorr"] != null)
+                                        {
+                                            <p class="alert alert-danger">@TempData["Erorr"]</p>
+                                        }
+                                    }
+                                    @{
+
+                                        var checkForToday = db.RA42_ENTER_EXIT_REGISTERATION_DTL.Where(a => a.ACCESS_TYPE_CODE == Model.ACCESS_TYPE_CODE
+                                        && a.ACCESS_ROW_CODE == Model.PERMIT_CODE && a.DLT_STS != true && DbFunctions.TruncateTime(a.ENTER_TIME.Value) == DateTime.Today && a.CRD_DT > new DateTime(2024,10,1)).ToList();
+                                        bool exit = false;
+                                        if (checkForToday.Count > 0)
+                                        {
+
+                                            exit = true;
+
+                                        }
+                                    }
+
+                                    @if (exit == true)
+                                    {
+                                        if (ViewBag.checkViolations == true)
+                                        {
+                                            <div class="col-md-12">
+                                                <div class="alert alert-danger">
+                                                    <i class="fa fa-exclamation-triangle"></i> @Resources.Passes.ResourceManager.GetString("prevented_by_violation" + "_" + ViewBag.lang)
+
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            if (Model.DATE_TO >= DateTime.Today)
+                                            {
+
+                                                <div class="col-md-6">
+                                                    <input type="checkbox" id="vno" /> @Resources.Passes.ResourceManager.GetString("vno" + "_" + ViewBag.lang)
+                                                    <br />
+                                                    <div id="visit_no" style="display:none"><input type="number" id="v_number" class="form-control" /></div>
+                                                    <span style="display:none" id="many_entrance"></span>
+                                                </div>
+                                                <div class="btn-group m-1 @align">
+                                                    <a href="javascript:PrintTempForm()" class="btn btn-primary details">
+                                                        <i class="fa fa-file-alt"></i> &nbsp;
+                                                        @Resources.Common.ResourceManager.GetString("print_form" + "_" + ViewBag.lang)
+                                                    </a>
+                                                    <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("Edit", ViewBag.controllerName, new { id = Model.PERMIT_CODE })">
+                                                        <i class="fa fa-edit"></i> &nbsp;
+                                                        @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)
+                                                    </a>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="btn-group m-1 @align">
+                                                    <div class="alert alert-warning">
+                                                        <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("Edit", ViewBag.controllerName, new { id = Model.PERMIT_CODE })">
+                                                            <i class="fa fa-edit"></i> &nbsp;
+                                                            @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)
+                                                        </a>  @Resources.Passes.ResourceManager.GetString("expired_permit" + "_" + ViewBag.lang)
+                                                        <i class="fa fa-exclamation-triangle"></i>
+                                                    </div>
+
+                                                </div>
+
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        using (Html.BeginForm("CardTemp", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="row bg-light rounded p-2">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                @Html.HiddenFor(model => model.PERMIT_CODE)
+
+
+                                                <input type="hidden" name="CheckPrinted" value="Printed" />
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("enter_time" + "_" + ViewBag.lang)
+                                                        <input type="datetime-local" required class="form-control" id="ENTER_TIME" name="ENTER_TIME" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group @align">
+                                                        <button type="submit" value="Create" class="btn btn-success">
+                                                            <i class="fa fa-save"></i> &nbsp;
+                                                            @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        }
+
+                                    }
+
+                                    <div class="col-md-12">
+                                        <br />
+                                        <iframe id="frame" frameborder="0" height="300" type="application/pdf" style="display: none; width: 100%;"></iframe>
+                                        <br />
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        @foreach (var o in checkForToday.Where(a => a.EXIT_TIME != null))
+                                        {
+                                            <div class="row bg-light mb-1 rounded p-1">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("enter_time_r" + "_" + ViewBag.lang)
+                                                        <input type="text" readonly value="@o.ENTER_TIME" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("exit_time_r" + "_" + ViewBag.lang)
+                                                        <input type="text" value="@o.EXIT_TIME" class="form-control" readonly />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (checkForToday.Count > 0)
+                                        {
+                                            <span style="display:none" id="time">@checkForToday.LastOrDefault().ENTER_TIME.Value.ToString("HHmm")</span>
+                                        }
+                                        <hr />
+
+                                        @using (Html.BeginForm("CardTemp", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="row bg-light rounded p-2">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                @Html.HiddenFor(model => model.PERMIT_CODE)
+
+                                                @{
+                                                    var x = 0;
+                                                }
+
+                                                <input type="hidden" name="CheckPrinted" value="Printed" />
+                                                @foreach (var time in checkForToday.Where(a => a.EXIT_TIME == null))
+                                                {
+                                                    { x = 1; }
+                                                    <input type="hidden" name="enter_id" value="@time.ENTER_EXIT_TIME_CODE" />
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            @Resources.Passes.ResourceManager.GetString("enter_time_r" + "_" + ViewBag.lang)
+                                                            <input type="text" readonly value="@time.ENTER_TIME" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            @Resources.Passes.ResourceManager.GetString("exit_time" + "_" + ViewBag.lang)
+                                                            <input type="datetime-local" value="@time.EXIT_TIME" class="form-control" id="EXIT_TIME" name="EXIT_TIME" />
+                                                        </div>
+                                                    </div>
+
+                                                }
+                                                @if (x != 0)
+                                                {
+                                                    <div class="col-md-12">
+                                                        <div class="form-group @align">
+                                                            <button type="submit" value="Create" class="btn btn-success">
+                                                                <i class="fa fa-save"></i> &nbsp;
+                                                                @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                                @if (x == 0 && exit == true)
+                                                {
+                                                    using (Html.BeginForm("CardTemp", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+
+                                                        <div class="row bg-light rounded p-2">
+                                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                            @Html.HiddenFor(model => model.PERMIT_CODE)
+
+
+                                                            <input type="hidden" name="CheckPrinted" value="Printed" />
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    @Resources.Passes.ResourceManager.GetString("new_enter_time" + "_" + ViewBag.lang)
+                                                                    <input type="datetime-local" required class="form-control" id="ENTER_TIME" name="ENTER_TIME" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <div class="form-group @align mt-4">
+                                                                    <button type="submit" value="Create" class="btn btn-success">
+                                                                        <i class="fa fa-save"></i> &nbsp;
+                                                                        @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+
+                                                    }
+                                                }
+
+                                            </div>
+                                            <br />
+
+
+
+                                        }
+
+                                        @{
+                                            var checkTimes = db.RA42_ENTER_EXIT_REGISTERATION_DTL.Where(a => a.ACCESS_TYPE_CODE == Model.ACCESS_TYPE_CODE
+                                       && a.ACCESS_ROW_CODE == Model.PERMIT_CODE && a.DLT_STS != true && DbFunctions.TruncateTime(a.ENTER_TIME.Value) != DateTime.Today).OrderByDescending(a => a.EXIT_TIME).ToList();
+
+
+                                        }
+
+                                        @if (checkTimes.Count > 0)
+                                        {
+
+
+                                            bool ttt = false;
+                                            <div class="col-md-12">
+                                                <h4>@Resources.Passes.ResourceManager.GetString("timings" + "_" + ViewBag.lang)</h4>
+                                            </div>
+                                            using (Html.BeginForm("CardTemp", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                @Html.HiddenFor(model => model.PERMIT_CODE)
+
+                                                foreach (var t in checkTimes)
+                                                {
+                                                    if (!t.EXIT_TIME.HasValue)
+                                                    {
+                                                        ttt = true;
+                                                    }
+                                                    <input type="hidden" name="T[]" value="@t.ENTER_EXIT_TIME_CODE" />
+                                                    <div class="row bg-light mb-1 rounded p-1">
+                                                        @if (!t.EXIT_TIME.HasValue)
+                                                        {
+                                                            <div class="col-md-12">
+                                                                <span class="text-danger">
+                                                                    @Resources.Passes.ResourceManager.GetString("no_time_exit" + "_" + ViewBag.lang)
+                                                                </span>
+                                                            </div>
+                                                        }
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                @Resources.Passes.ResourceManager.GetString("enter_time_r" + "_" + ViewBag.lang)
+                                                                <input type="text" readonly value="@t.ENTER_TIME" class="form-control" name="E[]" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                @if (!t.EXIT_TIME.HasValue)
+                                                                {
+                                                                    @Resources.Passes.ResourceManager.GetString("exit_time" + "_" + ViewBag.lang)
+
+                                                                    <input type="datetime-local" value="@t.EXIT_TIME" class="form-control" name="X[]" />
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Resources.Passes.ResourceManager.GetString("exit_time_r" + "_" + ViewBag.lang)
+                                                                    <input type="text" readonly value="@t.EXIT_TIME" class="form-control" name="X[]" />
+
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                if (ttt == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        <div class="form-group @align mt-4">
+                                                            <button type="submit" value="Create" class="btn btn-success">
+                                                                <i class="fa fa-save"></i> &nbsp;
+                                                                @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+
+    @section scripts{
+
+
+
+
+        <script type="text/javascript" src="~/Scripts/jquery-1.12.4.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/jspdf.debug.js"></script>
+        <script type="text/javascript" src="~/Scripts/basic.js"></script>
+        <script type="text/javascript" src="~/Scripts/default_vfs.js"></script>
+        <script type="text/javascript" src="~/Scripts/fonts.js"></script>
+
+        <script>
+
+
+        var pf;
+        var br;
+        var si;
+
+
+
+
+
+
+        function toDataURL(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    callback(reader.result);
+                    pf = reader.result;
+                    //sessionStorage.setItem("base64", reader.result);
+
+
+                }
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+
+            xhr.responseType = 'blob';
+            xhr.send();
+        }
+
+
+
+        function toDataURL2(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    callback(reader.result);
+                    si = reader.result;
+
+                    //sessionStorage.setItem("barcode64", reader.result);
+
+
+                }
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+
+            xhr.responseType = 'blob';
+            xhr.send();
+        }
+         
+        function Print(type) {
+            var id = $("#PERMIT_CODE").text();
+            //console.log(Id);
+
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("PrintById")',
+                    data: { id: id, type: type },
+                    dataType: "json",
+                    success: function () {
+                        console.log(type);
+                    },
+                    error: function () {
+                        console.log("somthing wrong while printed");
+                    }
+                });
+
+        }
+
+
+        $("#vno").change(function () {
+            var div = document.getElementById("visit_no");
+            if (this.checked) {
+                div.style.display = 'block';
+                document.getElementById("many_entrance").innerHTML = "VNO";
+            }
+            else {
+                document.getElementById("many_entrance").innerHTML = "";
+                div.style.display = 'none';
+            }
+
+        });
+
+         function PrintTempForm() {
+
+            Print("TemproryCard");
+
+            //const Arial = $("#arial").text();
+              //var doc = new jsPDF('l', 'mm', [500, 600]);
+
+            var doc = new jsPDF('l', 'mm', [301.36, 79.11],true);
+
+
+
+            doc.addFileToVFS("Amiri-Regular.ttf", AmiriRegular);
+            doc.addFont('Amiri-Regular.ttf', 'Amiri', 'normal');
+
+            doc.addFileToVFS("Arialbd.ttf", Arial);
+            doc.addFont('Arialbd.ttf', 'arialbd', 'normal');
+              var imgdata;
+              imgdata = $("#form_layout").text();
+
+              var width = doc.internal.pageSize.getWidth();
+             var height = doc.internal.pageSize.getHeight();
+             doc.addImage(imgdata, 'PNG', 0, 0, width, height, undefined,'FAST');
+
+
+             var id = $("#PERMIT_CODE").text();
+             var card_for = $("#card_for").text();
+             var name = $("#name").text();
+            var color = $("#color").text();
+            var type = $("#type").text();
+             var vechilnum = $("#vechilnum").text();
+             var char = $("#char").text();
+             var number_of_vehicle = vechilnum + " - " + char;
+             var with_vechicle = $("#car_available").text();
+             var members = $("#num_hosted").text();
+             var numberc = $("#numberc").text();
+             var many = $("#many_entrance").text();
+             var v_number = $("#v_number").val();
+            var zones = $("#zones").text();
+             var today_date = $("#today_date").text();
+             var time = $("#time").text();
+             var purpose = $("#purpose").text();
+             doc.setFontSize(4);
+             doc.setFont('arialbd'); // set font
+
+             if (many != "") {
+                 many = many + " - " + v_number;
+             }
+             doc.setFont('Amiri'); // set font
+             //doc.text(station, 50, 30, { align: 'right', lang: 'ar' });
+             //doc.text(station, 50, 40, { align: 'right', lang: 'ar' });
+             var resized_name = doc.splitTextToSize(name, 19);
+             doc.text(resized_name, 42, 13.3, { align: 'right', lang: 'ar' });
+             doc.text(color, 40, 16.2, { align: 'right', lang: 'ar' });
+             doc.text(type, 40, 18.6, { align: 'right', lang: 'ar' });
+             doc.text(purpose, 37.5, 20.8, { align: 'right', lang: 'ar' });
+             doc.text(with_vechicle, 34, 22.6, { align: 'right', lang: 'ar' });
+             doc.setFont('arialbd'); // set font
+             doc.text(many, 45, 22.5, { align: 'right', lang: 'ar' });
+             doc.text(id, 8, 10, { align: 'right', lang: 'ar' });
+             doc.text(id, 55, 9, { align: 'right', lang: 'ar' });
+             doc.text(members, 18, 13.3, { align: 'right', lang: 'ar' });
+             doc.text(numberc, 18, 16.4, { align: 'right', lang: 'ar' });
+             if (card_for == "16") {
+                 doc.text("ID: "+numberc, 60, 10.3, { align: 'right', lang: 'ar' });
+             }
+             doc.text(number_of_vehicle, 18, 18.6, { align: 'right', lang: 'ar' });
+             doc.text(time, 18, 20.5, { align: 'right', lang: 'ar' });
+             doc.text(today_date, 18, 22.5, { align: 'right', lang: 'ar' });
+             doc.setFont('Amiri'); // set font
+             //doc.text(zones, 6, 11, { align: 'right', lang: 'ar' });
+             var splitZone = doc.splitTextToSize(zones, 70);
+             doc.text(splitZone, 83, 9, { align: 'right', lang: 'ar' });
+             doc.text(splitZone, 47, 11, { align: 'right', lang: 'ar' });
+                var barcode64 = textToBase64Barcode('@Model.BARCODE');
+                doc.addImage(barcode64, 'PNG', 58.7, 21.6, 30, 6);
+
+             var string = doc.output('datauristring');
+             //window.open(doc.output('bloburl'))
+             document.getElementById("frame").style.display = "block";
+             $('#frame').attr('src', string);
+
+            //doc.save("form.pdf");
+
+
+
+
+        }
+
+        </script>
+
+
+        <script src="@Url.Content("~/Scripts/JsBarcode.all.js")"></script>
+        <script>
+
+            $(function () {
+                $(".barcode-image").each(function () {
+                    console.log($(this).data("imageid"));
+
+                    var imageid = "#" + $(this).data("imageid");
+                    var code = $(this).data("barcode");
+
+                    JsBarcode(imageid, code, {
+                        format: "code39",
+                        displayValue: false,
+                        fontSize: 20,
+                        height: 30,
+                        width: 1
+                    });
+
+                    $("#base-64-input").val($(this).attr("src"));
+
+
+                });
+            });
+
+            function textToBase64Barcode(text) {
+                var canvas = document.createElement("canvas");
+                JsBarcode(canvas, text, { format: "CODE39", displayValue: false });
+                return canvas.toDataURL("image/png");
+            }
+
+        </script>
+
+
+
+        <script src="@Url.Content("~/Scripts/datatables/datatables.js")"></script>
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                //$("#ENTER_TIME").kendoDateTimePicker({ interval: 1, timeFormat: "HH:mm", format: "dd/MM/yyyy HH:mm" });
+                showProgressBar($(".service-number-field"));
+                showServiceInfo($(".service-number-field"));
+            });
+        </script>
+    }

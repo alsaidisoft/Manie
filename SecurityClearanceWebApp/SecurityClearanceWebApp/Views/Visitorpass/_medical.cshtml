@@ -1,0 +1,193 @@
+﻿@using APP.Util;
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_VISITOR_PASS_DTL>
+
+@{
+    ViewBag.Title = "Medical center";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+
+<style>
+    td, th {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+<table class="table table-bordered table-hover table-responsive data-table text-center" style="display:table;">
+    <thead class="bg-primary text-white">
+        <tr>
+            <th>#</th>
+            <th>@Resources.Passes.ResourceManager.GetString("hosted" + "_" + ViewBag.lang)</th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("Visitor_name" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("worker_identity_card" + "_" + ViewBag.lang)
+            </th>
+
+            <th>@Resources.Passes.ResourceManager.GetString("members_allowed" + "_" + ViewBag.lang)</th>
+
+            <th>
+                @Resources.Passes.ResourceManager.GetString("Car_property" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("visitor_employer" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("sn_host" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+            </th>
+
+
+
+            <th>
+                @Resources.Passes.ResourceManager.GetString("Status" + "_" + ViewBag.lang)
+            </th>
+            <th style="border-right:1px solid #ccc; width: 20%">
+                @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var dash = " - ";
+        }
+        @foreach (var item in Model.Where(a => a.CARD_FOR_CODE == 11))
+        {
+            <tr>
+
+                <td>@item.VISITOR_PASS_CODE</td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RESPONSIBLE)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.VISITOR_NAME)
+                </td>
+
+                <td>
+                    @if (Language.GetCurrentLang() == "en")
+                    {
+                        if (item.RELATIVE_TYPE_CODE != null)
+                        {
+                            @item.RA42_RELATIVE_TYPE_MST.RELATIVE_TYPE_E}
+                    }
+                    else
+                    {
+                        if (item.RELATIVE_TYPE_CODE != null)
+                        {
+                            @item.RA42_RELATIVE_TYPE_MST.RELATIVE_TYPE
+                        }
+                    }
+                </td>
+                <td>
+                    @item.ID_CARD_NUMBER
+                </td>
+
+                <td>
+                    @item.NUMBER_OF_HOSTED
+                </td>
+
+                <td>
+                    @item.DATE_FROM.Value.ToShortDateString() @dash @item.DATE_TO.Value.ToShortDateString()
+                </td>
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.VISITOR_EMPLOYER)
+
+                </td>
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.SN_FOR_THE_GUARDIAN)
+
+                </td>
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.PURPOSE_OF_PASS)
+
+                </td>
+
+
+
+
+                <td>
+
+
+
+                    @if (item.REJECTED == true)
+                    {
+                        <div class="alert alert-danger text-center"><i class="fa fa-times-circle"></i> @Resources.Passes.ResourceManager.GetString("Reject" + "_" + ViewBag.lang)</div>
+                    }
+                    else
+                    {
+
+                        if (item.STATUS == true)
+                        {
+
+                            <div class="alert alert-success text-center">
+                                <i class="fa fa-check-circle"></i> @Resources.Passes.ResourceManager.GetString("Approve" + "_" + ViewBag.lang)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning text-center">
+                                <i class="fa fa-hourglass-half"></i> @Resources.Passes.ResourceManager.GetString("Progress" + "_" + ViewBag.lang)
+                            </div>
+                        }
+                    }
+                </td>
+
+                <td style="border-right:1px solid #ccc;" dir="ltr">
+
+                    <div class="">
+                        <div class="row justify-content-center">
+                            <div class="btn-group p-2 justify-content-center">
+
+                                @if (item.REJECTED != true)
+                                {
+
+                                    <a class="btn btn-info text-center" href="" title="@Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)">
+                                        <i class="fa fa-comment"></i>@item.countCommennts(item.VISITOR_PASS_CODE)
+
+                                    </a>
+                                    <a class="btn btn-primary details text-center" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("Details", "Visitorpass", new { id = item.VISITOR_PASS_CODE })">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("Edit", "Visitorpass", new { id = item.VISITOR_PASS_CODE })">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-danger text-center" title="@Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)" href="@Url.Action("Delete", "Visitorpass", new { id = item.VISITOR_PASS_CODE })">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                    if (item.STATUS == true)
+                                    {
+                                        <a class="btn btn-dark text-center" title="@Resources.Common.ResourceManager.GetString("print" + "_" + ViewBag.lang)" href="@Url.Action("CardTemp", "Visitorpass", new { id = item.VISITOR_PASS_CODE })">
+                                            <i class="fa fa-print"></i>
+                                        </a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

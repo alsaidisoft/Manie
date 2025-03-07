@@ -1,0 +1,309 @@
+﻿@model SecurityClearanceWebApp.Models.RA42_AUTHORIZATION_PASS_DTL
+
+@{
+    ViewBag.Title = "Search";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    string barcode = Guid.NewGuid().ToString().Substring(0, 5);
+    var no_file_format = Resources.Passes.ResourceManager.GetString("file_format" + "_" + ViewBag.lang);
+    var required = Resources.Common.ResourceManager.GetString("required" + "_" + ViewBag.lang);
+
+}
+
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @if (ViewBag.RESPO_STATE > 1 || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+        {
+            @Html.Partial("Index")
+        }
+
+
+
+        <div class="col-md-12">
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row justify-content-center">
+                                @Html.Partial("Tabs")
+
+                            </div>
+                        </div>
+                        <div class="col-12"><hr /></div>
+
+                        <div class="col-6 text-primary">
+                            <h4>
+                                <i class="fa fa-search"></i>
+                                &nbsp;
+                                @Resources.Passes.ResourceManager.GetString("Search" + "_" + ViewBag.lang) (@ViewBag.STATION_NAME)
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 @align">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @{
+                        if (TempData["Success"] != null)
+                        {
+                            <p class="alert alert-success">@TempData["Success"]</p>
+                        }
+                        if (TempData["Erorr"] != null)
+                        {
+                            <p class="alert alert-danger">@TempData["Erorr"]</p>
+                        }
+                    }
+                    @using (Html.BeginForm("Search", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-12">
+
+                                <span class="alert-warning p-1 rounded">
+                                    <b class="text-danger"> * </b>@Resources.Passes.ResourceManager.GetString("required_fields" + "_" + ViewBag.lang)
+                                </span>
+                                <hr />
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Service_number" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    <input type="text" name="SERVICE_NUMBER" class="service-number-input form-control" required="" oninvalid="this.setCustomValidity('@required')" oninput="setCustomValidity('')" />
+                                    @Html.ValidationMessageFor(model => model.SERVICE_NUMBER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)
+                                    <input type="file" name="PERSONAL_IMAGE" accept="image/*" class="form-control" />
+                                    @Html.ValidationMessageFor(model => model.PERSONAL_IMAGE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Phone_number" + "_" + ViewBag.lang)
+
+                                    @Html.EditorFor(model => model.PHONE_NUMBER, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PHONE_NUMBER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Gsm" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                    @Html.EditorFor(model => model.GSM, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.GSM, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        @Resources.Passes.ResourceManager.GetString("Duration" + "_" + ViewBag.lang)
+                                    </div>
+                                    <div class="row p-2">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang) <b class="text-danger"> * </b>
+
+                                                @Html.EditorFor(model => model.DATE_FROM, new { htmlAttributes = new { @class = "form-control", @required = "", onkeydown = "javascript: return false;", @autocomplete = "off" } })
+                                                @Html.ValidationMessageFor(model => model.DATE_FROM, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang) <b class="text-danger"> * </b>
+
+                                                @Html.EditorFor(model => model.DATE_TO, new { htmlAttributes = new { @class = "form-control", @required = "", onkeydown = "javascript: return false;", @autocomplete = "off" } })
+                                                @Html.ValidationMessageFor(model => model.DATE_TO, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    @if (ViewBag.RESPO_STATE == 6)
+                                    {
+                                        @Resources.Passes.ResourceManager.GetString("security_manager" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    }
+                                    else
+                                    {
+                                        @Resources.Passes.ResourceManager.GetString("plans_political" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    }
+
+                                    @Html.DropDownList("WORKFLOW_RESPO_CODE", null, "--اختر--", htmlAttributes: new { @class = "form-control w-100", @id = "WORKFLOWRESPOCODE", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(model => model.WORKFLOW_RESPO_CODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang) <b class="text-danger"> * </b>
+                                    @Html.TextAreaFor(model => model.PURPOSE_OF_PASS, new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(model => model.PURPOSE_OF_PASS, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                    @Html.TextAreaFor(model => model.REMARKS, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.REMARKS, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            @if (ViewBag.RESPO_STATE == 6)
+                            {
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Barcode" + "_" + ViewBag.lang)
+
+                                        <input class="form-control text-box single-line"
+                                               value="@barcode"
+                                               name="BARCODE" type="hidden" readonly />
+                                        <br />
+
+                                        <img id="barcode3" />
+                                        @Html.ValidationMessageFor(model => model.BARCODE, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                            }
+                            <div class="col-md-12">
+                                <div class="form-group @align">
+                                    <button type="submit" value="Create" class="btn btn-success">
+                                        <i class="fa fa-plus-circle"></i> &nbsp;
+                                        @Resources.Common.ResourceManager.GetString("new_request" + "_" + ViewBag.lang)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <link href="~/Content/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/select2.min.js"></script>
+    <link href="~/Content/Kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/Kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="~/Scripts/validatefile.js"></script>
+    <script src="~/Scripts/Kendo/js/kendo.all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            showProgressBar($(".service-number-field"));
+            showServiceInfo($(".service-number-field"));
+            //$("#DATE_FROM").kendoDatePicker({
+            //    format: "dd/MM/yyyy"
+            //});
+            //$("#DATE_TO").kendoDatePicker({
+            //    format: "dd/MM/yyyy"
+            //});
+
+            $(function () {
+                var dateToday = new Date();
+                var yrRange = dateToday.getFullYear() + ":" + (dateToday.getFullYear() + 2);
+                $("#DATE_FROM").datepicker({
+                    //minDate: 0,
+                    dateFormat: "dd/mm/yy",
+                    yearRange: yrRange,
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    changeYear: true,
+                    onClose: function (selectedDate, inst) {
+                        var minDate = new Date(Date.parse(selectedDate));
+                        //minDate.setDate(maxDate.getDate() + 1);
+                        $("#DATE_TO").datepicker("option", "minDate", selectedDate);
+                    }
+                });
+
+                $("#DATE_TO").datepicker({
+                    minDate: "+1D",
+                    dateFormat: "dd/mm/yy",
+                    yearRange: yrRange,
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    changeYear: true,
+                    onClose: function (selectedDate, inst) {
+                        var maxDate = new Date(Date.parse(selectedDate));
+                         //maxDate.setDate(maxDate.getDate() - 1);
+                        //$("#DATE_FROM").datepicker("option", "maxDate", maxDate);
+                    }
+                });
+            });
+            //$("#WORKFLOWRESPOCODE").select2();
+
+            //$("#WORKFLOWRESPOCODE").kendoComboBox({
+            //    filter: "contains",
+            //    change: function (e) {
+            //        var widget = e.sender;
+
+            //        if (widget.value() && widget.select() === -1) {
+            //            //custom has been selected
+            //            widget.value(""); //reset widget
+            //            //widget.trigger("change");
+            //        }
+            //    }
+            //});
+            $(function () {
+                $('input[type=file]').change(function () {
+                    var val = $(this).val().toLowerCase(),
+                        regex = new RegExp("(.*?)\.(gif|jpg|jpeg|JPEG|GIF|JPG)$");
+
+                    if (!(regex.test(val))) {
+                        $(this).val('');
+                        alert('@no_file_format');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+    <script src="@Url.Content("~/Scripts/JsBarcode.all.js")"></script>
+    <script>
+            JsBarcode("#barcode3", "@barcode", {
+                format: "code39",
+                displayValue: false,
+                fontSize: 20,
+                height: 20,
+                width:1
+
+            });
+    </script>
+
+}

@@ -1,0 +1,421 @@
+﻿@using SecurityClearanceWebApp.Util;
+@using System.Globalization
+@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<GroupedClearanceSearchResult>
+@{
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var app_name = Resources.Common.ResourceManager.GetString("app_name" + "_" + ViewBag.lang);
+    var expired = Resources.Common.ResourceManager.GetString("expired" + "_" + ViewBag.lang);
+    var countinue = Resources.Common.ResourceManager.GetString("countinue" + "_" + ViewBag.lang);
+    var delivered = Resources.Passes.ResourceManager.GetString("delivery_status" + "_" + ViewBag.lang);
+    var not_delivered = Resources.Passes.ResourceManager.GetString("not_delivered" + "_" + ViewBag.lang);
+    var first = Resources.Passes.ResourceManager.GetString("first_page" + "_" + ViewBag.lang);
+    var next = Resources.Passes.ResourceManager.GetString("next_page" + "_" + ViewBag.lang);
+    var perviues = Resources.Passes.ResourceManager.GetString("previous" + "_" + ViewBag.lang);
+    var last = Resources.Passes.ResourceManager.GetString("last_page" + "_" + ViewBag.lang);
+    var urlHttp = Resources.Common.ResourceManager.GetString("urlHttp" + "_" + ViewBag.lang);
+
+    string type = Request.QueryString["type"];
+    string tab = Request.QueryString["tab"];
+}
+
+<style>
+    td, th {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+    .alert-success{
+        font-size:16px !important;
+    }
+
+    #loading {
+        display: none;
+    }
+
+    .ul.pagination {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+    }
+
+    ul.pagination li {
+        display: inline;
+    }
+
+        ul.pagination li a {
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border-radius: 4px;
+        }
+
+            ul.pagination li a.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            ul.pagination li a:hover:not(.active) {
+                background-color: #ddd;
+            }
+</style>
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @Html.Partial("Index")
+
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="@ViewBag.IconTab"></i>
+                        &nbsp;
+                        @Resources.Passes.ResourceManager.GetString(ViewBag.activetab + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+                <div class="card-body">
+
+
+
+
+                    @using (Html.BeginForm("CompaniesBrowse", "Permitsdtl", FormMethod.Get, new { id = "searchForm" }))
+                    {
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <select id="searchType" class="form-control">
+                                        <option value="CivilNumber" @(ViewBag.SearchType == "CivilNumber" ? "selected" : "")>
+                                            @Resources.Passes.ResourceManager.GetString("Civil_number" + "_" + ViewBag.lang)
+                                        </option>
+                                        <option value="ServiceNumber" @(ViewBag.SearchType == "ServiceNumber" ? "selected" : "")>
+                                         @Resources.Passes.ResourceManager.GetString("Service_number_data_enter" + "_" + ViewBag.lang)
+                                        </option>
+                                        <option value="PlateNumber" @(ViewBag.SearchType == "PlateNumber" ? "selected" : "")>
+                                            @Resources.Passes.ResourceManager.GetString("Plate_char_number" + "_" + ViewBag.lang)
+                                        </option>
+                                        <option value="Phone" @(ViewBag.SearchType == "Phone" ? "selected" : "")>
+                                            @Resources.Passes.ResourceManager.GetString("Phone" + "_" + ViewBag.lang)
+                                        </option>
+                                        <option value="Name" @(ViewBag.SearchType == "Name" ? "selected" : "")>
+                                            @Resources.Passes.ResourceManager.GetString("Name" + "_" + ViewBag.lang)
+                                        </option>
+                                         <option value="Company" @(ViewBag.SearchType == "Company" ? "selected" : "")>
+                                                @Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)
+                                         </option>
+                                           
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <input type="text" id="searchString" value="@ViewBag.SearchValue" class="form-control" placeholder="أدخل مادة البحث" />
+                                    </div>
+                                </div>
+
+                                @Html.Hidden("type", ViewBag.PermitMainType as string)
+                                @Html.Hidden("tab", ViewBag.activetab as string)
+                                
+                            </div>
+                        </div>
+                        <div id="loading" class="text-blue p-4 col-md-12 text-center">@Resources.Common.ResourceManager.GetString("searching" + "_" + ViewBag.lang)</div>
+
+                    }
+
+
+                <table class ="table table-striped table-bordered table-hover mt-3" style="width:100%">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th>#</th>
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("respo_unit" + "_" + ViewBag.lang)
+                            </th>
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)
+                            </th>
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("employees" + "_" + ViewBag.lang)
+
+                            </th>
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                            </th>
+
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("Status" + "_" + ViewBag.lang)
+                            </th>
+
+
+                            <th style="border-right:1px solid #ccc; width:25%">
+                                @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int x = 1;
+                        }
+                        @foreach (var group in Model)
+                        {
+                           
+                            <tr>
+                                <td>@x</td>
+                                <td>@group.Responsipole</td>
+                                <td>@group.Company</td>
+                                <td width="30%" class="border-dark">
+
+                                    @{
+                                        int n = 1;
+                                        int id = group.CompanyPermitId;
+                                        bool is_general = false;
+
+                                    }
+                                    @foreach (var item in group.Items)
+                                    {
+
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-8">
+
+
+                                                    @{ 
+                                                        var dash = ": ";
+                                                    }
+                                                    @if (item.PermitType.Contains("تصريح مركبة للإستخدام العام"))
+                                                    {
+                                                        @item.PermitType
+                                                        <br />
+                                                        @Resources.Passes.ResourceManager.GetString("car_number" + "_" + ViewBag.lang)@dash @item.PlateNumber
+                                                        is_general = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>
+                                                            @n-@item.Name | @item.CivilNumber
+                                                        </span>
+                                                    }
+
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="btn-group">
+                                                        <a href="@Url.Action("Details", item.ControllerName, new { id= item.Id,tab = tab })" class="btn btn-primary small  details">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                        @if (item.ControllerName.Equals("Permitsdtl"))
+                                                        {
+                                                            <a href="@Url.Action("Edit", item.ControllerName, new { id = item.Id, tab = tab })" class="btn btn-warning small">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="@Url.Action("EditTemproryPass", item.ControllerName, new { id = item.Id, tab = tab })" class="btn btn-warning small">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        }
+                                                        <a href="@Url.Action("Delete", item.ControllerName, new { id= item.Id,tab = tab })" class="btn btn-danger small">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+
+                                                        @if (item.Status == true)
+                                                        {
+                                                            <a href="@Url.Action("Card", item.ControllerName, new { id = item.Id,tab = tab })" class="btn btn-dark small">
+                                                                <i class="fa fa-id-card-alt"></i>
+                                                            </a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                        <br />
+                                        n++;
+                                        if (group.ControllerName == "Permitsdtl")
+                                        {
+                                            id = item.Id;
+                                        }
+                                    }
+
+                                </td>
+                                <td>@group.MainPurposeOfPass</td>
+                                <td width="10%">
+                                    @if (group.MainRejected == true)
+                                    {
+                                        <div class="alert alert-danger text-center"><i class="fa fa-times-circle"></i> @Resources.Passes.ResourceManager.GetString("Reject" + "_" + ViewBag.lang)</div>
+                                    }
+                                    else
+                                    {
+
+                                        if (group.MainStatus == true)
+                                        {
+
+                                            <div class="alert alert-success text-sm-center text-center">
+                                                <i class="fa fa-check-circle"></i> @Resources.Passes.ResourceManager.GetString("Approve" + "_" + ViewBag.lang)
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-warning text-center">
+                                                <i class="fa fa-hourglass-half"></i> @Resources.Passes.ResourceManager.GetString("Progress" + "_" + ViewBag.lang)
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    <div>
+                                        <div class="row justify-content-center">
+                                          
+                                            <div class="btn-group p-2 justify-content-center">
+                                                <a class="btn btn-info text-center" href="@Url.Action("Comments", group.ControllerName,  new { id=id })" title="@Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)">
+                                                    <i class="fa fa-comment"></i>@group.Comments
+
+                                                </a>
+                                                @if (group.ControllerName == "Permitsdtl")
+                                                {
+                                                    <a class="btn btn-primary details text-center" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("CompanyPermitDetails", group.ControllerName, new { id = group.CompanyPermitId, tab = tab})">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                    <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("CompanyPermitEdit", group.ControllerName, new { id = group.CompanyPermitId, tab = tab })">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+
+                                                    <a class="btn btn-danger text-center" title="@Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)" href="@Url.Action("CompanyPermitDelete", group.ControllerName, new { id = group.CompanyPermitId, tab = tab })">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-primary details text-center" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("Details", group.ControllerName, new { id = group.CompanyPermitId })">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                    <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("Edit", group.ControllerName, new { id = group.CompanyPermitId })">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+
+                                                    <a class="btn btn-danger text-center" title="@Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)" href="@Url.Action("Delete", group.ControllerName, new { id = group.CompanyPermitId })">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                }
+                                                @if (group.MainStatus == true && group.ControllerName == "Permitsdtl")
+                                                {
+                                                    if (is_general == true) { }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-dark text-center" title="@Resources.Passes.ResourceManager.GetString("Print" + "_" + ViewBag.lang)" href="@Url.Action("PrintAll", group.ControllerName, new { id = group.CompanyPermitId, tab = tab })">
+                                                            <i class="fa fa-print"></i>
+                                                        </a>
+                                                    }
+                                                }
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            x++;
+                        }
+                    </tbody>
+                    </table>
+
+                    <div id="pagination">
+                        <div>
+
+                            <div class="text-dark m-0 p-1">
+                                @Resources.Passes.ResourceManager.GetString("total" + "_" + ViewBag.lang)
+                                @ViewBag.TotalRecords
+                            </div>
+
+                            @Html.PagedListPager(
+                             Model,
+                             page => Url.Action("CompaniesBrowse",
+                                      new
+                                           {
+                                                page = page,
+                                                type = ViewBag.PermitMainType,
+                                                mergedSearch = ViewBag.CurrentFilter,
+                                                tab = ViewBag.activetab
+                                           }),
+                                     new PagedListRenderOptions
+                                     {
+                                         LinkToFirstPageFormat = "<p class='btn btn-primary m-1'>" + @first + "</p>",
+                                         LinkToPreviousPageFormat = "<p class='btn btn-primary m-1'>" + perviues + "</p>",
+                                         //LinkToIndividualPageFormat = "<p class='btn btn-outline-primary'>{0}</p>",
+                                         LinkToNextPageFormat = "<p class='btn btn-primary m-1'>" + @next + "</p>",
+                                         LinkToLastPageFormat = "<p class='btn btn-primary m-1'>" + @last + "</p>",
+
+                                     }
+                            )
+                        </div>
+                    </div>
+
+
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#searchString').keypress(function (e) {
+                if (e.which == 13) { // Enter key pressed
+                    e.preventDefault();
+
+                    var searchType = $('#searchType').val();
+                    var searchString = $('#searchString').val();
+                    var mergedSearch = searchType + "_" + searchString;
+
+                    // Create a hidden input to hold the merged search string
+                    var hiddenInput = $('<input>', {
+                        type: 'hidden',
+                        name: 'mergedSearch',
+                        value: mergedSearch
+                    });
+
+                    // Append the hidden input to the form and submit the form
+                    $('#searchForm').append(hiddenInput);
+                    $('#searchForm').submit();
+                }
+            });
+        });
+
+
+        function Return(id,access) {
+        var MSG = confirm("@Resources.Passes.ResourceManager.GetString("are_you_sure_you_want_return" + "_" + ViewBag.lang)");
+            console.log(id);
+            console.log(access);
+        if (MSG) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Returned", "Mypasses",null)',
+                data: { id: id,access : access },
+                dataType: "json",
+                success: function () {
+                    setTimeout(function () { location.reload(); }, 1);
+                },
+                error: function () {
+                    alert("@Resources.Passes.ResourceManager.GetString("error" + "_" + ViewBag.lang)");
+                }
+            });
+       }
+}
+    </script>
+}

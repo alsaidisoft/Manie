@@ -1,0 +1,62 @@
+﻿@using APP.Util
+
+
+@{
+    ViewBag.Title = "Index";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+       
+
+            <div class="card-header text-primary"><h1><i class="fa fa-video"></i> @Resources.Common.ResourceManager.GetString("user_manual" + "_" + ViewBag.lang)</h1></div>
+            <div class="card-body text-center">
+
+
+
+
+
+
+                @if (ViewBag.workflowIDType <= 1 || ViewBag.workflowIDType == null)
+                {
+                    <video style="width:60%; margin: 0 auto; padding:4px;" controls>
+                        <source src="~/Content/videos/SecurityClearance.mp4" type="video/mp4" />
+                        <source src="~/Content/videos/SecurityClearance.mp4" type="video/ogg" />
+                        Your Browser Dose Not Support the Video Tag
+                    </video>
+                }
+
+                @if (ViewBag.workflowIDType == 2 || ViewBag.workflowIDType == 4)
+                {
+                    <video style="width:60%; margin: 0 auto; padding:4px;" controls>
+                        <source src="~/Content/videos/2&4.mp4" type="video/mp4" />
+                        <source src="~/Content/videos/2&4.mp4" type="video/ogg" />
+                        Your Browser Dose Not Support the Video Tag
+                    </video>
+                }
+
+                @if (ViewBag.workflowIDType == 3)
+                {
+                    <video style="width:60%; margin: 0 auto; padding:4px;" controls>
+                        <source src="~/Content/videos/3.mp4" type="video/mp4" />
+                        <source src="~/Content/videos/3.mp4" type="video/ogg" />
+                        Your Browser Dose Not Support the Video Tag
+                    </video>
+                }
+
+            </div>
+        </div>
+    </div>
+
+
+

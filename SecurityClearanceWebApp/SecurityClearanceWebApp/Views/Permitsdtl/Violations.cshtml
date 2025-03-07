@@ -1,0 +1,301 @@
+﻿@using Newtonsoft.Json;
+@using portal.Controllers;
+@using SecurityClearanceWebApp.Models;
+@using APP.Util;
+@model SecurityClearanceWebApp.Models.RA42_PERMITS_DTL
+
+@{
+    ViewBag.Title = "Violations";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var violation_ = @Resources.Common.ResourceManager.GetString("add_violation" + "_" + ViewBag.lang);
+    var required = Resources.Common.ResourceManager.GetString("required" + "_" + ViewBag.lang);
+
+    var col = 12;
+
+    var controller = "Mypasses";
+
+    int access = Model.RA42_ACCESS_TYPE_MST.ACCESS_SECRET_CODE.Value;
+
+    ViewData["access"] = access.ToString();
+}
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+
+        @if ((ViewBag.RESPO_STATE > 1 && ViewBag.RESPO_STATE < 11) || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+        {
+            if (ViewBag.RESPO_STATE != 9)
+            {
+                @Html.Partial("Index")
+
+                controller = ViewBag.controllerName;
+            }
+        }
+
+        <div class="col-md-@col">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="fa fa-exclamation-triangle"></i>
+                        @Resources.Passes.ResourceManager.GetString("Violations" + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 @align">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    @{
+                        if (TempData["Success"] != null)
+                        {
+                            <p class="alert alert-success">@TempData["Success"]</p>
+                        }
+                        if (TempData["Erorr"] != null)
+                        {
+                            <p class="alert alert-danger">@TempData["Erorr"]</p>
+                        }
+                    }
+                    @using (Html.BeginForm("Violations", null, FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "if(document.getElementById('VIOLATION_DESC').value !='') { return true; } else { alert('" + violation_ + "'); document.getElementById('VIOLATION_DESC').style.border='1px solid red'; return false; }" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.PERMIT_CODE)
+
+
+                            <div class="col-md-12 justify-content-center">
+
+                                <h4>
+                                    @Resources.Passes.ResourceManager.GetString("Violations" + "_" + ViewBag.lang)
+                                </h4>
+                                @if (ViewBag.RESPO_STATE == 3 || ViewBag.RESPO_STATE == 9 || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    @Resources.Passes.ResourceManager.GetString("Violation_type" + "_" + ViewBag.lang)
+                                                </label>
+                                                <select class="form-control" name="VIOLATION_CODE" required="" oninvalid="this.setCustomValidity('@required')" oninput="setCustomValidity('')">
+                                                    <option value="">--اختر نوع المخالفة--</option>
+                                                    @if (ViewBag.VIOLATION_CODE != null)
+                                                    {
+                                                        foreach (var option in ViewBag.VIOLATION_CODE)
+                                                        {
+                                                            <option value="@option.Value">@option.Text</option>
+                                                        }
+
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    @Resources.Passes.ResourceManager.GetString("violation_desc" + "_" + ViewBag.lang)
+                                                </label>
+                                                <textarea name="VIOLATION_DESC" id="VIOLATION_DESC" required="" oninvalid="this.setCustomValidity('@required')" oninput="setCustomValidity('')" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    @Resources.Passes.ResourceManager.GetString("Violation_price" + "_" + ViewBag.lang)
+                                                </label>
+
+                                                <input type="number" step="0.1" name="VIOLATION_PRICE" class="form-control" id="VIOLATION_PRICE" required="" oninvalid="this.setCustomValidity('@required')" oninput="setCustomValidity('')" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" dir="ltr">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    @Resources.Passes.ResourceManager.GetString("Violation_date" + "_" + ViewBag.lang)
+                                                </label>
+
+                                                <input type="text" name="VIOLATION_DATE" class="form-control" id="VIOLATION_DATE" style="width:100%" onkeydown="return false;" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    @Resources.Passes.ResourceManager.GetString("Violation_by" + "_" + ViewBag.lang)
+                                                </label>
+
+                                                <input type="text" name="VIOLATION_BY" class="form-control" id="VIOLATION_PRICE" required="" oninvalid="this.setCustomValidity('@required')" oninput="setCustomValidity('')" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group text-danger">
+                                                <input type="checkbox" name="PREVENT" id="prevent_yes" />
+                                                @Resources.Passes.ResourceManager.GetString("prevent_get_permit" + "_" + ViewBag.lang)
+                                                <input type="hidden" value="no" name="is_prevent" id="is_prevent" />
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                }
+                            </div>
+                            @if (ViewBag.VIOLATIONS != null)
+                            {
+                                foreach (var violation in ViewBag.VIOLATIONS)
+                                {
+                                    <div class="col-md-12">
+
+
+                                        <div class="form-group">
+
+                                            <div class="card-body" style="background: #fbc6c6; border-radius:5px;">
+                                                <p class="bg-white p-1 rounded">
+                                                    @{
+
+                                                        string name = Resources.Passes.ResourceManager.GetString("Autho_type" + "_" + ViewBag.lang) + ": " + (new UserInfo()).WorkFlowType(violation.CRD_BY) + " - " + (new UserInfo()).FULL_NAME(violation.CRD_BY);
+
+                                                        @name
+
+                                                    }
+                                                    - @Resources.Passes.ResourceManager.GetString("Violation_date" + "_" + ViewBag.lang) - @violation.VIOLATION_DATE
+                                                </p>
+                                                @if (ViewBag.RESPO_STATE == 3 || ViewBag.RESPO_STATE == 9 || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+                                                {<div class=""><span id="deletviolation"><a href="#" id="@violation.VECHILE_VIOLATION_CODE" title="@Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span></div>}
+                                                <br />
+                                                <br />
+                                                @Resources.Passes.ResourceManager.GetString("Violation_type" + "_" + ViewBag.lang) :
+                                                @(Language.GetCurrentLang()=="en"? violation.RA42_VIOLATIONS_MST.VIOLATION_TYPE_E:violation.RA42_VIOLATIONS_MST.VIOLATION_TYPE_A)
+                                                <hr />
+                                                @Resources.Passes.ResourceManager.GetString("Violation_by" + "_" + ViewBag.lang) :
+                                                @violation.VIOLATION_BY
+                                                <hr />
+                                                @if (violation.PREVENT == true)
+                                                {
+                                                    <div class="text-danger">@Resources.Passes.ResourceManager.GetString("prevent_get_permit" + "_" + ViewBag.lang) </div>
+                                                    <hr />
+                                                }
+
+                                                @Resources.Passes.ResourceManager.GetString("violation_desc" + "_" + ViewBag.lang) :
+                                                @violation.VIOLATION_DESC
+                                                <hr /> @Resources.Passes.ResourceManager.GetString("Violation_price" + "_" + ViewBag.lang) : @violation.VIOLATION_PRICE
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+
+
+
+
+
+                            @if (ViewBag.RESPO_STATE == 3 || ViewBag.RESPO_STATE == 9 || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+                            {
+                                <div class="col-md-12">
+
+                                    <div class="form-group @align">
+
+                                        <button type="submit" value="Approve" class="btn btn-success">
+                                            <i class="fa fa-plus-circle"></i>
+                                            @Resources.Common.ResourceManager.GetString("add_violation" + "_" + ViewBag.lang)
+                                        </button>
+
+                                    </div>
+
+
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+@section Scripts {
+
+
+
+    <link href="~/Content/Kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/Kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="~/Scripts/Kendo/js/kendo.all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#prevent_yes").change(function () {
+                if (this.checked) {
+                    document.getElementById("is_prevent").value = "yes";
+                }
+                else {
+                    document.getElementById("is_prevent").value = "no";
+
+                }
+
+            });
+
+            $("#VIOLATION_DATE").kendoDateTimePicker({
+                format: "dd/MM/yyyy hh:mm tt"
+            });
+
+            $('#deletviolation a').click(function (e) {
+            e.preventDefault();
+
+                var id = $(this).attr("Id");
+                console.log(id);
+            var MSG = confirm("@Resources.Passes.ResourceManager.GetString("Violation_confirm_delete" + "_" + ViewBag.lang)");
+
+            if (MSG) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteViolation")',
+                    data: { id: id },
+                    dataType: "json",
+                    success: function () {
+                        setTimeout(function () { location.reload(); }, 1);
+                    },
+                    error: function () {
+                        alert("@Resources.Passes.ResourceManager.GetString("Error_delete_violation" + "_" + ViewBag.lang)");
+                    }
+                });
+            }
+            })
+
+             
+        });
+    </script>
+
+
+
+}
+

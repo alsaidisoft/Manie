@@ -1,0 +1,788 @@
+﻿@model IEnumerable<SecurityClearanceWebApp.Models.RA42_CARD_DESIGN_DTL>
+
+@using APP.Util;
+
+@{
+    ViewBag.Title = "Index";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+
+    }
+
+}
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @{
+            Html.RenderPartial("settings_nav_links");
+
+        }
+        <div class="col-md-10">
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 justify-content-center text-primary">
+                            <h4>
+                                <i class="@ViewBag.controllerIconClass"></i>&nbsp;
+                                @Resources.Settings.ResourceManager.GetString("card_design" + "_" + ViewBag.lang)
+                            </h4>
+                        </div>
+                        <div class="col-6 text-white @align">
+                            <a class="btn btn-success" href="#" onclick="AddNew(0)">
+                                <i class="fa fa-plus-circle"></i>
+                                &nbsp;
+                                @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered table-hover table-responsive  @table  text-center" style="display: table">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("pass_type_a" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Force" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("card_for" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("base64_front" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("base64_back" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("base64_temp" + "_" + ViewBag.lang)
+                                </th>
+                                <th style="border-right: 1px solid #ccc">
+                                    @Resources.Settings.ResourceManager.GetString("ACTIONS" + "_" + ViewBag.lang)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int rowNo = 0;}
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                @{rowNo++;}
+                                <td>@rowNo</td>
+
+                                <td>
+                                    @if (Language.GetCurrentLang() == "en")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E)
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_ACCESS_TYPE_MST.ACCESS_TYPE)
+
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (Language.GetCurrentLang() == "en")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_FORCES_MST.FORCE_NAME_E)
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_FORCES_MST.FORCE_NAME_A)
+
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (Language.GetCurrentLang() == "en")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_CARD_FOR_MST.CARD_FOR_E)
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_CARD_FOR_MST.CARD_FOR_A)
+
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.BASE64_ENCODE_FRONT != null)
+                                    {
+                                        <img src="@item.BASE64_ENCODE_FRONT" width="200" />
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.BASE64_ENCODE_BACK != null)
+                                    {
+                                        <img src="@item.BASE64_ENCODE_BACK" width="200" />
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.BASE64_ENCODE_TEMP != null)
+                                    {
+                                        <img src="@item.BASE64_ENCODE_TEMP" width="200" />
+                                    }
+                                </td>
+
+                                <td style="border-right: 1px solid #ccc;">
+                                    <div class="btn-group" dir="ltr">
+                                        <a class="btn btn-primary details btn-sm" href="#" onclick="Details(@item.CARD_CODE)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a class="btn btn-warning btn-sm" href="#" onclick="EditRecord(@item.CARD_CODE)">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-danger btn-sm text-white" href="#" onclick="DeleteRecord(@item.CARD_CODE)">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*Create A Popup Modal With Registration Form For Add Or Edit Student Record*@
+
+<div class="modal fade" id="MyModal" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    @Resources.Settings.ResourceManager.GetString("base64_temp" + "_" + ViewBag.lang)
+                    <div class="form-group">
+                        <input type="file" class="form-control" accept="apllication/jpg" id="base64_example_image" onchange="encodeImageFileAsURL(this)" />
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <textarea class="form-control" id="base64_temp_result"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="form" method="post" enctype="multipart/form-data">
+                    <fieldset id="SubmitForm">
+                        <input type="hidden" name="CARD_CODE" id="CARD_CODE" />
+
+                        <div class="col-md-6">
+                            @Resources.Settings.ResourceManager.GetString("pass_type_a" + "_" + ViewBag.lang)
+                            <div class="form-group">
+
+                                <select name="ACCESS_TYPE_CODE" class="form-control" id="DropDwn1">
+                                    @if (ViewBag.ACCESS_TYPE_CODE != null)
+                                    {
+                                        foreach (var option in ViewBag.ACCESS_TYPE_CODE)
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
+
+                                    }
+                                </select>
+
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @Resources.Settings.ResourceManager.GetString("Force" + "_" + ViewBag.lang)
+                            <div class="form-group">
+
+                                <select name="FORCE_ID" class="form-control" id="DropDwn2">
+                                    @if (ViewBag.FORCE_ID != null)
+                                    {
+                                        foreach (var option in ViewBag.FORCE_ID)
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
+
+                                    }
+                                </select>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @Resources.Settings.ResourceManager.GetString("card_for" + "_" + ViewBag.lang)
+                            <div class="form-group">
+
+                                <select name="CARD_FOR_CODE" class="form-control" id="DropDwn3">
+                                    @if (ViewBag.CARD_FOR_CODE != null)
+                                    {
+                                        foreach (var option in ViewBag.CARD_FOR_CODE)
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
+
+                                    }
+                                </select>
+
+
+
+                            </div>
+                        </div>
+                        <div style="display:none">
+                            <div class="col-md-6">
+                                @Resources.Settings.ResourceManager.GetString("front_image" + "_" + ViewBag.lang)
+                                <div class="form-group">
+                                    <input type="file" class="form-control" accept="apllication/jpg" id="front_image" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                @Resources.Settings.ResourceManager.GetString("back_image" + "_" + ViewBag.lang)
+                                <div class="form-group">
+                                    <input type="file" class="form-control" accept="apllication/jpg" id="back_image" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                @Resources.Settings.ResourceManager.GetString("base64_temp" + "_" + ViewBag.lang)
+                                <div class="form-group">
+                                    <input type="file" class="form-control" accept="apllication/jpg" id="temp_image" />
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("base64_front" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <textarea name="BASE64_ENCODE_FRONT" class="form-control" id="BASE64_ENCODE_FRONT"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("base64_back" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <textarea name="BASE64_ENCODE_BACK" class="form-control" id="BASE64_ENCODE_BACK"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("base64_temp" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <textarea name="BASE64_ENCODE_TEMP" class="form-control" id="BASE64_ENCODE_TEMP"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <textarea name="REMARKS" class="form-control" id="REMARKS"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <a href="#" class="btn btn-block text-center" id="SaveRecord"></a>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Create A PopUp Modal For DeleteConfirmation*@
+
+<div class="modal fade" id="DeleteConfirmation" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_dlt"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <h4>
+                    @Resources.Common.ResourceManager.GetString("delete_question" + "_" + ViewBag.lang)
+                </h4>
+
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("AccessName" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="ACCESSA1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("AccessName" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="ACCESSE1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("force_a" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="FORCEA1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("force_a" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="FORCEE1"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("card_for_a" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="CARD_FORA1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("card_for_a" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="CARD_FORE1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("front_image" + "_" + ViewBag.lang)</h6>
+                            <img id="f_img1" width="300" />
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("back_image" + "_" + ViewBag.lang)</h6>
+                            <img id="b_img1" width="300" />
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("base64_temp" + "_" + ViewBag.lang)</h6>
+                            <img id="t_img1" width="300" />
+                            <hr />
+                        </div>
+                        <div class="col-md-12">
+                            <h6 class="details-info-title">
+                                @Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)
+                            </h6>
+                            <h6 class="details-info-content text-primary" id="REMARKS1"></h6>
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success" data-dismiss="modal" id="r"> <i class="fa fa-thumbs-up"></i> 
+                @Resources.Common.ResourceManager.GetString("cancel" + "_" + ViewBag.lang)</a>
+                &thinsp;
+                <a href="#" class="btn btn-danger" onclick="ConfirmDelete()">
+                    <i class="fa fa-trash"></i>
+                    @Resources.Common.ResourceManager.GetString("delete_confirm" + "_" + ViewBag.lang)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Details" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_details"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("AccessName" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="ACCESSA2"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("AccessName" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="ACCESSE2"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("force_a" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="FORCEA2"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("force_a" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="FORCEE2"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("card_for_a" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="CARD_FORA2"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("card_for_a" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="CARD_FORE2"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("front_image" + "_" + ViewBag.lang)</h6>
+                            <img id="f_img2" width="300" />
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("back_image" + "_" + ViewBag.lang)</h6>
+                            <img id="b_img2" width="300" />
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("base64_temp" + "_" + ViewBag.lang)</h6>
+                            <img id="t_img2" width="300" />
+                            <hr />
+                        </div>
+                        <div class="col-md-12">
+                            <h6 class="details-info-title">
+                                @Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)
+                            </h6>
+                            <h6 class="details-info-content text-primary" id="REMARKS2"></h6>
+                            <hr />
+                        </div>
+                    </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_BY" + "_" + ViewBag.lang)</h6>
+                                <h6 class="details-info-content text-primary" id="CRD_BY"></h6>
+                                <hr />
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_DT" + "_" + ViewBag.lang)</h6>
+                                <h6 class="details-info-content text-primary" id="CRD_DT"></h6>
+                                <hr />
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_BY" + "_" + ViewBag.lang)</h6>
+                                <h6 class="details-info-content text-primary" id="UPD_BY"></h6>
+                                <hr />
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_DT" + "_" + ViewBag.lang)</h6>
+                                <h6 class="details-info-content text-primary" id="UPD_DT"></h6>
+                                <hr />
+                            </div>
+                        </div>
+
+                    </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+
+    <script>
+        var f;
+        var b;
+      
+
+        $('#front_image').change(function () {
+            encodeImageFileAsURL("front_image");
+        });
+
+        $('#back_image').change(function () {
+            encodeImageFileAsURL("back_image");
+
+           
+        });
+        $('#temp_image').change(function () {
+            encodeImageFileAsURL("temp_image");
+
+
+        });
+        function encodeImageFileAsURL(element) {
+            var file = element.files[0];
+            var reader = new FileReader();
+            $("#base64_temp_result").val("");
+            reader.onloadend = function () {
+                console.log('RESULT', reader.result);
+                $("#base64_temp_result").val(reader.result);
+            }
+            reader.readAsDataURL(file);
+        }
+        //function encodeImageFileAsURL(url) {
+            
+        //    var filesSelected = document.getElementById(url).files;
+        //    if (filesSelected.length > 0) {
+        //        var fileToLoad = filesSelected[0];
+
+        //        var fileReader = new FileReader();
+
+        //        fileReader.onload = function (fileLoadedEvent) {
+        //            var srcData = fileLoadedEvent.target.result; // <--- data: base64
+
+        //            //var newImage = document.createElement('img');
+        //            //newImage.src = srcData;
+
+        //            //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+        //            if (url === "front_image") {
+        //                $("#BASE64_ENCODE_FRONT").val(srcData);
+        //            }
+        //            if(url === "back_image") {
+        //                $("#BASE64_ENCODE_BACK").val(srcData);
+
+        //            }
+        //            if (url === "temp_image") {
+        //                $("#BASE64_ENCODE_TEMP").val(srcData);
+
+        //            }
+        //            //alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+        //            console.log("Converted Base64 version is " + srcData);
+        //        }
+        //        fileReader.readAsDataURL(fileToLoad);
+        //    }
+        //}
+
+        function AddNew(id) {
+            $("#form")[0].reset();
+            $("#CARD_CODE").val(0);
+            $("#ModalTitle").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)").removeClass('btn-warning').addClass("btn-success");
+            $("#MyModal").modal();
+
+        }
+
+        //Show The Popup Modal For Edit Student Record
+
+        function EditRecord(Id) {
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle").html("<i class='fa fa-edit'></i> @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-save'></i> @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)").removeClass('btn-success').addClass("btn-warning");
+            $("#MyModal").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                   
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var base64_front = obj.BASE64_ENCODE_FRONT != null ? obj.BASE64_ENCODE_FRONT : "";
+                    var base64_back = obj.BASE64_ENCODE_BACK != null ? obj.BASE64_ENCODE_BACK : "";
+                    var base64_temp = obj.BASE64_ENCODE_TEMP != null ? obj.BASE64_ENCODE_TEMP : "";
+                    $("#CARD_CODE").val(obj.CARD_CODE);
+                    $("#REMARKS").val(obj.REMARKS);
+                    $("#BASE64_ENCODE_FRONT").val(base64_front);
+                    $("#BASE64_ENCODE_BACK").val(base64_back);
+                    $("#BASE64_ENCODE_TEMP").val(base64_temp);
+                    $("#DropDwn1").val(obj.ACCESS_TYPE_CODE).trigger('change');
+                    $("#DropDwn2").val(obj.FORCE_ID).trigger('change');
+                    $("#DropDwn3").val(obj.CARD_FOR_CODE).trigger('change');
+
+
+                }
+            })
+        }
+
+           $("#SaveRecord").click(function () {
+            var data = $("#SubmitForm").serialize();
+            $.ajax({
+                type: "Post",
+                url: "./SaveDataInDatabase",
+                data: data,
+                success: function (result) {
+                    window.location.href = "./index";
+                    $("#MyModal").modal("hide");
+
+                }
+            })
+        })
+
+         //Show The Popup Modal For DeleteComfirmation
+        function Details(Id) {
+            $("#CARD_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_details").html("<i class='fa fa-eye'></i> @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)");
+            $("#Details").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var access = obj.ACCESS_TYPE != null ? obj.ACCESS_TYPE : "";
+                    var accesse = obj.ACCESS_TYPE_E != null ? obj.ACCESS_TYPE_E : "";
+                    var force = obj.FORCE_NAME_A != null ? obj.FORCE_NAME_A : "";
+                    var forcee = obj.FORCE_NAME_E != null ? obj.FORCE_NAME_E : "";
+                    var card_for = obj.CARD_FOR_A != null ? obj.CARD_FOR_A : "";
+                    var card_fore = obj.CARD_FOR_E != null ? obj.CARD_FOR_E : "";
+                    var remarks = obj.REMARKS != null ? obj.REMARKS : "";
+                    var base64_front = obj.BASE64_ENCODE_FRONT != null ? obj.BASE64_ENCODE_FRONT : "";
+                    var base64_back = obj.BASE64_ENCODE_BACK != null ? obj.BASE64_ENCODE_BACK : "";
+                    var base64_temp = obj.BASE64_ENCODE_TEMP != null ? obj.BASE64_ENCODE_TEMP : "";
+                    var crd_by = obj.CRD_BY != null ? obj.CRD_BY : "";
+                    var upd_by = obj.UPD_BY != null ? obj.UPD_BY : "";
+                    var crd_dt = obj.CRD_DT != null ? dtConvFromJSON(obj.CRD_DT) : "";
+                    var upd_dt = obj.UPD_DT != null ? dtConvFromJSON(obj.UPD_DT) : "";
+                   
+                    $("#ACCESSA2").text(access);
+                    $("#ACCESSE2").text(accesse);
+                    $("#FORCEA2").text(force);
+                    $("#FORCEE2").text(forcee);
+                    $("#CARD_FORA2").text(card_for);
+                    $("#CARD_FORE2").text(card_fore);
+                    $("#REMARKS2").text(remarks);
+                    var front = document.getElementById('f_img2');
+                    var back = document.getElementById('b_img2');
+                    var temp = document.getElementById('t_img2');
+                    if (base64_front != "") {
+                        front.src = base64_front;
+                    }
+                    if (base64_back != "") {
+                        back.src = base64_back;
+
+                    }
+                    if (base64_temp != "") {
+                        temp.src = base64_temp;
+                    }
+                    $("#CRD_BY").text(crd_by);
+                    $("#CRD_DT").text(crd_dt);
+                    $("#UPD_BY").text(upd_by);
+                    $("#UPD_DT").text(upd_dt);
+
+                }
+            })
+
+        }
+        //Show The Popup Modal For DeleteComfirmation
+        function DeleteRecord(Id) {
+            $("#CARD_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_dlt").html("<i class='fa fa-trash'></i> @Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)");
+            $("#DeleteConfirmation").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var access = obj.ACCESS_TYPE != null ? obj.ACCESS_TYPE : "";
+                    var accesse = obj.ACCESS_TYPE_E != null ? obj.ACCESS_TYPE_E : "";
+                    var force = obj.FORCE_NAME_A != null ? obj.FORCE_NAME_A : "";
+                    var forcee = obj.FORCE_NAME_E != null ? obj.FORCE_NAME_E : "";
+                    var card_for = obj.CARD_FOR_A != null ? obj.CARD_FOR_A : "";
+                    var card_fore = obj.CARD_FOR_E != null ? obj.CARD_FOR_E : "";
+                    var remarks = obj.REMARKS != null ? obj.REMARKS : "";
+                    var base64_front = obj.BASE64_ENCODE_FRONT != null ? obj.BASE64_ENCODE_FRONT : "";
+                    var base64_back = obj.BASE64_ENCODE_BACK != null ? obj.BASE64_ENCODE_BACK : "";
+                    var base64_temp = obj.BASE64_ENCODE_TEMP != null ? obj.BASE64_ENCODE_TEMP : "";
+                    var crd_by = obj.CRD_BY != null ? obj.CRD_BY : "";
+                    var upd_by = obj.UPD_BY != null ? obj.UPD_BY : "";
+                    var crd_dt = obj.CRD_DT != null ? dtConvFromJSON(obj.CRD_DT) : "";
+                    var upd_dt = obj.UPD_DT != null ? dtConvFromJSON(obj.UPD_DT) : "";
+
+                    $("#ACCESSA1").text(access);
+                    $("#ACCESSE1").text(accesse);
+                    $("#FORCEA1").text(force);
+                    $("#FORCEE1").text(forcee);
+                    $("#CARD_FORA1").text(card_for);
+                    $("#CARD_FORE1").text(card_fore);
+                    $("#REMARKS1").text(remarks);
+                    var front = document.getElementById('f_img1');
+                    var back = document.getElementById('b_img1');
+                    var temp = document.getElementById('t_img1');
+                    if (base64_front != "") {
+                        front.src = base64_front;
+                    }
+                    if (base64_back != "") {
+                        back.src = base64_back;
+
+                    }
+                    if (base64_temp != "") {
+                        temp.src = base64_temp;
+                    }
+
+
+                }
+            })
+
+        }
+        function ConfirmDelete () {
+            var Id = $("#CARD_CODE").val();
+            //console.log(Id);
+            $.ajax({
+                type: "POST",
+                url: "./DltRecordById?Id=" + Id,
+                success: function (result) {
+                    $("#DeleteConfirmation").modal("hide");
+                    window.location.href = "./index";
+
+                }
+            })
+        }
+
+        function dtConvFromJSON(data) {
+            jsonDate = data;
+            debugger;
+            var d = new Date(parseInt(jsonDate.substr(6)));
+            var m, day;
+            m = d.getMonth() + 1;
+            if (m < 10)
+                m = '0' + m
+            if (d.getDate() < 10)
+                day = '0' + d.getDate()
+            else
+                day = d.getDate();
+            var formattedDate = d.getFullYear() + "/ " + m + "/ " + day;
+            var hours = (+d.getHours());
+            var minutes = (+d.getMinutes());
+            var formattedTime = hours + ":" + minutes + ":" + (+d.getSeconds());
+            formattedDate = formattedTime + " " + formattedDate;
+            return formattedDate;
+        }
+
+    </script>
+
+
+}
+

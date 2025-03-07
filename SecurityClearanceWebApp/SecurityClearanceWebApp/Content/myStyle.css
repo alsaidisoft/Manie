@@ -1,0 +1,348 @@
+﻿@font-face {
+    font-family: Khalid;
+    src: url(khalid.ttf) format('truetype'),
+    url(Khalid-Art-bold.eot) format('embedded-opentype');
+}
+body {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    font-family: Khalid;
+}
+input{
+    direction: rtl;
+}
+
+select{
+    direction: rtl;
+}
+.header {
+    width: 100%;
+    background: #5273ad;
+    margin: 0 auto;
+}
+
+.header img {
+    margin: 0 auto;
+    width: 100%;
+        
+}
+.header1 {
+    width: 100% !important;
+    background: rgba(30, 136, 198, 0.37);
+    margin: 0 auto !important;
+    text-align: center;
+
+}
+    .header1 p {
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+        direction: ltr;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+        margin: 0px;
+        padding: 4px;
+        overflow: auto;
+    }
+.header1 img {
+    margin: 0 auto;
+    width: 12%;
+    text-align: center;
+}
+.mycontent {
+    width: 90%;
+    background-color: #f2f2f2;
+    margin: 0 auto;
+    padding: 10px;
+}
+.mycontent h1 {
+        text-align: right;
+        direction: rtl
+}
+.col-md-6 {
+    float: right;
+}
+.mycontent h4 {
+    text-align: right;
+    direction: rtl;
+    text-decoration: underline;
+}
+label {
+    text-align: right;
+    direction: rtl;
+    margin: 10px;
+    font-weight: bold;
+
+}
+.mycontent ul{
+    float: right;
+    text-align: right;
+    direction: rtl;
+    font-size: 18px;
+    color: #c81818;
+}
+  .mandatory {
+        color: #c81818;
+        font-size: 16px;
+    }
+.form-group{
+    padding: 10px;
+    text-align: right;
+}
+
+
+
+       
+nav{
+    width: 100% !important;
+    text-align: center;
+    background: #e4e4e4;
+    margin: 0 auto !important;
+}
+
+nav ul {
+        padding: 5px;
+        direction: rtl;
+        width: 100%;
+        text-align: center;
+}
+
+    nav ul li {
+        display: inline-block;
+        font-size: 20px;
+        margin: 5px;
+        text-align: center;
+        width: 250px;
+        background-color: #3577b6;
+        padding: 10px 0px 10px 0px;
+        border-radius: 5px;
+    }
+    nav ul li a {
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+    }
+
+nav ul li:hover{
+        text-decoration: none;
+        color: #fff;
+        background: #206ec2;
+}
+nav ul li a:hover {
+       text-decoration: none;
+       color: #fff;
+}
+#myDatatable {
+    border: 1px solid #c8c8c8;
+}
+#myDatatable thead tr th {
+    border: 1px solid #e1e1e1;
+    text-align: center;
+    padding: 4px;
+    font-size: 18px;
+}
+
+#myDatatable td {
+    border: 1px solid #e1e1e1;
+    text-align: center;
+    padding: 4px;
+    font-size: 14px;
+}
+.servicenumber {
+    text-align: right;
+    direction: rtl;
+    color: red;
+}
+.fixed-image {
+    width: 250px;
+    height: 250px;
+    border: 1px solid #000;
+    float: left;
+    position: relative;
+}
+.fixed-image img{
+    width: 245px;
+    height: 245px;
+}
+.printtoPDF{
+    margin: 0 auto;
+    width: 90%;
+    height: auto;
+    padding: 5px;
+
+}
+    .printtoPDF p {
+        font-size: 20px;
+        font-weight: bold;
+        color: #000;
+        text-align: center;
+        direction: rtl;
+        text-decoration: underline;
+    }
+
+.imgPdflogo{
+
+    width: 20%;
+
+    }
+.printtoPDF h3{
+    margin: 0 auto;
+    text-align: center;
+    direction: rtl;
+    text-decoration: underline;
+    padding: 10px;
+}
+.printtoPDF label {
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    text-align: right;
+    direction: rtl;
+}
+.printtoPDF input{
+    border: none;
+}
+.printtoPDF table {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    margin: 0 auto;
+    direction: rtl;
+    border-collapse: collapse;
+}
+
+    .printtoPDF table td,th {
+        font-weight: bold;
+        border: 1px solid #000;
+    }
+
+.printtoPDF table td {
+   border: 1px solid #000;
+   font-weight: bold;
+    }
+
+#image_print {
+    width: 245px;
+    height: 245px;
+}
+
+.previewImage {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0px;
+}
+
+    .previewImage img {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+.previewImage2 {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0px;
+}
+
+    .previewImage2 img {
+        margin: 0 auto;
+        width:70%;
+        
+    }
+    .right{
+        float: right;
+        width: 60%;
+        height: auto;
+    }
+
+
+    .right label{
+        clear: both;
+        width: 100%;
+
+    }
+
+    .left{
+        float: left;
+        width: 40%;
+        height: auto;
+    }
+
+.alert-success{
+    font-size: 20px;
+    text-align: right;
+    direction: rtl;
+    font-weight: bold;
+    background-color: #9ddc96;
+}
+
+.error {
+    font-size: 20px;
+    text-align: right;
+    direction: rtl;
+    font-weight: bold;
+    background: #f1b0b0;
+    padding: 20px;
+    color: #c81818;
+    border-radius: 5px;
+}
+.main_page{
+    margin: 0 auto;
+    height: 400px;
+    width: 400px;
+    background: #f5f5f5;
+    border-radius: 5px;
+    border: 1px solid #dcdcdc;
+}
+.note {
+    font-size: 16px;
+    text-align: right;
+    direction: rtl;
+    font-weight: bold;
+    color: #c81818;
+    padding: 5px;
+}
+
+.dot{
+    height: 20px;
+    width: 20px;
+    background-color: #20ee51;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot1 {
+    height: 20px;
+    width: 20px;
+    background-color: #32a5e8;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.btn-default{
+    background-color: #5aa863;
+    color: #fff;
+    font-weight: bold;
+    width:100%;
+    font-size: 22px;
+    margin: 0 auto;
+}
+
+#myDatatable{
+    direction: rtl;
+}
+
+#myDatatable td{
+    font-size: 18px;
+}
+
+#grid th{
+    font-weight: bold;
+    font-size: 20px;
+    color: #033655
+}
+#grid td{
+    font-weight: bold;
+    font-size: 18px;
+}

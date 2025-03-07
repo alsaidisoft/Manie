@@ -1,0 +1,286 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+  
+}
+
+<style>
+    td, th {
+        text-align: center !important;
+    }
+</style>
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @{
+            Html.RenderPartial("settings_nav_links");
+
+        }
+        <div class="col-md-10">
+            <div class="card">
+                
+                @*<div class="col-12 justify-content-center p-4 m-2">*@
+                    <h1 class="card-header text-primary">
+                        <i class="fa fa-cogs"></i> @Resources.Common.ResourceManager.GetString("settings" + "_" + ViewBag.lang)
+
+                    </h1>
+                @*</div>*@
+                <div class="card-body">
+
+                    <h1 class="text-primary">
+                        <i class="fa fa-user"></i> @ViewBag.FULL_NAME -
+                        @Resources.Common.ResourceManager.GetString("Welcome" + "_" + ViewBag.lang)
+                    </h1>
+                    <br />
+                    <h4 class="text-primary"><i class="fa fa-lock"></i> @Resources.Common.ResourceManager.GetString("ListOfPermissions" + "_" + ViewBag.lang)</h4>
+                    <br />
+
+                    <table class="table  table-bordered table-responsive-lg">
+                        <thead>
+                            <tr>
+                                <th colspan="10" class="text-white text-center bg-primary p-2 m-0">
+                                    <h3 class="text-center">
+                                        @Resources.Settings.ResourceManager.GetString("Pervilleges" + "_" + ViewBag.lang)
+                                    </h3>
+                                </th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr class="border-secondary">
+                                <th class="alert-secondary text-dark border-secondary">
+                                    @Resources.Settings.ResourceManager.GetString("Ad" + "_" + ViewBag.lang)
+                                </th>
+                                <th class="alert-secondary text-dark border-secondary">
+                                    @Resources.Settings.ResourceManager.GetString("View" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th class="alert-secondary text-dark border-secondary">
+                                    @Resources.Settings.ResourceManager.GetString("Up" + "_" + ViewBag.lang)
+                                </th>
+                                <th class="alert-secondary text-dark border-secondary">
+                                    @Resources.Settings.ResourceManager.GetString("Delete" + "_" + ViewBag.lang)
+                                </th>
+                            </tr>
+                            <tr class="border-secondary">
+                                <td class=" border-secondary @if (ViewBag.AD == true)
+                                    {
+                                        //<text>alert-success</text>
+                                    }
+                                    else
+                                    {
+                                           //<text>alert-danger</text>
+
+                                    }">
+                                    @if (ViewBag.AD == true)
+                                    {
+
+                                        <i class="text-success fa fa-check-circle"></i>
+
+                                    }
+                                    else
+                                    {
+
+                                        <i class="text-danger fa fa-times-circle"></i>
+
+                                    }
+                                </td>
+                                <td class=" border-secondary @if (ViewBag.VW == true)
+                                    {
+                                       // <text>alert-success</text>
+                                    }
+                                    else
+                                    {
+                                          // <text>alert-danger</text>
+
+                                    }">
+                                    @if (ViewBag.VW == true)
+                                    {
+
+                                        <i class="text-success fa fa-check-circle"></i>
+
+                                    }
+                                    else
+                                    {
+
+                                        <i class="text-danger fa fa-times-circle"></i>
+
+                                    }
+                                </td>
+                                <td class=" border-secondary @if (ViewBag.UP == true)
+                                    {
+                                        //<text>alert-success</text>
+                                    }
+                                    else
+                                    {
+                                           //<text>alert-danger</text>
+
+                                    }">
+                                    @if (ViewBag.UP == true)
+                                    {
+
+                                        <i class="text-success fa fa-check-circle"></i>
+
+                                    }
+                                    else
+                                    {
+
+                                        <i class="text-danger fa fa-times-circle"></i>
+
+                                    }
+                                </td>
+                                <td class=" border-secondary @if (ViewBag.DLT == true)
+                                    {
+                                       // <text>alert-success</text>
+                                    }
+                                    else
+                                    {
+                                           //<text>alert-danger</text>
+
+                                    }">
+                                    @if (ViewBag.DLT == true)
+                                    {
+
+                                        <i class="text-success fa fa-check-circle"></i>
+
+                                    }
+                                    else
+                                    {
+
+                                        <i class="text-danger fa fa-times-circle"></i>
+
+                                    }
+                                </td>
+                            </tr>
+                            <tr class="border-secondary">
+                                <th class="alert-secondary text-dark border-secondary">
+                                    @Resources.Settings.ResourceManager.GetString("Rp" + "_" + ViewBag.lang)
+                                </th>
+                                
+                                <th class="alert-secondary text-dark border-secondary">
+                                    @Resources.Settings.ResourceManager.GetString("Settings_pr" + "_" + ViewBag.lang)
+                                </th>
+                                <th class="alert-secondary text-dark border-secondary">
+                                    @Resources.Settings.ResourceManager.GetString("Developer" + "_" + ViewBag.lang)
+                                </th>
+                                <th class="alert-secondary text-dark border-secondary">
+                                    @Resources.Settings.ResourceManager.GetString("All_permissions" + "_" + ViewBag.lang)
+                                </th>
+
+                            </tr>
+                            <tr>
+                                <td class=" border-secondary @if (ViewBag.RP == true)
+                                    {
+                                       // <text>alert-success</text>
+                                    }
+                                    else
+                                    {
+                                          // <text>alert-danger</text>
+
+                                    }">
+                                    @if (ViewBag.RP == true)
+                                    {
+
+                                        <i class="text-success fa fa-check-circle"></i>
+
+                                    }
+                                    else
+                                    {
+
+                                        <i class="text-danger fa fa-times-circle"></i>
+
+                                    }
+                                </td>
+                                <td class=" border-secondary @if (ViewBag.STN == true)
+                                    {
+                                       // <text>alert-success</text>
+                                    }
+                                    else
+                                    {
+                                          // <text>alert-danger</text>
+
+                                    }">
+                                    @if (ViewBag.STN == true)
+                                    {
+
+                                        <i class="text-success fa fa-check-circle"></i>
+
+                                    }
+                                    else
+                                    {
+
+                                        <i class="text-danger fa fa-times-circle"></i>
+
+                                    }
+
+                            <td class=" border-secondary @if (ViewBag.DEVELOPER == true)
+                                    {
+                                       // <text>alert-success</text>
+                                    }
+                                    else
+                                    {
+                                           //<text>alert-danger</text>
+
+                                    }">
+                                    @if (ViewBag.DEVELOPER == true)
+                                    {
+
+                                        <i class="text-success fa fa-check-circle"></i>
+
+                                    }
+                                    else
+                                    {
+
+                                        <i class="text-danger fa fa-times-circle"></i>
+
+                                    }
+                                </td>
+
+                                <td class=" border-secondary @if (ViewBag.ADMIN == true)
+                                    {
+                                       // <text>alert-success</text>
+                                    }
+                                    else
+                                    {
+                                           //<text>alert-danger</text>
+
+                                    }">
+                                    @if (ViewBag.ADMIN == true)
+                                    {
+
+                                        <i class="text-success fa fa-check-circle"></i>
+
+                                    }
+                                    else
+                                    {
+
+                                        <i class="text-danger fa fa-times-circle"></i>
+
+                                    }
+                                </td>
+
+                            </tr>
+                            
+                           
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

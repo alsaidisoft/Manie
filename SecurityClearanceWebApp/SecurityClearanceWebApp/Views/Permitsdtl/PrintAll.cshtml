@@ -1,0 +1,1193 @@
+﻿@using APP.Util;
+@using SecurityClearanceWebApp.Controllers;
+@using SecurityClearanceWebApp.Models;
+@model SecurityClearanceWebApp.Models.RA42_COMPANY_PASS_DTL
+
+@{
+    ViewBag.Title = "PrintAll";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var b_lign = "left";
+    var left = "-50%";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        b_lign = "right";
+        left = "-85%";
+
+
+    }
+    var col = 12;
+    var controller = "Mypasses";
+
+
+    string barcode = Guid.NewGuid().ToString().Substring(0, 5);
+    var expired = Resources.Common.ResourceManager.GetString("expired" + "_" + ViewBag.lang);
+    var countinue = Resources.Common.ResourceManager.GetString("countinue" + "_" + ViewBag.lang);
+    var choose_trans = Resources.Passes.ResourceManager.GetString("choose_transaction_type" + "_" + ViewBag.lang);
+    var required = Resources.Common.ResourceManager.GetString("required" + "_" + ViewBag.lang);
+
+
+    int access = Model.RA42_ACCESS_TYPE_MST.ACCESS_SECRET_CODE.Value;
+    string permit = Model.RA42_CARD_FOR_MST.CARD_SECRET_CODE;
+
+    ViewData["access"] = access.ToString();
+    RA42_SECURITY_CLEARANCEEntities db = new RA42_SECURITY_CLEARANCEEntities();
+
+
+}
+
+<style>
+    ul.tl li .timestamp {
+        color: #8D8D8D;
+        position: absolute;
+        width: 100%;
+        left: @left;
+        text-align: left;
+        font-size: 12px;
+    }
+</style>
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @if (ViewBag.RESPO_STATE > 1)
+        {
+            @Html.Partial("Index")
+            controller = ViewBag.controllerName;
+
+        }
+        <div class="col-md-@col">
+            @if (ViewBag.RESPO_STATE > 1)
+            {
+
+                <div class="page-path">
+                    <a href="@Url.Action("CompanyPermitDetails", "Permitsdtl", new { id = Model.COMPANY_PASS_CODE, tab = @ViewBag.activetab })">
+                        <i class="fa fa-eye"></i>
+                        @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)
+                    </a>
+                    <span>/</span>
+                    <a href="@Url.Action("CompanyPermitDelete", "Permitsdtl", new { id = Model.COMPANY_PASS_CODE, tab = @ViewBag.activetab })">
+                        <i class="fa fa-trash"></i>
+                        @Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)
+                    </a>
+                    <span>/</span>
+                    <a href="@Url.Action("Comments", "Permitsdtl", new { id = @ViewBag.Permit_code_emp, tab = @ViewBag.activetab })">
+                        <i class="fa fa-comment"></i>
+                        @Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)
+                    </a>
+                    <span>/</span>
+                    <a>
+                        <i class="fa fa-print"></i>
+                        @Resources.Passes.ResourceManager.GetString("Print" + "_" + ViewBag.lang)
+                    </a>
+                </div>
+
+            }
+
+
+
+            <div class="card shadow-sm">
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="fa fa-print"></i>
+                        @Resources.Common.ResourceManager.GetString("Print" + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-9 text-primary">
+                            <h4>
+                                <i class="@Model.RA42_ACCESS_TYPE_MST.ICON"></i>&nbsp;
+                                @(Language.GetCurrentLang() == "en" ? Model.RA42_CARD_FOR_MST.CARD_FOR_E : Model.RA42_CARD_FOR_MST.CARD_FOR_A)
+                            </h4>
+                        </div>
+                        <div class="col-md-3 @align">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <p id="COMPANY_PASS_CODE" style="display:none">@Model.COMPANY_PASS_CODE</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        @Resources.Passes.ResourceManager.GetString("main_info" + "_" + ViewBag.lang)
+                                    </div>
+
+                                    <div class="row p-2">
+
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                @Resources.Settings.ResourceManager.GetString("Force" + "_" + ViewBag.lang)
+                                                <p class="text-primary">
+                                                    @(Language.GetCurrentLang() == "en" ? Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_E :
+Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_A)
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang) 
+                                                <p class="text-primary" id="station">
+                                                    @(Language.GetCurrentLang() == "en" ? Model.RA42_STATIONS_MST.STATION_NAME_E :
+Model.RA42_STATIONS_MST.STATION_NAME_A)
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("main_permits_type" + "_" + ViewBag.lang)                                                <p class="text-primary">
+                                                    @(Language.GetCurrentLang() == "en" ? Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E :
+Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE)
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                @Resources.Settings.ResourceManager.GetString("card_for" + "_" + ViewBag.lang)                                                <p class="text-primary">
+                                                    @(Language.GetCurrentLang() == "en" ? Model.RA42_CARD_FOR_MST.CARD_FOR_E :
+Model.RA42_CARD_FOR_MST.CARD_FOR_A)
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <br />
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)
+                                            <p class="text-primary" id="company">@(Language.GetCurrentLang() == "en" ? @Model.RA42_COMPANY_MST.COMPANY_NAME_E : @Model.RA42_COMPANY_MST.COMPANY_NAME)</p>
+
+                                            <hr />
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("respo_unit" + "_" + ViewBag.lang)
+                                            <p class="text-primary" id="respo">@Model.RESPONSIBLE</p>
+                                            <hr />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                                            <p class="text-primary" id="purpose">@Model.PURPOSE_OF_PASS</p>
+                                            <hr />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                            <p class="text-primary">@Model.REMARKS</p>
+                                            <hr />
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-lg-12">
+                                        <h4 class="text-primary">
+                                            @Resources.Passes.ResourceManager.GetString("Zones" + "_" + ViewBag.lang)
+                                        </h4>
+                                        @{
+                                            string zones = "";
+                                        }
+
+
+                                        @{
+
+                                            if (ViewBag.GetZones.Count > 0)
+                                            {
+                                                var last_item = ViewBag.GetZones[ViewBag.GetZones.Count - 1];
+
+
+
+                                                foreach (var listZones in ViewBag.GetZones)
+                                                {
+                                                    <div class="col-md-12">
+                                                        <div class="alert alert-dark  mt-1 btn-block"><i class="fa fa-arrows-alt p-1"></i> @(Language.GetCurrentLang() == "en" ? listZones.RA42_ZONE_AREA_MST.ZONE_NAME_E : listZones.RA42_ZONE_AREA_MST.ZONE_NAME)</div>
+                                                    </div>
+                                                    if (listZones.RA42_ZONE_AREA_MST.ZONE_TYPE == "Z")
+                                                    {
+                                                        if (Model.RA42_STATIONS_MST.FORCE_ID == 3 || Model.RA42_STATIONS_MST.FORCE_ID == 4)
+                                                        {
+                                                            zones += listZones.RA42_ZONE_AREA_MST.ZONE_NAME;
+
+                                                            if (listZones != last_item)
+                                                            {
+                                                                zones += ", ";
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            zones += listZones.RA42_ZONE_AREA_MST.ZONE_TYPE.ToLower() + "" + listZones.RA42_ZONE_AREA_MST.ZONE_NUMBER;
+
+                                                            if (listZones != last_item)
+                                                            {
+                                                                zones += ", ";
+                                                            }
+                                                        }
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (Model.RA42_STATIONS_MST.FORCE_ID == 3 || Model.RA42_STATIONS_MST.FORCE_ID == 4)
+                                                        {
+                                                            zones += listZones.RA42_ZONE_AREA_MST.ZONE_NAME;
+
+                                                            if (listZones != last_item)
+                                                            {
+                                                                zones += ", ";
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            zones += listZones.RA42_ZONE_AREA_MST.ZONE_TYPE.ToLower() + "" + listZones.RA42_ZONE_AREA_MST.ZONE_NUMBER;
+
+                                                            if (listZones != last_item)
+                                                            {
+                                                                zones += ", ";
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+
+
+
+
+                                        <span id="zones" style="display: none;">@zones</span>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <h4 class="text-primary">
+                                            @Resources.Passes.ResourceManager.GetString("Documents" + "_" + ViewBag.lang)
+                                        </h4>
+                                        @foreach (var listFiles in ViewBag.GetFiles)
+                                        {
+                                            if (listFiles.FILE_TYPE != null)
+                                            {
+                                                if (!string.IsNullOrWhiteSpace(listFiles.FILE_TYPE_TEXT))
+                                                {
+                                                    bool check = DateTime.TryParse(listFiles.FILE_TYPE_TEXT, out DateTime dateTime);
+                                                    if (check == true)
+                                                    {
+                                                        var exp = countinue;
+                                                        var div = "alert-success";
+                                                        DateTime d = Convert.ToDateTime(listFiles.FILE_TYPE_TEXT);
+                                                        if (d < DateTime.Now)
+                                                        {
+                                                            exp = expired;
+                                                            div = "alert-danger";
+                                                        }
+                                                        <div class="col-md-12">
+                                                            <div class="alert alert-dark mt-1 btn-block">
+                                                                <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E : @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <span class="@div p-1 rounded">@exp | @listFiles.FILE_TYPE_TEXT </span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-md-12">
+                                                            <div class="alert alert-dark mt-1 btn-block">
+                                                                <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E : @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) | <span style="color: #007bff !important;">@listFiles.FILE_TYPE_TEXT</span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-md-12">
+                                                        <div class="alert alert-dark mt-1 btn-block">
+                                                            <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E : @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+
+
+                                    </div>
+
+
+                                    <div class="col-lg-12">
+                                        <hr />
+                                        <h4 class="text-primary">
+                                            @Resources.Passes.ResourceManager.GetString("employees" + "_" + ViewBag.lang)
+                                        </h4>
+                                        @{
+                                            int xx = 1;
+                                        }
+                                        @foreach (var listEmloyees in ViewBag.GetEmployees)
+                                        {
+                                            var dot = ".";
+                                            <div class="col-md-12">
+                                                <div class="alert alert-dark mt-1 h-75 w-100">
+                                                    <div class="@alignInverse">
+                                                        <span class="bg-dark text-white rounded ml-1 p-1">@xx@dot</span>
+                                                        <img src="~/Files/Profiles/@listEmloyees.PERSONAL_IMAGE" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" width="50" height="50" id="personal_img_@xx" />
+
+                                                        | @(Language.GetCurrentLang() == "en" ? @listEmloyees.NAME_E : @listEmloyees.NAME_A)
+                                                        |  @listEmloyees.CIVIL_NUMBER
+                                                        <a href="~/@ViewBag.lang/@ViewBag.controllerName/Details/@listEmloyees.PERMIT_CODE" class="btn btn-primary details btn-sm"><i class="fa fa-eye"></i></a>
+                                                        |
+                                                        <a href="~/@ViewBag.lang/@ViewBag.controllerName/Edit/@listEmloyees.PERMIT_CODE" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p id="id_@xx" style="display: none"> @listEmloyees.PERMIT_CODE </p>
+                                            <p id="id_card_@xx" style="display: none"> @listEmloyees.CIVIL_NUMBER </p>
+                                            <p id="name_@xx" style="display: none"> @listEmloyees.NAME_A</p>
+                                            <p id="identity_@xx" style="display: none">@listEmloyees.RA42_IDENTITY_MST.IDENTITY_TYPE_A </p>
+                                            <p id="date_to_@xx" style="display: none"> @listEmloyees.DATE_TO.ToString("dd/MM/yyyy") </p>
+                                            <p id="barcode_@xx" style="display: none">@listEmloyees.BARCODE</p>
+                                            if (listEmloyees.VECHILE_CODE != null)
+                                            {
+                                                <p id="char_@xx" style="display: none;">@listEmloyees.RA42_PLATE_CHAR_MST.PLATE_CHAR</p>
+                                                <p id="vechilnum_@xx" style="display: none"> @listEmloyees.PLATE_NUMBER </p>
+                                                <p id="color_@xx" style="display: none">@listEmloyees.RA42_VECHILE_COLOR_MST.COLOR</p>
+                                                <p id="type_@xx" style="display: none">@listEmloyees.RA42_VECHILE_CATIGORY_MST.VECHILE_CAT - @listEmloyees.RA42_VECHILE_NAME_MST.VECHILE_NAME</p>
+                                                <p id="plate_type_@xx" style="display: none">@listEmloyees.RA42_PLATE_TYPE_MST.PLATE_TYPE</p>
+                                                <p id="with_car_@xx" style="display: none">yes</p>
+                                            }
+
+                                            xx++;
+                                        }
+                                        <p id="xx_size" style="display: none;">@xx</p>
+                                        <table class="table border" id="members_" style="display:none">
+                                            <thead>
+                                                <tr><th colspan="3">بيانات المصرح لهم بالدخول</th></tr>
+                                                <tr>
+                                                    <th>من - إلى</th>
+                                                    <th>الجنسية</th>
+                                                    <th>الاسم - الرقم</th>
+                                                    @*<th>الرقم</th>*@
+                                                    <th>ت</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    int r = 0;
+                                                }
+                                                @foreach (var rrr in ViewBag.GetEmployees)
+                                                {
+                                                    { r = r + 1; }
+                                                    <tr>
+
+                                                        <td>@rrr.DATE_TO.ToString("dd/MM/yyyy") - @rrr.DATE_FROM.ToString("dd/MM/yyyy")</td>
+                                                        <td>@rrr.RA42_IDENTITY_MST.IDENTITY_TYPE_A</td>
+                                                        <td>@rrr.NAME_A | @rrr.CIVIL_NUMBER</td>
+                                                        <td>@r</td>
+                                                    </tr>
+
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <p id="num" style="display:none">@r</p>
+
+                                </div>
+                                <div class="col-12"><hr /></div>
+                                <div class="col-md-12">
+                                    @if (Model.BARCODE != null)
+                                    {
+                                        <img data-imageid="barcode-id-@Model.COMPANY_PASS_CODE" id="barcode-id-@Model.COMPANY_PASS_CODE" data-barcode="@Model.BARCODE" class="barcode-image" />
+                                    }
+                                </div>
+
+                                <div class="col-md-12">
+                                    <hr />
+                                    @Resources.Settings.ResourceManager.GetString("autho_signature" + "_" + ViewBag.lang)
+                                    @{
+                                        var signature = db.RA42_AUTHORAIZATION_SIGNAURE_MST.Where(a => a.RA42_STATIONS_MST.STATION_CODE == Model.STATION_CODE && a.DLT_STS != true).OrderByDescending(a => a.AUTHO_SIGNATURE_CODE).FirstOrDefault();
+                                        var sign = "";
+                                        if (signature != null)
+                                        {
+                                            sign = /*@urlHttp + @app_name +*/ "/Files/Signatures/" + signature.SIGNATURE;
+                                        }
+                                        <p><img src="@sign" style="display: none;" id="signature" /></p>
+                                        <img src="@sign" />
+                                    }
+
+                                </div>
+
+                                @{
+
+                                    var card_for = db.RA42_CARD_DESIGN_DTL.Where(a => a.RA42_CARD_FOR_MST.CARD_SECRET_CODE == Model.CARD_FOR_CODE.ToString() && a.ACCESS_TYPE_CODE ==
+                                    Model.ACCESS_TYPE_CODE && a.RA42_FORCES_MST.FORCE_ID == Model.RA42_STATIONS_MST.FORCE_ID).FirstOrDefault();
+                                    if (card_for != null)
+                                    {
+                                        <p id="form_layout" style="display:none;">@card_for.BASE64_ENCODE_TEMP</p>
+                                        <p id="CARD_SECRET_CODE" style="display:none;">@card_for.RA42_CARD_FOR_MST.CARD_SECRET_CODE</p>
+                                        <p id="access_type_a" style="display: none;">تصريح شركات</p>
+                                        <p id="access_type_e" style="display: none;">Companies permit</p>
+                                        <p id="front" style="display: none;">@card_for.BASE64_ENCODE_FRONT</p>
+                                        <p id="back" style="display: none;">@card_for.BASE64_ENCODE_BACK</p>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-12">
+                                            <div class="alert alert-warning">
+                                                <i class="fa fa-exclamation-triangle"></i>
+                                                @Resources.Common.ResourceManager.GetString("no_design" + "_" + ViewBag.lang)
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                                <p id="force_id" style="display:none;">@Model.RA42_STATIONS_MST.FORCE_ID</p>
+                                <p id="force_logo" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.LOGO</p>
+                                <p id="force_a" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_A</p>
+                                <p id="force_e" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_E</p>
+                                <p id="directorate_a" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.DIRECTORATE_A</p>
+                                <p id="directorate_e" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.DIRECTORATE_E</p>
+                                <p id="phone_num" style="display: none;">@Model.RA42_STATIONS_MST.PHONE_NUMBER</p>
+                                <br />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 border-right">
+                            @{
+
+                                if (TempData["Success"] != null)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @if (TempData["Success"] != null)
+                                            {
+                                                <div class="alert alert-success"><i class="fa fa-check"></i> @TempData["Success"]</div>
+                                            }
+                                            @if (TempData["Erorr"] != null)
+                                            {
+                                                <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> @TempData["Erorr"]</div>
+                                            }
+                                            <div class="row">
+
+                                                <div class="col-md-12">
+                                                    <div class="btn-group m-1 @align">
+
+                                                        <a href="javascript:PrintCard()" class="btn btn-dark">
+                                                            <i class="fa fa-print"></i> &nbsp;
+                                                            @Resources.Passes.ResourceManager.GetString("print_all" + "_" + ViewBag.lang)
+                                                        </a>
+
+                                                        <a href="javascript:PrintTempForm()" class="btn btn-primary details">
+                                                            <i class="fa fa-file-alt"></i> &nbsp;
+                                                            @Resources.Common.ResourceManager.GetString("print_form" + "_" + ViewBag.lang)
+                                                        </a>
+                                                        <a class="btn btn-warning text-center"
+                                                           title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)"
+                                                           href="@Url.Action("CompanyPermitEdit", ViewBag.controllerName, new { id = Model.COMPANY_PASS_CODE })">
+                                                            <i class="fa fa-edit"></i> &nbsp;
+                                                            @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 p-2"></div>
+                                                <div class="col-md-12">
+
+                                                    <iframe id="frame" frameborder="0" height="500" type="application/pdf" style="display: none; width: 100%;"></iframe>
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div class="col-12">
+
+
+
+
+                                        <hr />
+
+                                        @using (Html.BeginForm("PrintAll", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="row bg-light rounded p-2">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                @Html.HiddenFor(model => model.COMPANY_PASS_CODE)
+
+
+                                                <input type="hidden" name="CheckPrinted" value="Printed" />
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("trans_type" + "_" + ViewBag.lang)
+                                                        <select name="TRANSACTION_TYPE_CODE" class="form-control" onchange="SelectedMethod(this);" required="" oninvalid="this.setCustomValidity(' @required')" oninput="setCustomValidity('')">
+                                                            <option value="">@choose_trans</option>
+                                                            @if (ViewBag.TRANSACTION_TYPE_CODE != null)
+                                                            {
+                                                                foreach (var item in ViewBag.TRANSACTION_TYPE_CODE)
+                                                                {
+                                                                    <option value="@item.Value">@item.Text</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" id="receDiv">
+
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("Receipt" + "_" + ViewBag.lang)
+                                                        <input type="file" name="RECEIPT" id="RECEIPT" class="form-control" />
+                                                    </div>
+
+
+
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                                        <textarea name="TRANSACTION_REMARKS" class="form-control"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" name="id" value="@Model.COMPANY_PASS_CODE" />
+                                                <input type="hidden" name="tab" value="@ViewBag.activetab" />
+                                                <div class="col-md-12">
+                                                    <div class="form-group @align">
+                                                        <button type="submit" value="Create" class="btn btn-success">
+                                                            <i class="fa fa-save"></i> &nbsp;
+                                                            @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        }
+                                    </div>
+                                }
+                            }
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section scripts{
+
+
+
+    <script type="text/javascript" src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jspdf.debug.js"></script>
+    <script type="text/javascript" src="~/Scripts/basic.js"></script>
+    <script type="text/javascript" src="~/Scripts/fonts.js"></script>
+    <script type="text/javascript" src="~/Scripts/default_vfs.js"></script>
+    <script type="text/javascript" src="~/Scripts/autotable/jspdf.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/autotable/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+
+         function SelectedMethod(sel) {
+            var check = sel.options[sel.selectedIndex].text;
+
+            var amount = check.replace(/[^0-9]/g, '');
+            if (amount > 0) {
+                $("#receDiv").show();
+            }
+            else {
+                $("#receDiv").hide();
+            }
+
+        }
+
+        var pf;
+        var br;
+        var si;
+        var sec;
+
+        $(document).ready(function () {
+
+            $("#receDiv").hide();
+            var signature = document.getElementById("signature").src;
+
+
+            toDataURL2(signature, function (dataUrl) {
+                console.log('signature:', dataUrl)
+            });
+
+
+
+
+        });
+
+
+        function toDataURL(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    callback(reader.result);
+                    //pf = reader.result;
+                    //sessionStorage.setItem("base64", reader.result);
+
+
+                }
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+
+            xhr.responseType = 'blob';
+            xhr.send();
+        }
+        function toDataURL2(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    callback(reader.result);
+                    si = reader.result;
+
+                    //sessionStorage.setItem("barcode64", reader.result);
+
+
+                }
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+
+            xhr.responseType = 'blob';
+            xhr.send();
+        }
+
+         function Print(type,id) {
+              console.log(id);
+
+
+                  $.ajax({
+                      type: "POST",
+                      url: '@Url.Action("PrintById")',
+                      data: { id: id, type: type },
+                      dataType: "json",
+                      success: function () {
+                          console.log(type);
+                      },
+                      error: function () {
+                          console.log("somthing wrong while printed");
+                      }
+                  });
+
+          }
+
+        function convertImgToBase64(imgUrl) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+
+                img.onload = function () {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(img, 0, 0);
+
+                    const dataURL = canvas.toDataURL("image/png");
+                    resolve(dataURL);
+                };
+
+                img.onerror = reject;
+                img.src = imgUrl;
+            });
+        }
+        async function PrintCard() {
+
+
+           
+            var doc = new jsPDF('l', 'mm', [242, 153]);
+
+            doc.addFileToVFS("Amiri-Regular.ttf", AmiriRegular);
+            doc.addFont('Amiri-Regular.ttf', 'Amiri', 'normal');
+
+            doc.addFileToVFS("Arialbd.ttf", Arial);
+            doc.addFont('Arialbd.ttf', 'arialbd', 'normal');
+
+            var width = doc.internal.pageSize.getWidth();
+            var height = doc.internal.pageSize.getHeight();
+            var imgdata;
+            var imgdata2;
+            imgdata = $("#front").text();
+            imgdata2 = $("#back").text();
+              var logo;
+              var xx_size = $("#xx_size").text();
+              let n = 1;
+              for (let i = 1; i < xx_size; i++) {
+                  n++;
+                  var profile = document.getElementById("personal_img_" + i).src;
+                  //await toDataURL(profile, function (dataUrl) {
+                  //    console.log('profile:', dataUrl)
+                  //    pf = dataUrl;
+                  //    var img = pf;
+                  //    doc.addImage(img, 'JPEG', 4, 17, 20, 20);
+                  //});
+                  const base64Image = await convertImgToBase64(profile);
+                  doc.addImage(imgdata, 'JPEG', 0, 0, 85.6, 54);
+                  doc.setFontSize(6.5);
+                  logo = $("#force_logo").text();
+
+                  doc.addImage(logo, 'png', width / 2.2, 1, 8, 8);
+
+
+                  var force_id = $("#force_id").text();
+                  var force_a = $("#force_a").text();
+                  var force_e = $("#force_e").text();
+                  var direc_a = $("#directorate_a").text();
+                  var direc_e = $("#directorate_e").text();
+                  var access_a = $("#access_type_a").text();
+                  var access_e = $("#access_type_e").text();
+
+
+                  var name = $("#name_" + i).text();
+                  var company = $("#company").text();
+                  var identity = $("#identity_" + i).text();
+                  var station = $("#station").text();
+                  var civil_number = $("#id_card_" + i).text();
+                  var respo = $("#respo").text();
+                  var with_car = $("#with_car_" + i).text();
+                  var vechilnum = $("#vechilnum_" + i).text();
+                  var char = $("#char_" + i).text();
+                  var type = $("#type_" + i).text();
+                  var plate_type = $("#plate_type_" + i).text();
+                  var color = $("#color_" + i).text();
+                  var date = $("#date_to_" + i).text();
+                  var zones = $("#zones").text();
+                  var phone = $("#phone_num").text();
+                  var id = $("#id_" + i).text();
+                  var barcode = $("#barcode_" + i).text();
+
+                  Print("Card", id);
+                  doc.setFont('Amiri'); // set font Amiri
+                  doc.setFontSize(6.5);
+                  doc.text(force_a, 81, 3, { align: 'right', lang: 'ar' });
+                  doc.text(direc_a, 81, 6, { align: 'right', lang: 'ar' });
+                  doc.text(access_a, 81, 9, { align: 'right', lang: 'ar' });
+                  doc.setFontSize(6);
+                  doc.setFont('arialbd'); // set Arial
+                  doc.text(force_e, 4, 3, { align: 'left', lang: 'en' });
+                  doc.text(direc_e, 4, 6, { align: 'left', lang: 'en' });
+                  doc.text(access_e, 4, 9, { align: 'left', lang: 'en' });
+                  doc.setFontStyle('normal');
+
+
+                  var img = base64Image;
+                  doc.addImage(img, 'JPEG', 4, 17, 20, 20);
+
+
+                  var sig = si;
+                  doc.addImage(sig, 'JPEG', 4, 43, 10, 10);
+
+
+
+                  if (with_car == "yes") {
+                      doc.setFontSize(8.5);
+                      doc.setFont('arialbd'); // set font
+                      doc.text(":رقم المركبة", 81, 40, { align: 'right', lang: 'ar' });
+                      doc.text(":اللون", 47, 40, { align: 'right', lang: 'ar' });
+                      doc.text(":اللوحة", 35, 45, { align: 'right', lang: 'ar' });
+                      doc.text(":نوع المركبة", 81, 45, { align: 'right', lang: 'ar' });
+                      doc.text(":الوحدة", 81, 15, { align: 'right', lang: 'ar' });
+                      doc.text(":الرقم", 81, 20, { align: 'right', lang: 'ar' });
+                      doc.text(":الاسم", 81, 24, { align: 'right', lang: 'ar' });
+                      doc.text(":الجنسية", 81, 28, { align: 'right', lang: 'ar' });
+                      doc.text(":المستضيف", 81, 32, { align: 'right', lang: 'ar' });
+                      doc.text(":الشركة", 81, 36, { align: 'right', lang: 'ar' });
+                      doc.text(":تاريخ الانتهاء", 81, 50, { align: 'right', lang: 'ar' });
+                      doc.text(":سلطة التخويل", 30, 50, { align: 'right', lang: 'ar' });
+                  }
+                  else {
+                      doc.setFontSize(8.5);
+                      doc.setFont('arialbd'); // set font
+                      doc.text(":الوحدة", 81, 19, { align: 'right', lang: 'ar' });
+                      doc.text(":الرقم", 81, 24, { align: 'right', lang: 'ar' });
+                      doc.text(":الاسم", 81, 29, { align: 'right', lang: 'ar' });
+                      doc.text(":الجنسية", 81, 33, { align: 'right', lang: 'ar' });
+                      doc.text(":المستضيف", 81, 37, { align: 'right', lang: 'ar' });
+                      doc.text(":الشركة", 81, 41, { align: 'right', lang: 'ar' });
+                      doc.text(":تاريخ الانتهاء", 81, 50, { align: 'right', lang: 'ar' });
+                      doc.text(":سلطة التخويل", 30, 50, { align: 'right', lang: 'ar' });
+                  }
+                  if (with_car == "yes") {
+                      doc.setFontSize(9);
+                      doc.setFont('arialbd'); // set font
+                      var number_of_vehicle = vechilnum + " - " + char;
+                      doc.text(number_of_vehicle, 67, 40, { align: 'right', lang: 'ar' });
+                      doc.text(civil_number, 72, 20, { align: 'right', lang: 'ar' });
+                      doc.setFont('Amiri'); // set font
+                      doc.text(station, 72, 11, { align: 'right', lang: 'ar' });
+                      doc.text(name, 72, 24, { align: 'right', lang: 'ar' });
+                      doc.text(identity, 72, 27.5, { align: 'right', lang: 'ar' });
+                      doc.setFontSize(8);
+                      doc.text(respo, 69, 32, { align: 'right', lang: 'ar' });
+                      doc.setFontSize(9);
+                      doc.text(company, 72, 35.5, { align: 'right', lang: 'ar' });
+                      doc.text(color, 40, 40, { align: 'right', lang: 'ar' });
+                      doc.text(plate_type, 27, 45, { align: 'right', lang: 'ar' });
+                      doc.text(type, 68, 45, { align: 'right', lang: 'ar' });
+
+                  }
+                  else {
+                      doc.setFontSize(9);
+                      doc.setFont('arialbd'); // set font
+                      doc.text(civil_number, 72, 24, { align: 'right', lang: 'ar' });
+                      doc.setFont('Amiri'); // set font
+                      doc.text(station, 72, 15, { align: 'right', lang: 'ar' });
+                      doc.text(name, 72, 29, { align: 'right', lang: 'ar' });
+                      doc.text(identity, 72, 32.8, { align: 'right', lang: 'ar' });
+                      doc.setFontSize(8);
+                      doc.text(respo, 69, 37, { align: 'right', lang: 'ar' });
+                      doc.setFontSize(9);
+                      doc.text(company, 72, 40.5, { align: 'right', lang: 'ar' });
+                  }
+
+                  doc.setFontSize(9);
+                  doc.setFont('arialbd'); // set font
+                  doc.text(date, 49, 50.3, { align: 'left', lang: 'en' });
+
+                  doc.addPage();
+                  doc.addImage(imgdata2, 'JPEG', 0, 0, 85.6, 54);
+                  doc.setPage();                 
+
+
+
+
+
+
+
+                  var barcode64 = textToBase64Barcode(barcode);
+                  doc.addImage(barcode64, 'PNG', 18, 41, 50, 10);
+
+                  doc.setTextColor(255, 0, 0);
+                  doc.setFontSize(11);
+                  doc.setFont('arialbd'); // set font
+                  var splitZone = doc.splitTextToSize(zones, 70);
+                  doc.text(splitZone, 77, 15, { align: 'right', lang: 'ar' });
+                  doc.setTextColor(0, 0, 0);
+                  doc.setFontSize(8.5);
+                  //doc.setFont('arialbd'); // set font
+                  doc.setFont('Amiri'); // set font
+                  //doc.setFont('arialbd'); // set font
+
+                  doc.setFontSize(6);
+                  var text1 = ".هذا التصريح ملك لـ" + force_a + " وحيازته لغير المصرح له بالاستخدام يعتبر جرما" + "*";
+                  var text2 = "إذا عثر عليه يسلم لأقرب وحدة عسكرية أو شرطة عمان السلطانية أو الاتصال بـ" + "*";
+                  var text3 = ".يجب إبراز التــــــــــــصريح للــــــحارس عـند البوابــات والمنـاطق الأمـنية المـصرح بالـــدخول إليها" + "*";
+                  var text4 = ".يعتبر الشخص مسؤولا عن التصريح وفي حالة الإنتهاء يسلم إلى قسم التصاريح الخاص بالوحدة" + "*";
+                  var text_1 = doc.splitTextToSize(text1, 93);
+                  var text_2 = doc.splitTextToSize(text2, 93);
+                  var text_3 = doc.splitTextToSize(text3, 93);
+                  var text_4 = doc.splitTextToSize(text4, 93);
+                  doc.text(text_1, 81, 25, { align: 'right', lang: 'ar' });
+                  doc.text(text_2, 81, 27.2, { align: 'right', lang: 'ar' });
+                  doc.text(text_3, 81, 29.2, { align: 'right', lang: 'ar' });
+                  doc.text(text_4, 81, 31.2, { align: 'right', lang: 'ar' });
+                  doc.setFont('arialbd'); // set font
+                  //doc.setFontStyle('italic');
+                  doc.setFontSize(6);
+
+                  var text5 = "*This permit for " + force_e + ",unothorized use is against security.";
+                  var text6 = "*When found take it to the military unit, Royal Oman Police or call: " + phone + ".";
+                  var text7 = "*Entry permit must be showen at each unit gate and zone when required."
+                  var text8 = "*When expired, please return it to the authorized unit section."
+                  doc.text(text5, 4, 34, { align: 'justify', lang: 'en' });
+                  doc.text(text6, 4, 36.2, { align: 'justify', lang: 'en' });
+                  doc.text(text7, 4, 38.1, { align: 'justify', lang: 'en' });
+                  doc.text(text8, 4, 40.3, { align: 'justify', lang: 'en' });
+                  doc.setFont('arialbd'); // set font
+                  var text0 = "." + phone;
+                  doc.text(text0, 7, 27.2, { align: 'justify', lang: 'en' });
+                  if (xx_size > n) {
+                      doc.addPage();
+                  }
+              }
+
+      var string = doc.output('datauristring');
+
+      document.getElementById("frame").style.display = "block";
+      $('#frame').attr('src', string);
+
+
+
+
+  }
+
+
+
+
+         function PrintTempForm() {
+
+             var xx_size = $("#xx_size").text();
+             for (let i = 1; i < xx_size; i++) {
+                 var id = $("#id_" + i).text();
+                 Print("TemproryCard",id);
+             }
+
+            var doc = new jsPDF('p', 'mm', [297, 210]);
+
+
+
+            doc.addFileToVFS("Amiri-Regular.ttf", AmiriRegular);
+            doc.addFont('Amiri-Regular.ttf', 'Amiri', 'normal');
+
+            doc.addFileToVFS("Arialbd.ttf", Arial);
+            doc.addFont('Arialbd.ttf', 'arialbd', 'normal');
+            var imgdata;
+            imgdata = $("#form_layout").text();
+            var width = doc.internal.pageSize.getWidth();
+            var height = doc.internal.pageSize.getHeight();
+            doc.addImage(imgdata, 'JPEG', 0, 0, width, height );
+            var logo;
+            //var imgdata2;
+            logo = $("#force_logo").text();
+            doc.addImage(logo, 'JPEG', width / 2.2, 3, 7, 7);
+
+
+
+            doc.setFontSize(11);
+            var force_a = $("#force_a").text();
+            var force_e = $("#force_e").text();
+            var direc_a = $("#directorate_a").text();
+            var direc_e = $("#directorate_e").text();
+            var access_a = $("#access_type_a").text();
+            var access_e = $("#access_type_e").text();
+
+
+
+            var force_id = $("#force_id").text();
+            var company = $("#company").text();
+            var station =  $("#station").text();
+            var purpose = $("#purpose").text();
+            var numberc = $("#num").text();
+            var respo = $("#respo").text();
+            var zones = $("#zones").text();
+            var card_for = $("#CARD_SECRET_CODE").text();
+            var mmrr = $("#mmrr").text();
+
+            doc.setFontSize(6);
+
+            doc.setFont('arialbd'); // set font
+
+             doc.setFontStyle('italic');
+             doc.text(force_e, 3, 7, { align: 'left', lang: 'en' });
+             doc.text(direc_e, 3, 9.5, { align: 'left', lang: 'en' });
+             doc.text(access_e, 3, 11.7, { align: 'left', lang: 'en' });
+             doc.setFontStyle('normal');
+             doc.setFontSize(6);
+             doc.setFont('Amiri'); // set font
+             doc.text(force_a, 71, 7, { align: 'right', lang: 'ar' });
+             doc.text(direc_a, 71, 9.5, { align: 'right', lang: 'ar' });
+             doc.text(access_a, 71, 11.7, { align: 'right', lang: 'ar' });
+             doc.setFontSize(8);
+
+            doc.text("تصريح دخول مؤقت", 70, 20, { align: 'right', lang: 'ar' });
+            doc.setFontSize(5);
+
+            doc.text(":الوحــدة", 70, 26, { align: 'right', lang: 'ar' });
+            doc.text(":عدد العمال", 70, 31, { align: 'right', lang: 'ar' });
+            doc.text(":الغرض", 70, 36, { align: 'right', lang: 'ar' });
+            doc.text(":المستضيف", 70, 41, { align: 'right', lang: 'ar' });
+            doc.text(":الشــركة", 70, 46, { align: 'right', lang: 'ar' });
+
+            doc.setFont('Amiri'); // set font
+            doc.text(station, 52, 24, { align: 'right', lang: 'ar' });
+            doc.text(numberc, 52, 31, { align: 'right', lang: 'ar' });
+            doc.text(purpose, 52, 36, { align: 'right', lang: 'ar' });
+            doc.text(respo, 52, 41, { align: 'right', lang: 'ar' });
+            doc.text(company, 52, 46, { align: 'right', lang: 'ar' });
+
+            doc.setTextColor(0, 0, 0);
+            doc.line(70, 27, 6, 27);
+            doc.line(70, 33, 6, 33);
+            doc.line(70, 38, 6, 38);
+            doc.line(70, 43, 6, 43);
+            doc.line(70, 48, 6, 48);
+             doc.line(53, 48, 53, 24);
+
+
+               if (mmrr != "1") {
+                    //doc.autoTable({ html: '#members_' });
+
+                    var htmlstring = '';
+                    var tempVarToCheckPageHeight = 0;
+                    var pageHeight = 0;
+                   pageHeight = doc.internal.pageSize.height;
+                   let wantedTableWidth = 100;
+                   let pageWidth = doc.internal.pageSize.width;
+                   let margin = (pageWidth - wantedTableWidth) / 2;
+                    specialElementHandlers = {
+                        // element with id of "bypass" - jQuery style selector
+                        '#bypassme': function (element, renderer) {
+                            // true = "handled elsewhere, bypass text extraction"
+                            return true
+                        }
+                    };
+
+
+                    doc.autoTable({
+                        html: '#members_',
+                        startY: 50,
+                        theme: 'plain',
+                        tableWidth: 50,
+                        headStyles: {
+                            fontSize: 6,
+                            lineWidth: 0.01,
+                            lineColor: [0, 0, 0],
+                            halign: 'center',
+                            cellWidth: 'wrap',
+                            fillColor: "#eee"
+                        },
+
+                        styles: {
+                            font: 'Amiri',
+                            fontSize: 5,
+                            halign: 'center',
+                            cellPadding: { top: 0.5, right: 1, bottom: 0.5, left: 1 },
+                            /*overflow: 'linebreak',*/
+                            lineWidth: 0.01,
+                            lineColor: [0, 0, 0],
+                            cellWidth: 'wrap'
+                        },
+                        margin: { left: 10, right: 2 }
+                    });
+                   doc.text(" :سلطة التخويل", 70, 97, { align: 'right', lang: 'ar' });
+                    var barcode64 = textToBase64Barcode('@Model.BARCODE');
+                    doc.addImage(barcode64, 'PNG', 5, 95, 20, 5);
+                    doc.setFontSize(6);
+                    doc.text(":المناطق والبوابات الأمنية المصرح بالدخول إليها", 70, 90, { align: 'right', lang: 'ar' });
+                    //doc.setTextColor(0, 0, 255);
+                    doc.text(zones, 70, 93, { align: 'right', lang: 'ar' });
+                    doc.setFontSize(5);
+                    //doc.setTextColor(255, 0, 0);
+                }
+                else {
+                   doc.text(" :سلطة التخويل", 70, 90, { align: 'right', lang: 'ar' });
+                     var barcode64 = textToBase64Barcode('@Model.BARCODE');
+                    doc.addImage(barcode64, 'PNG', 5, 90, 20, 10);
+                    doc.setFontSize(6);
+                    doc.text(":المناطق والبوابات الأمنية المصرح بالدخول إليها", 70, 75, { align: 'right', lang: 'ar' });
+                    //doc.setTextColor(0, 0, 255);
+                    doc.text(zones, 70, 80, { align: 'right', lang: 'ar' });
+                    doc.setFontSize(5);
+                }
+
+
+                  if (force_id != "2") {
+                      var sig = si;
+                      doc.addImage(sig, 'JPEG', 58, 93, 13, 13);
+                  }
+
+
+
+                var string = doc.output('datauristring');
+
+                document.getElementById("frame").style.display = "block";
+                $('#frame').attr('src', string);
+
+
+
+
+
+
+
+        }
+        String.prototype.EntoAr = function () {
+            return this.replace(/\d/g, d => String.fromCharCode('0x066' + d))
+        }
+    </script>
+
+
+    <script src="@Url.Content("~/Scripts/JsBarcode.all.js")"></script>
+    <script>
+
+        $(function () {
+            $(".barcode-image").each(function () {
+                console.log($(this).data("imageid"));
+
+                var imageid = "#" + $(this).data("imageid");
+                var code = $(this).data("barcode");
+
+                JsBarcode(imageid, code, {
+                    format: "code39",
+                    displayValue: false,
+                    fontSize: 20,
+                    height: 30,
+                    width: 1,
+
+                });
+
+                $("#base-64-input").val($(this).attr("src"));
+
+
+            });
+        });
+
+
+
+        function textToBase64Barcode(text) {
+            var canvas = document.createElement("canvas");
+            JsBarcode(canvas, text, { format: "CODE39", displayValue: false });
+            return canvas.toDataURL("image/png");
+        }
+
+    </script>
+}
+
+

@@ -1,0 +1,161 @@
+﻿@using Newtonsoft.Json;
+@using portal.Controllers;
+@using SecurityClearanceWebApp.Models;
+@using APP.Util;
+@model SecurityClearanceWebApp.Models.RA42_FAMILY_PASS_DTL
+
+@{
+    ViewBag.Title = "Comments";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var comment_ = @Resources.Passes.ResourceManager.GetString("Add_comment" + "_" + ViewBag.lang);
+
+    var col = 12;
+
+    var controller = "Mypasses";
+}
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+
+        @if (ViewBag.RESPO_STATE > 1 || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+        {
+            @Html.Partial("Index")
+            controller = ViewBag.controllerName;
+        }
+
+        <div class="col-md-@col">
+           
+            <div class="card shadow-sm">
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="fa fa-comment"></i>
+                        @Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 @align">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @{
+                        if (TempData["Success"] != null)
+                        {
+                            <p class="alert alert-success">@TempData["Success"]</p>
+                        }
+                        if (TempData["Erorr"] != null)
+                        {
+                            <p class="alert alert-danger">@TempData["Erorr"]</p>
+                        }
+                    }
+                    @using (Html.BeginForm("Comments", null, FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "if(document.getElementById('comment').value !='') { return true; } else { alert('" + comment_ + "'); document.getElementById('comment').style.border='1px solid red'; return false; }" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.FAMILY_CODE)
+
+
+                            <div class="col-md-12">
+                                <h4>
+                                    @Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)
+                                </h4>
+
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        @Resources.Passes.ResourceManager.GetString("Add_comment" + "_" + ViewBag.lang)
+                                    </label>
+                                    <textarea name="COMMENT" class="form-control" id="comment"></textarea>
+                                </div>
+                            </div>
+                            @if (ViewBag.COMMENTS != null)
+                            {
+
+                                foreach (var comment in ViewBag.COMMENTS)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+
+                                            <div class="card-body" style="background: #c8d0d1; border-radius:5px;">
+                                                <p class="bg-white p-1 rounded">
+                                                    @{
+
+                                                        string name = Resources.Passes.ResourceManager.GetString("Autho_type" + "_" + ViewBag.lang) + ": " + (new UserInfo()).WorkFlowType(comment.CRD_BY) + " - " + (new UserInfo()).FULL_NAME(comment.CRD_BY);
+
+                                                        @name
+
+                                                    }
+                                                    - @Resources.Passes.ResourceManager.GetString("Crd_comment_date" + "_" + ViewBag.lang) - @comment.CRD_DT
+
+                                                </p>
+                                                <br />
+                                                @comment.COMMENT
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+
+
+
+
+
+
+                            <div class="col-md-12">
+
+                                <div class="form-group @align">
+
+                                    <button type="submit" value="Approve" class="btn btn-success">
+                                        <i class="fa fa-plus-circle"></i>
+                                        @Resources.Passes.ResourceManager.GetString("Add_comment" + "_" + ViewBag.lang)
+                                    </button>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+@section Scripts {
+
+
+
+
+
+
+
+}

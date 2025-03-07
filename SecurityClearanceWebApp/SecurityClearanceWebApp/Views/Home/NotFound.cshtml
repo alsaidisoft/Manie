@@ -1,0 +1,62 @@
+﻿
+@{
+                /**/
+
+                Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>لا تملك صلاحيات الدخول - You don't have pemession</title>
+    <link rel="icon" href="@Url.Content("~/Content/images/logo.png")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/jquery-ui.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/fontawesome.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/toast/iziToast.css")">
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/datatables/datatables.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/datatables/buttons.bootstrap4.min.css")">
+
+    <link rel="@Url.Content("~/Content/datatables/bootstrap.css")">
+    <link rel="@Url.Content("~/Content/datatables/dataTables.bootstrap4.min.css")">
+    <link rel="@Url.Content("~/Content/datatables/buttons.bootstrap4.min.css")">
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/site.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/Kendo/Kendo/kendo.common.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/Kendo/Kendo/kendo.default.min.css")">
+    <style>
+        body {
+            background-color: whitesmoke;
+            background: url("@Url.Content("~/Content/images/back013.png")")
+        }
+
+       
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="justify-content-center">
+            <div class="col-lg-12 text-center" dir="rtl">
+
+                <div class="p-5 m-5 alert  alert-danger text-uppercase font-weight-bolder" style="font-size:60px">
+
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <br />
+                      لا تملك صلاحيات الدخول إلى هذه الصفحة، الرجاء مخاطبة قسم الدعم الفني لمزيد من المعلومات على الرقم: 
+                    <div style="font-family: Arial; margin: 0px; padding: 0px; display: inline-block;">339100 </div> 
+                    <hr />
+                    <div style="font-family:Arial">You are not authorize to log in to this page, please technical support applecation section on phone NO: 339100</div>
+                    <div class="col-md-12 text-center"> <a href="#" onclick="history.back()" class="btn btn-outline-danger btn-lg">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

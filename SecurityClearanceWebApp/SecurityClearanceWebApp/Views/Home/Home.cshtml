@@ -1,0 +1,82 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = Resources.Common.system_name_ar;
+
+    var dir = "ltr";
+    var font = "Khalidboldart";
+    var textalign = "text-left";
+    if (ViewBag.lang == "Ar")
+    {
+        font = "Khalidboldart";
+        dir = "rtl";
+        textalign = "text-right";
+    }
+}
+    <html>
+    <head>
+        <title>@ViewBag.Title</title>
+
+        <link rel="shortcut icon" type="image/x-icon" href="~/Content/images/mod.png" />
+
+        <link href="~/Content/home.css" rel="stylesheet" />
+        <link href="~/Content/css/all.css" rel="stylesheet" />
+        <style>
+            .col-md-12{
+                width: 100%;
+                margin: 0 auto;
+            }
+            .card{
+                border: 1px solid #ccc;
+                width: 100%;
+                border-radius: 5px;
+            }
+
+            .card img{
+                text-align: center;
+                margin: 0 auto;
+            }
+           
+        </style>
+    </head>
+   
+    <body class="tracking-in-contract-bck-bottom" style="font-family:@font">
+
+
+      
+
+        <div id="clouds" dir="rtl">
+            <br /><br />
+            <center>
+                <img src="~/Content/images/mod.png" style="width:7%; margin: auto auto; padding: 0;" class="" />
+                @*<img src="~/Content/images/2.png" style="width:5%; margin: auto auto; padding: 0;" class="" />
+                <img src="~/Content/images/3.png" style="width:5%; margin: auto auto; padding: 0;" class="" />
+                <img src="~/Content/images/4.png" style="width:5%; margin: auto auto; padding: 0;" class="" />*@
+
+                <br />
+
+            </center>
+
+        </div>
+
+        <div class='c'>
+            <br /><br />
+            <div class='_1'>@Resources.Common.hisn_application</div>
+            <br />
+            <center>
+                <div class='_3'>@Resources.Common.app_name_home_ar</div>
+
+            </center>
+            <br />
+            <br />
+            <div class='_2' dir="rtl">@Resources.Common.choose_lang</div>
+            <br />
+            <a class='btn' href='~/en/Home/Index'>@Resources.Common.invers_lang_ar</a>
+            <a class='btn' href='~/ar/Home/Index'>@Resources.Common.invers_lang_en</a>
+            <br />
+            <br />
+        </div>
+        
+
+    </body>
+    </html>

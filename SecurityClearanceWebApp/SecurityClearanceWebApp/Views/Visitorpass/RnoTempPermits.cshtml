@@ -1,0 +1,191 @@
+﻿@using SecurityClearanceWebApp.Util;
+@using System
+@using System.Collections
+@using APP.Util
+
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_VISITOR_PASS_DTL>
+
+@{
+    ViewBag.Title = "Rno temprory permits";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+    }
+
+
+
+}
+
+<style>
+    th, td {
+        text-align: center !important;
+    }
+
+    .buttons-colvis, .buttons-print, .buttons-excel {
+        display: none !important;
+    }
+</style>
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+        <h1 class="card-header  text-primary"><i class="fa fa-user-clock"></i> @Resources.Passes.ResourceManager.GetString("manage_temp_permits" + "_" + ViewBag.lang)</h1>
+
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Partial("Tabs")
+                </div>
+
+
+            </div>
+            <div class="card-body">
+                @{
+                    int rowNo = 0;
+                    var servicenum = ViewBag.SERVICE_NUMBER;
+                }
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active notification" id="companies-tab" data-toggle="tab" href="#companies" role="tab" aria-controls="companies" aria-selected="true">
+                                @Resources.Passes.ResourceManager.GetString("companies_temp" + "_" + ViewBag.lang)
+                                @if (ViewBag.companies_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.companies_temp</span>
+
+                                }
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link notification" id="medical-tab" data-toggle="tab" href="#medical" role="tab" aria-controls="medical" aria-selected="false">
+                                @Resources.Passes.ResourceManager.GetString("medical_temp" + "_" + ViewBag.lang)
+                                @if (ViewBag.medical_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.medical_temp</span>
+
+                                }
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link notification" id="families-tab" data-toggle="tab" href="#families" role="tab" aria-controls="families" aria-selected="false">
+                                @Resources.Passes.ResourceManager.GetString("family_temp" + "_" + ViewBag.lang)
+                                @if (ViewBag.families_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.families_temp</span>
+
+                                }
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link notification" id="visitors-tab" data-toggle="tab" href="#visitors" role="tab" aria-controls="visitors" aria-selected="false">
+                                @Resources.Passes.ResourceManager.GetString("visitor_temp" + "_" + ViewBag.lang)
+                                @if (ViewBag.visitors_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.visitors_temp</span>
+
+                                }
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link notification" id="visitorsmod-tab" data-toggle="tab" href="#visitorsmod" role="tab" aria-controls="visitorsmod" aria-selected="false">
+                                @Resources.Passes.ResourceManager.GetString("visitor_from_mod" + "_" + ViewBag.lang)
+                                @if (ViewBag.visitors_mod_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.visitors_mod_temp</span>
+
+                                }
+                            </a>
+                        </li>
+
+                      
+
+
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="companies" role="tabpanel" aria-labelledby="companies-tab">
+                            <div class="col-md-12 p-3 bg-light">
+
+
+
+                                @Html.Partial("_companies")
+
+
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
+                            <div class="tab-pane fade show active" id="medical" role="tabpanel" aria-labelledby="companies-tab">
+                                <div class="col-md-12 p-3 bg-light">
+
+
+                                    @Html.Partial("_medical")
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="families" role="tabpanel" aria-labelledby="families-tab">
+                            <div class="tab-pane fade show active" id="families" role="tabpanel" aria-labelledby="medical-tab">
+                                <div class="col-md-12 p-3 bg-light">
+
+
+                                    @Html.Partial("_families")
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="visitors" role="tabpanel" aria-labelledby="visitors-tab">
+                            <div class="tab-pane fade show active" id="visitors" role="tabpanel" aria-labelledby="families-tab">
+                                <div class="col-md-12 p-3 bg-light">
+
+
+                                    @Html.Partial("_visitors")
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="visitorsmod" role="tabpanel" aria-labelledby="visitorsmod-tab">
+                            <div class="tab-pane fade show active" id="visitorsmod" role="tabpanel" aria-labelledby="visitors-tab">
+                                <div class="col-md-12 p-3 bg-light">
+
+
+                                    @Html.Partial("_visitorsmod")
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+                <div class="col-md-12 text-white mt-2 ml-2 @align justify-content-center">
+                    <a class="btn btn-secondary  text-center p-2" href="@Url.Action("Archive", "Visitorpass", null)">
+                        <i class="fa fa-archive"></i>
+                        &nbsp;
+                        @Resources.Passes.ResourceManager.GetString("archive" + "_" + ViewBag.lang)
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<br />
+
+

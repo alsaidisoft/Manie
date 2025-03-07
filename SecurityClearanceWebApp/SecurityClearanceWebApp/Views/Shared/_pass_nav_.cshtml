@@ -1,0 +1,230 @@
+﻿@using System;
+@using System.Collections.Generic;
+@using System.Data;
+@using System.Data.Entity;
+@using System.IO;
+@using System.Linq;
+@using System.Net;
+@using System.Threading.Tasks;
+@using System.Web;
+@using System.Web.Mvc;
+@using System.Web.UI.WebControls;
+@using APP.Filters;
+@using APP.Util;
+@using portal.Controllers;
+@using SecurityClearanceWebApp.Models;
+
+@{
+    ViewBag.Title = "Index";
+    string align = "text-left";
+    string alignInverse = "text-right";
+    string dir = "rtl";
+    if (ViewBag.lang == "en")
+    {
+        align = "text-right";
+        alignInverse = "text-left";
+        dir = "ltr";
+    }
+
+
+}
+
+@{
+
+    string type = (Request.QueryString["type"] != null ? Request.QueryString["type"] : ViewData["access"] as string);
+
+
+}
+@if ((ViewBag.RESPO_STATE > 1 && ViewBag.RESPO_STATE < 8) || (ViewBag.RESPO_STATE == 10) || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+{
+    <div class="col-md-12 justify-content-center text-center">
+        <div class="btn-group @alignInverse" dir="@dir" role="group">
+
+            @if (ViewBag.AIR_ACCESS == true)
+            {
+                <a class="btn btn-primary font-weight-bolder text-center @if (ViewBag.COUNTAIR != 0 || ViewBag.COUNTAIRTOPRINT != 0)
+                { <text>notification</text>} @if (type == "10" || ViewBag.controllerName == "AirCrewpass")
+         { <text>active</text> }" href="~/@ViewBag.lang/Permitsdtl/Index?type=10">
+
+                    @if (ViewBag.COUNTAIR != 0 || ViewBag.COUNTAIRTOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTAIR + ViewBag.COUNTAIRTOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.air_crew_icon"></i> <br />@ViewBag.air_crew_permit</p>
+                </a>
+            }
+
+            @if (ViewBag.TRAINEE_ACCESS == true)
+            {
+                <a class="btn btn-primary font-weight-bolder text-center @if (ViewBag.COUNTTRAINEE != 0 || ViewBag.COUNTTRAINEETOPRINT != 0)
+                { <text>notification</text>} @if (type == "8" || ViewBag.controllerName == "Traineepass")
+         { <text>active</text> }" href="~/@ViewBag.lang/Permitsdtl/Index?type=8">
+
+                    @if (ViewBag.COUNTTRAINEE != 0 || ViewBag.COUNTTRAINEETOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTTRAINEE + ViewBag.COUNTTRAINEETOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.trainee_icon"></i><br /> @ViewBag.trainee_permit</p>
+                </a>
+            }
+
+            @if (ViewBag.VISITOR_ACCESS == true)
+            {
+                <a class="btn btn-primary font-weight-bolder text-center @if (ViewBag.COUNTVISITOR != 0 || ViewBag.COUNTVISITORTOPRINT != 0)
+                { <text>notification</text>} @if (type == "9" || ViewBag.controllerName == "Visitorpass")
+         { <text>active</text> }" href="~/@ViewBag.lang/Permitsdtl/Index?type=9">
+
+                    @if (ViewBag.COUNTVISITOR != 0 || ViewBag.COUNTVISITORTOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTVISITOR + ViewBag.COUNTVISITORTOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.visitor_icon"></i><br /> @ViewBag.visitor_permit</p>
+                </a>
+            }
+
+            @if (ViewBag.EVENT_EXERCICE_ACCESS == true)
+            {
+                <a class="btn btn-primary font-weight-bolder text-center @if (ViewBag.COUNTEVENTEXERCISE != 0 || ViewBag.COUNTEVENTEXERCISETOPRINT != 0)
+                { <text>notification</text>} @if (ViewBag.COUNTTEMPRORY != 0)
+         { <text>notification</text>} @if (type == "7" || ViewBag.controllerName == "EventsExercisepass")
+         { <text>active</text> }" href="~/@ViewBag.lang/Permitsdtl/Index?type=7">
+
+                    @if (ViewBag.COUNTEVENTEXERCISE != 0 || ViewBag.COUNTEVENTEXERCISETOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTEVENTEXERCISE + ViewBag.COUNTEVENTEXERCISETOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.events_icon"></i><br /> @ViewBag.events_permit</p>
+                </a>
+            }
+
+            @if (ViewBag.TEMP_COMPANY_ACCESS == true)
+            {
+                <a class="btn btn-primary font-weight-bolder text-center @if (ViewBag.COUNTTEMPRORY != 0 || ViewBag.COUNTTEMPRORYTOPRINT != 0)
+                { <text>notification</text>} @if (type == "5" || ViewBag.controllerName == "Temprorycompanypass")
+         { <text>active</text> }" href="~/@ViewBag.lang/permitsdtl/Index?type=5">
+
+                    @if (ViewBag.COUNTTEMPRORY != 0 || ViewBag.COUNTTEMPRORYTOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTTEMPRORY + ViewBag.COUNTTEMPRORYTOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.companies_icon"></i><br /> @ViewBag.companies_permit</p>
+                </a>
+            }
+
+            @if (ViewBag.CONTRACT_COMPANY_ACCESS == true)
+            {
+                <a class="btn btn-primary font-weight-bolder text-center @if (ViewBag.COUNTCONTRACT != 0 || ViewBag.COUNTCONTRACTTOPRINT != 0)
+                { <text>notification</text>} @if (type == "6" || ViewBag.controllerName == "Cuntractedcompanypass")
+         { <text>active</text> }" href="~/@ViewBag.lang/Permitsdtl/Index?type=6">
+
+                    @if (ViewBag.COUNTCONTRACT != 0 || ViewBag.COUNTCONTRACTTOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTCONTRACT + ViewBag.COUNTCONTRACTTOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.contracted_icon"></i><br /> @ViewBag.contracted_permit</p>
+                </a>
+            }
+            @if (ViewBag.FAMILY_ACCESS == true)
+            {
+                <a class="btn btn-primary font-weight-bolder text-center @if (ViewBag.COUNTFAMILY != 0|| ViewBag.COUNTFAMILYTOPRINT != 0)
+                { <text>notification</text>}  @if (type == "4" || ViewBag.controllerName == "Familypass")
+         { <text>active</text> }" href="~/@ViewBag.lang/Permitsdtl/Index?type=4">
+
+                    @if (ViewBag.COUNTFAMILY != 0 || ViewBag.COUNTFAMILYTOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTFAMILY + ViewBag.COUNTFAMILYTOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.family_icon"></i><br /> @ViewBag.family_permit</p>
+                </a>
+            }
+
+            @if (ViewBag.VECHILE_ACCESS == true)
+            {
+                <a class="btn btn-primary font-weight-bolder text-center @if (ViewBag.COUNTVECHIL != 0 || ViewBag.COUNTVECHILTOPRINT != 0)
+                { <text>notification</text>} @if (type == "3" || ViewBag.controllerName == "Vechilepass")
+         { <text>active</text> }" href="~/@ViewBag.lang/Permitsdtl/Index?type=3">
+
+                    @if (ViewBag.COUNTVECHIL != 0 || ViewBag.COUNTVECHILTOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTVECHIL + ViewBag.COUNTVECHILTOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.employee_other_icon"></i><br /> @ViewBag.employee_others_permit</p>
+                </a>
+            }
+
+            @if (ViewBag.SECURITY_ACCESS == true)
+            {
+                <a class="btn btn-primary   font-weight-bolder text-center @if (ViewBag.COUNTSECUR != 0 || ViewBag.COUNTSECURTOPRINT != 0)
+                { <text>notification</text>} @if (type == "2" || ViewBag.controllerName == "Securitypass")
+         { <text>active</text> }" href="~/@ViewBag.lang/Permitsdtl/Index?type=2">
+
+                    @if (ViewBag.COUNTSECUR != 0 || ViewBag.COUNTSECURTOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTSECUR + ViewBag.COUNTSECURTOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.private_icon"></i><br /> @ViewBag.private_permit</p>
+                </a>
+            }
+
+
+            @if (ViewBag.AUTHO_ACCESS == true)
+            {
+                <a class="btn btn-primary  font-weight-bolder text-center @if (ViewBag.COUNTAUTHO != 0 || ViewBag.COUNTAUTHOTOPRINT != 0)
+                { <text>notification</text>} @if (type == "1" || ViewBag.controllerName == "Authoraizationpass")
+         { <text>active</text> }" href="~/@ViewBag.lang/Permitsdtl/Index?type=1">
+
+                    @if (ViewBag.COUNTAUTHO != 0 || ViewBag.COUNTAUTHOTOPRINT != 0)
+                    {
+                        var t = ViewBag.COUNTAUTHO + ViewBag.COUNTAUTHOTOPRINT;
+                        <span class="badge2 numbersfont2">@t</span>
+
+                    }
+
+                    <p class="text-center text-uppercase"><i class="@ViewBag.autho_icon"></i><br /> @ViewBag.autho_permit</p>
+                </a>
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        <br />
+        <br />
+    </div>
+}

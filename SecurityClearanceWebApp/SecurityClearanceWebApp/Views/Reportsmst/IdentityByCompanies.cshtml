@@ -1,0 +1,276 @@
+﻿@using APP.Util
+
+
+
+@{
+    ViewBag.Title = "تقرير الجنسيات";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+@*<style>
+        td {
+            font-family: Arial !important;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>*@
+
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+        <h1 class="card-header  text-primary"><i class="fa fa-file-excel"></i> تقرير الجنسيات العاملة بالشركات</h1>
+        @using (Html.BeginForm("IdentityByCompanies", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>@Resources.Common.ResourceManager.GetString("From" + "_" + ViewBag.lang)</label>
+                            <input type="date" name="From" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>@Resources.Common.ResourceManager.GetString("To" + "_" + ViewBag.lang)</label>
+                            <input type="date" name="To" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt-4">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> @Resources.Common.ResourceManager.GetString("Search" + "_" + ViewBag.lang)</button>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <hr />
+            </div>
+        }
+            <div class="card-body">
+                <div class="col-md-12" dir="@dir">
+                    <button type="button" id="cmd" class="btn btn-secondary"><i class="fa fa-print"></i> طباعة</button>
+                </div>
+                <hr />
+                <div class="col-md-12" id="pdf" dir="rtl">
+                    <div class="text-center" @*style="display:none"*@>
+                        <center>
+                            <h4>@ViewBag.CAMP_NAME</h4>
+                            <h4>تقرير مجموع الجنسيات العاملة بالقاعدة</h4>
+                        </center>
+                        <hr />
+                        <center style="font-family: Arial !important">@ViewBag.Date</center>
+                        <br />
+                    </div>
+
+                    <hr />
+                    <table border="1" cellpadding="3" dir="rtl" class="table table-bordered" style="width:100% !important; white-space: nowrap">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>ت</th>
+                                <th>اسم الشركة</th>
+                                <th>الجنسية</th>
+                                <th>المجموع</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            @if (ViewBag.Result != null)
+                            {
+                                List<string> companiesByCar = new List<string> { };
+                                List<string> companiesNotByCar = new List<string> { };
+                                List<string> companiesTempByCar = new List<string> { };
+                                List<string> companiesTempNotByCar = new List<string> { };
+                                foreach (var item in ViewBag.Result)
+                                {
+                                    if (item.Type == "1")
+                                    {
+                                        string comp = item.Company;
+                                        string iden = item.Identity;
+                                        companiesByCar.Add(comp + "_" + iden);
+                                    }
+                                    if (item.Type == "2")
+                                    {
+                                        string comp = item.Company;
+                                        string iden = item.Identity;
+                                        companiesNotByCar.Add(comp + "_" + iden);
+                                    }
+                                    if (item.Type == "3")
+                                    {
+                                        string comp = item.Company;
+                                        string iden = item.Identity;
+                                        companiesTempByCar.Add(comp + "_" + iden);
+                                    }
+                                    if (item.Type == "4")
+                                    {
+                                        string comp = item.Company;
+                                        string iden = item.Identity;
+                                        companiesTempNotByCar.Add(comp + "_" + iden);
+                                    }
+
+                                }
+
+                                var comBycar = companiesByCar.GroupBy(x => x)
+                                .Select(g => new { Value = g.Key, Count = g.Count() })
+                                .OrderByDescending(x => x.Count);
+
+                                var comByNot = companiesNotByCar.GroupBy(x => x)
+                                .Select(g => new { Value = g.Key, Count = g.Count() })
+                                .OrderByDescending(x => x.Count);
+
+                                var comByNotTemp = companiesTempNotByCar.GroupBy(x => x)
+                               .Select(g => new { Value = g.Key, Count = g.Count() })
+                               .OrderByDescending(x => x.Count);
+                                var comBycarTemp = companiesTempByCar.GroupBy(x => x)
+                               .Select(g => new { Value = g.Key, Count = g.Count() })
+                               .OrderByDescending(x => x.Count);
+
+                                int f = 1;
+                                int total = 0;
+                                int repeat = 0;
+                                foreach (var x in comBycar)
+                                {
+                                    var company = x.Value.Substring(0, x.Value.IndexOf('_'));
+                                    var identity = x.Value.Substring(x.Value.IndexOf('_') + 1);
+                                    if (repeat == 0)
+                                    {
+                                    <tr class="bg-light">
+                                        <td colspan="4">تصريح شركات بمركبة</td>
+                                    </tr>
+                                        repeat = 1;
+                                    }
+                                    <tr>
+                                        <td>@f</td>
+                                        <td>@company</td>
+                                        <td>@identity</td>
+                                        <td>@x.Count</td>
+
+                                    </tr>
+                                    f = f + 1;
+                                    total = total + x.Count;
+
+                                }
+                                repeat = 0;
+                                foreach (var x in comByNot)
+                                {
+                                    var company = x.Value.Substring(0, x.Value.IndexOf('_'));
+                                    var identity = x.Value.Substring(x.Value.IndexOf('_') + 1);
+                                    if (repeat == 0)
+                                    {
+                                    <tr class="bg-light">
+                                        <td colspan="4">تصريح شركات بدون مركبة</td>
+                                    </tr>
+                                        repeat = 1;
+                                    }
+                                    <tr>
+                                        <td>@f</td>
+                                        <td>@company</td>
+                                        <td>@identity</td>
+                                        <td>@x.Count</td>
+
+                                    </tr>
+                                    f = f + 1;
+                                    total = total + x.Count;
+
+
+                                }
+                                repeat = 0;
+                                foreach (var x in comByNotTemp)
+                                {
+                                    var company = x.Value.Substring(0, x.Value.IndexOf('_'));
+                                    var identity = x.Value.Substring(x.Value.IndexOf('_') + 1);
+                                    if (repeat == 0)
+                                    {
+                                    <tr class="bg-light">
+                                        <td colspan="4">تصريح شركات مؤقته بدون مركبة</td>
+                                    </tr>
+                                        repeat = 1;
+                                    }
+                                    <tr>
+                                        <td>@f</td>
+                                        <td>@company</td>
+                                        <td>@identity</td>
+                                        <td>@x.Count</td>
+
+                                    </tr>
+                                    f = f + 1;
+                                    total = total + x.Count;
+
+
+
+                                }
+                                repeat = 0;
+                                foreach (var x in comBycarTemp)
+                                {
+                                    var company = x.Value.Substring(0, x.Value.IndexOf('_'));
+                                    var identity = x.Value.Substring(x.Value.IndexOf('_') + 1);
+                                    if (repeat == 0)
+                                    {
+                                    <tr class="bg-light">
+                                        <td colspan="4">تصريح شركات مؤقته بمركبة</td>
+                                    </tr>
+                                        repeat = 1;
+                                    }
+                                    <tr>
+                                        <td>@f</td>
+                                        <td>@company</td>
+                                        <td>@identity</td>
+                                        <td>@x.Count</td>
+
+                                    </tr>
+                                    f = f + 1;
+                            total = total + x.Count;
+
+
+                                }
+
+                                <tr class="bg-light">
+                                    <td colspan="3">مجموع العمـــــــــــــــــال</td>
+                                    <td>@total</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+@section Scripts {
+    
+
+    <script>
+
+
+
+
+        function printData() {
+            var divToPrint = document.getElementById("pdf");
+            newWin = window.open("");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        $('#cmd').on('click', function () {
+            printData();
+        });
+    </script>
+
+
+}

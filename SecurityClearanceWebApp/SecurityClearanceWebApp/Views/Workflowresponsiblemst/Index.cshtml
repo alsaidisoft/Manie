@@ -1,0 +1,1273 @@
+﻿@using APP.Util;
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_WORKFLOW_RESPONSIBLE_MST>
+
+@{
+    ViewBag.Title = "Index";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+    var active = "active";
+    var nactive = "not active";
+
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+        active = "مفعل";
+        nactive = "محضور";
+
+    }
+
+}
+
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @{
+            Html.RenderPartial("settings_nav_links");
+
+        }
+        <div class="col-md-10">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 justify-content-center text-primary">
+                            <h4>
+                                <i class="@ViewBag.controllerIconClass"></i>&nbsp;
+                                @Resources.Settings.ResourceManager.GetString("WORKFLOW_TYPE_Permissions" + "_" + ViewBag.lang)
+                            </h4>
+                        </div>
+                        <div class="col-6 text-white @align">
+                            <a class="btn btn-success" href="#" onclick="AddNew(0)">
+                                <i class="fa fa-plus-circle"></i>
+                                &nbsp;
+                                @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Erorr"] != null)
+                    {
+                        <div class="alert alert-danger text-center p-1">@TempData["Erorr"]</div>
+                    }
+                    <table class="table table-striped table-bordered table-hover table-responsive @table  text-center" style="display: table">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>#</th>
+                                @if (ViewBag.DEVELOPER == true)
+                                {
+                                    <th>
+                                        @Resources.Settings.ResourceManager.GetString("Force" + "_" + ViewBag.lang)
+                                    </th>
+                                }
+                                @if (ViewBag.DEVELOPER == true || ViewBag.ADMIN == true)
+                                {
+                                    <th>
+                                        @Resources.Settings.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)
+                                    </th>
+                                }
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("sect" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("SERVICE_NUMBER" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Respo_name" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Step_name" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Active" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th style="border-right: 1px solid #ccc;">
+                                    @Resources.Settings.ResourceManager.GetString("ACTIONS" + "_" + ViewBag.lang)
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int rowNo = 0;}
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                @{rowNo++;}
+                                <td>@rowNo</td>
+
+
+                                @if (ViewBag.DEVELOPER == true)
+                                {
+                                    <td>
+                                        @if (Language.GetCurrentLang() == "en")
+                                        {
+                                            @Html.DisplayFor(modelItem => item.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_E)
+
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_A)
+
+                                        }
+
+                                    </td>
+                                }
+                                @if (ViewBag.DEVELOPER == true || ViewBag.ADMIN == true)
+                                {
+                            <td width="15%">
+                                @if (Language.GetCurrentLang() == "en")
+                                {
+                                    @Html.DisplayFor(modelItem => item.RA42_STATIONS_MST.STATION_NAME_E)
+
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.RA42_STATIONS_MST.STATION_NAME_A)
+
+                                }
+                            </td>
+                                }
+                            <td>
+                                @if (Language.GetCurrentLang() == "en")
+                                {
+                                    @item.UNIT_NAME_E
+                                }
+                                else
+                                {
+                                    @item.UNIT_NAME
+                                }
+                            </td>
+                                <td>@item.SERVICE_NUMBER</td>
+                                <td>
+                                    @{
+                                        var slash = " - ";
+                                    }
+                                    @if (Language.GetCurrentLang() == "en")
+                                    {
+                                        @item.RANK_E @slash @item.RESPONSEPLE_NAME_E
+                                    }
+                                    else
+                                    {
+                                        @item.RANK @slash @item.RESPONSEPLE_NAME
+                                    }
+                                </td>
+                                <td>
+                                    @if (Language.GetCurrentLang() == "en")
+                                    {
+                                        foreach (var x in item.RA42_ACCESS_SELECT_MST.Where(a => a.DLT_STS != true))
+                                        {
+                                            @Html.DisplayFor(model => x.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E)
+                                            string _underscor = "-";
+                                            @_underscor
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (var x in item.RA42_ACCESS_SELECT_MST.Where(a => a.DLT_STS != true))
+                                        {
+                                            @Html.DisplayFor(model => x.RA42_ACCESS_TYPE_MST.ACCESS_TYPE)
+                                            string _underscor = "-";
+                                            @_underscor
+                                        }
+                                    }
+                                </td>
+                                <td width="15%">
+                                    @if (Language.GetCurrentLang() == "en")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_WORKFLOW_MST.STEP_NAME_E)
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_WORKFLOW_MST.STEP_NAME)
+
+                                    }
+
+                                </td>
+                                <td width="15%">
+                                    @if (item.ACTIVE != false)
+                                    {
+
+                                    <div class="alert alert-success rounded text-center">
+                                        <i class="fa fa-check-circle"></i> @Resources.Settings.ResourceManager.GetString("Activated" + "_" + ViewBag.lang)
+                                    </div>
+                                    }
+                                    else
+                                    {
+                                <div class="alert alert-danger rounded text-center">
+                                    <i class="fa fa-times-circle"></i> @Resources.Settings.ResourceManager.GetString("NotActivated" + "_" + ViewBag.lang)
+                                </div>
+                                    }
+                                    </td>
+
+
+
+
+                                <td style="border-right: 1px solid #ccc;">
+                                    <div class="btn-group" dir="ltr">
+                                        <a class="btn btn-primary details btn-sm" href="#" onclick="Details(@item.WORKFLOW_RESPO_CODE)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a class="btn btn-warning btn-sm" href="#" onclick="EditRecord(@item.WORKFLOW_RESPO_CODE)">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+
+                                        <a class="btn btn-danger btn-sm" href="#" onclick="DeleteRecord(@item.WORKFLOW_RESPO_CODE)">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Create A Popup Modal With Registration Form For Add Or Edit Student Record*@
+
+<div class="modal fade" id="MyModal" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="form">
+                    <fieldset id="SubmitForm">
+                        <input type="hidden" name="WORKFLOW_RESPO_CODE" id="WORKFLOW_RESPO_CODE" />
+                        <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("SERVICE_NUMBER" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <input type="text" class="service-number-input form-control" name="SERVICE_NUMBER" id="SERVICE_NUMBER" />
+                            </div>
+                            <p id="nam"></p>
+                            <p id="uni"></p>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-12" id="respo">
+                            @Resources.Settings.ResourceManager.GetString("Respo_name" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="RESPONSEPLE_NAME" id="RESPONSEPLE_NAME" />
+                            </div>
+                            <hr />
+
+                        </div>
+                        @{
+                            int se = 0;
+                        }
+                        @foreach (var i in ViewBag.SECTION_NAME)
+                        {
+                            se = se + 1;
+                        }
+
+                        @if (se != 0)
+                        {
+
+                            <div class="col-md-12">
+                                @Resources.Settings.ResourceManager.GetString("sect" + "_" + ViewBag.lang)
+                                <div class="form-group">
+                                    <select name="UNIT_NAME" id="UNIT_NAME_AR" class="form-control w-100" style="min-width:100% !important">
+                                        <option value="">--اختر القسم--</option>
+                                        @foreach (var item in ViewBag.SECTION_NAME)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                      <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("sect" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="UNIT_NAME" id="UNIT_NAME_AR" />
+                            </div>
+                        </div>
+                        }
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6" id="access1">
+                                    <div class="form-group">
+                                        <div class="control-label">
+                                            @Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)
+                                        </div>
+                                        <select class="form-control select2-selector" name="ACCESS_TYPE_CODE[]" multiple style="width:100%;" id="ACCESS_TYPE_CODE1">
+                                            @foreach (var ltfo in (MultiSelectList)ViewBag.ACCESS_TYPE_CODE)
+                                            {
+
+                                                <option value="@ltfo.Value">@ltfo.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="access2">
+                                    <div class="form-group">
+                                        <div class="control-label">
+                                            @Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)
+                                        </div>
+                                        <select class="form-control select2-selector" name="ACCESS_TYPE_CODE[]" multiple style="width:100%;" id="ACCESS_TYPE_CODE2">
+
+                                            @foreach (var ltfo in (MultiSelectList)ViewBag.ACCESS_TYPE_CODE)
+                                            {
+                                                <option value="@ltfo.Value">@ltfo.Text</option>
+                                            }
+
+                                        </select>
+
+
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" id="wo1">
+                                    <div class="form-group">
+                                        <div class="control-label">
+                                            @Resources.Settings.ResourceManager.GetString("WORKFLOW_TYPE" + "_" + ViewBag.lang)
+                                        </div>
+                                        <select class="form-control" name="WORKFLOWID" id="WORKFLOWID1">
+                                            @foreach (var ltfo in ViewBag.WORKFLOWID)
+                                            {
+                                                <option value="@ltfo.Value" @if (ltfo.Value == "12") { <text> selected</text>} @*@if ((ViewBag.workflowIDType != 4 && ltfo.Value == "4") && (ViewBag.ADMIN !=true && ViewBag.DEVELOPER !=true)) {<text>disabled="disabled"</text>}*@>@ltfo.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="wo2">
+                                    <div class="form-group">
+                                        <div class="control-label">
+                                            @Resources.Settings.ResourceManager.GetString("WORKFLOW_TYPE" + "_" + ViewBag.lang)
+                                        </div>
+                                        <select class="form-control" name="WORKFLOWID" id="WORKFLOWID2">
+                                            @foreach (var ltfo in ViewBag.WORKFLOWID)
+                                            {
+                                                <option value="@ltfo.Value" @*@if ((ViewBag.workflowIDType != 4 && ltfo.Value == "4") && (ViewBag.ADMIN !=true && ViewBag.DEVELOPER !=true)) {<text>disabled="disabled"</text>}*@>@ltfo.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" id="uni1">
+                                    <div class="form-group">
+                                        <div class="control-label">
+                                            @Resources.Settings.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)
+                                        </div>
+                                        <select class="form-control" name="STATION_CODE" id="UNIT_CODE1">
+                                            @foreach (var ltfo in ViewBag.STATION_CODE)
+                                            {
+                                                <option value="@ltfo.Value">@ltfo.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="uni2">
+                                    <div class="form-group">
+                                        <div class="control-label">
+                                            @Resources.Settings.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)
+                                        </div>
+                                        <select class="form-control" name="STATION_CODE" id="UNIT_CODE2">
+                                            @foreach (var ltfo in ViewBag.STATION_CODE)
+                                            {
+                                                <option value="@ltfo.Value">@ltfo.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    @Resources.Settings.ResourceManager.GetString("Choose_permission" + "_" + ViewBag.lang)
+                                </div>
+
+                                <div class="row p-2">
+
+                                    @if (ViewBag.ADMIN == true || ViewBag.DEVELOPER == true || ViewBag.RP == true)
+                                    {
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Settings.ResourceManager.GetString("Rp" + "_" + ViewBag.lang)
+                                                <input type="checkbox" class="form-check-input m-1" name="RP" value="true" id="RP" />
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (ViewBag.ADMIN == true || ViewBag.DEVELOPER == true || ViewBag.STN == true)
+                                    {
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Settings.ResourceManager.GetString("Settings_pr" + "_" + ViewBag.lang)
+                                                <input type="checkbox" class="form-check-input m-1" name="SETTINGS" value="true" id="SETTINGS" />
+
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (ViewBag.DEVELOPER == true)
+                                    {
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Settings.ResourceManager.GetString("Developer" + "_" + ViewBag.lang)
+                                                <input type="checkbox" class="form-check-input m-1" name="DEVELOPER" value="true" id="DEVELOPER" />
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+                                    {
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Settings.ResourceManager.GetString("All_permissions" + "_" + ViewBag.lang)
+                                                <input type="checkbox" class="form-check-input m-1" name="ADMIN" value="true" id="ADMIN" />
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Resources.Settings.ResourceManager.GetString("Active" + "_" + ViewBag.lang)
+                                <input type="checkbox" class="form-check-input m-1" name="ACTIVE" value="false" id="boxid1"><label for="boxid1" class="text-success font-weight-bold text-left w-50" id="b1">مفعل</label>
+                                <input type="checkbox" class="form-check-input m-1" name="ACTIVE" value="false" id="boxid2"><label for="boxid2" class="text-success font-weight-bold text-left w-25 pr-4" id="b2"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <a href="#" class="btn btn-block text-center" id="SaveRecord"></a>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Create A PopUp Modal For DeleteConfirmation*@
+
+<div class="modal fade" id="DeleteConfirmation" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_dlt"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <h4>
+                    @Resources.Common.ResourceManager.GetString("delete_question" + "_" + ViewBag.lang)
+                </h4>
+
+
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("SERVICE_NUMBER" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="SN2"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Rank" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="RA2"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Respo_name" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="NA2"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-12">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Unitcode" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="UN2"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Ad" + "_" + ViewBag.lang)</h6>
+                                    <h6 class="details-info-content" id="AD2"></h6>
+                                    <hr />
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("View" + "_" + ViewBag.lang)</h6>
+                                    <h6 class="details-info-content" id="VW2"></h6>
+                                    <hr />
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Up" + "_" + ViewBag.lang)</h6>
+                                    <h6 class="details-info-content" id="UP2"></h6>
+                                    <hr />
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Delete" + "_" + ViewBag.lang)</h6>
+                                    <h6 class="details-info-content" id="DL2"></h6>
+                                    <hr />
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Rp" + "_" + ViewBag.lang)</h6>
+                                    <h6 class="details-info-content" id="RP2"></h6>
+                                    <hr />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Settings_pr" + "_" + ViewBag.lang)</h6>
+                                    <h6 class="details-info-content" id="SETTINGS2"></h6>
+                                    <hr />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Developer" + "_" + ViewBag.lang)</h6>
+                                    <h6 class="details-info-content" id="DEVELOPER2"></h6>
+                                    <hr />
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("All_permissions" + "_" + ViewBag.lang)</h6>
+                                    <h6 class="details-info-content" id="ADMIN2"></h6>
+                                    <hr />
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Active" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="AC2"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Pervilage" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="PR2"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("Pervilage" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="PRE2"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-12">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="PA2"></h6>
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+
+
+             
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success" data-dismiss="modal" id="r"> <i class="fa fa-thumbs-up"></i> @Resources.Common.ResourceManager.GetString("cancel" + "_" + ViewBag.lang)</a>
+                &thinsp;
+                <a href="#" class="btn btn-danger" onclick="ConfirmDelete()">
+                    <i class="fa fa-trash"></i>
+                    @Resources.Common.ResourceManager.GetString("delete_confirm" + "_" + ViewBag.lang)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Details" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_details"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("SERVICE_NUMBER" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="SN1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Rank" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="RA1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Respo_name" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="NA1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-12">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Unitcode" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="UN1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Active" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="AC1"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Pervilage" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="PR1"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("Pervilage" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="PRE1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-12">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content text-primary" id="PA1"></h6>
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Ad" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content" id="AD1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("View" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content" id="VW1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Up" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content" id="UP1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Delete" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content" id="DL1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Rp" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content" id="RP1"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Settings_pr" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content" id="SETTINGS1"></h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Developer" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content" id="DEVELOPER1"></h6>
+                            <hr />
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("All_permissions" + "_" + ViewBag.lang)</h6>
+                            <h6 class="details-info-content" id="ADMIN1"></h6>
+                            <hr />
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_BY" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="CRD_BY1"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_DT" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="CRD_DT1"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_BY" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="UPD_BY1"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_DT" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="UPD_DT1"></h6>
+                        <hr />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/Scripts/select2.min.js"></script>
+    <link href="~/Content/select2.min.css" rel="stylesheet" type="text/css" />
+    <script>
+        $(document).ready(function () {
+            showProgressBar($(".service-number-field"));
+            showServiceInfo($(".service-number-field"));
+            $(".select2-selector").select2();
+           
+
+            if (!document.getElementById('boxid1').checked) {
+                $('#boxid1').siblings('label').html('<div class="text-success">@active</div>');
+            }
+            $('#boxid1').click(function () {
+                if ($(this).is(':checked')) {
+                    $(this).siblings('label').html('<span class="text-danger">@nactive</span>');
+                }
+                else {
+                    $(this).siblings('label').html('<span class="text-success">@active</span>');
+                }
+            })
+            if (document.getElementById('boxid2').checked) {
+                $('#boxid2').siblings('label').html('<div class="text-danger">@nactive</div>');
+            }
+            $('#boxid2').click(function () {
+                if ($(this).is(':checked')) {
+                    $(this).siblings('label').html('<div class="text-danger">@nactive</div>');
+                    $(this).val('False');
+                }
+                else {
+                    $(this).siblings('label').html('<div class="text-success">@active</div>');
+                    $(this).val('True');
+                }
+            })
+        });
+
+        function AddNew(id) {
+            $("#form")[0].reset();
+            try {
+                $("#UNIT_NAME_AR").select2();
+            } catch (ex) {
+                console.log(ex);
+            }
+            $("#boxid1").hide();
+            $("#b1").hide();
+            $("#boxid2").show();
+            $("#b2").show();
+            $("#respo").hide();
+            $("#nam").hide();
+            $("#uni").hide();
+            $("#access1").show();
+            $("#ACCESS_TYPE_CODE1").show();
+            $("#wo1").show();
+            $("#uni1").show();
+            $("#WORKFLOWID1").prop('disabled', false);
+            $("#WORKFLOWID1").show();
+
+            $("#UNIT_CODE1").prop('disabled', false);
+            $("#UNIT_CODE1").show();
+            $("#access2").hide();
+            $("#uni2").hide();
+            $("#ACCESS_TYPE_CODE2").hide();
+            $("#wo2").hide();
+            $("#WORKFLOWID2").prop('disabled', 'disabled');
+            $("#WORKFLOWID2").hide();
+            $("#UNIT_CODE2").prop('disabled', 'disabled');
+            $("#UNIT_CODE2").hide();
+            $("#WORKFLOW_RESPO_CODE").val(0);
+            $("#UNIT_CODE").val(0);
+            $("#SERVICE_NUMBER").attr("style", "pointer-events:auto;");
+            $("#ModalTitle").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)").removeClass('btn-warning').addClass("btn-success");
+            $("#MyModal").modal();
+
+        }
+
+        //Show The Popup Modal For Edit Student Record
+
+        function EditRecord(Id) {
+            try {
+                $("#UNIT_NAME_AR").select2('destroy'); 
+            } catch (ex) {
+                console.log(ex);
+            }
+            $("#respo").show();
+            $("#boxid1").hide();
+            $("#b1").hide();
+            $("#boxid2").show();
+            $("#b2").show();
+            $("#nam").show();
+            $("#uni").show();
+            $("#access1").hide();
+            $("#access2").show();
+            $("#wo1").hide();
+            $("#wo2").show();
+            $("#uni1").hide();
+            $("#uni2").show();
+            $("#ACCESS_TYPE_CODE1").hide();
+            $("#WORKFLOWID1").hide();
+            $("#WORKFLOWID1").prop('disabled', 'disabled');
+            $("#UNIT_CODE1").hide();
+            $("#UNIT_CODE1").prop('disabled', 'disabled');
+            $("#ACCESS_TYPE_CODE2").show();
+            $("#WORKFLOWID2").prop('disabled', false);
+            $("#WORKFLOWID2").show();
+            $("#UNIT_CODE2").prop('disabled', false);
+            $("#UNIT_CODE2").show();
+            $("#UNIT_CODE").val(0);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle").html("<i class='fa fa-edit'></i> @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-save'></i> @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)").removeClass('btn-success').addClass("btn-warning");
+            $("#MyModal").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    $("#WORKFLOW_RESPO_CODE").val(obj.WORKFLOW_RESPO_CODE);
+                    $("#RESPONSEPLE_NAME").val(obj.RESPONSEPLE_NAME);
+                    $("#UNIT_NAME_AR").val(obj.UNIT_NAME);
+                    $("#SERVICE_NUMBER").val(obj.SERVICE_NUMBER);
+                    $("#SERVICE_NUMBER").attr("style", "pointer-events:none;");
+                    $("#nam").text(obj.RESPONSEPLE_NAME);
+                    $("#uni").text(obj.UNIT_NAME);
+                    $("#WORKFLOWID2").val(obj.WORKFLOWID);
+                    $("#UNIT_CODE2").val(obj.STATION_CODE);
+                    $("#SERVICE_NUMBER").removeClass('service-number-input').addClass('service-number-field');
+                    showProgressBar($(".service-number-field"));
+                    showServiceInfo($(".service-number-field"));
+                    if (obj.RP == true) {
+                        $("#RP").prop('checked', true);
+                    }
+                    else {
+                        $("#RP").prop('checked', false);
+                    }
+                   
+                  
+                    if (obj.SETTINGS == true) {
+                        $("#SETTINGS").prop('checked', true);
+                    }
+                    else {
+                        $("#SETTINGS").prop('checked', false);
+                    }
+                    if (obj.DEVELOPER == true) {
+                        $("#DEVELOPER").prop('checked', true);
+                    }
+                    else {
+                        $("#DEVELOPER").prop('checked', false);
+                    }
+                    if (obj.ADMIN == true) {
+                        $("#ADMIN").prop('checked', true);
+                    }
+                    else {
+                        $("#ADMIN").prop('checked', false);
+                    }
+
+                    $("#boxid2").val(obj.ACTIVE);
+                    if (obj.ACTIVE == false) {
+                        $("#boxid2").prop('checked', true);
+                        $("#b2").text("@nactive").removeClass('text-success').addClass('text-danger');
+                    }
+                    else {
+                        $("#b2").text("@active").removeClass('text-danger').addClass('text-success');
+                        $("#boxid2").prop('checked', false);
+                    }
+
+
+                }
+            })
+            var url2 = "./GetSelectdAccess?Id=" + Id;
+            $.ajax({
+                type: "GET",
+                url: url2,
+                success: function (data2) {
+                    var values =[];
+                    //console.log(data2);
+                    $("#ACCESS_TYPE_CODE2").val('').trigger('change');
+                    for (var i = 0; i < data2.length; i++) {
+                        //this method to create new options
+                        //var option = new Option(data2[i].ACCESS_TYPE, data2[i].ACCESS_TYPE_CODE, true, true);
+                        //$("#ACCESS_TYPE_CODE2").append(option).trigger('change');
+                        //this method to get values
+                        values.push(data2[i].ACCESS_TYPE_CODE);
+                    }
+
+                     $("#ACCESS_TYPE_CODE2").val(values).trigger('change');
+
+                }
+            })
+        }
+
+
+        $("#SaveRecord").click(function () {
+            if ($("#ACCESS_TYPE_CODE1").is(":visible")) {
+                if ($("#ACCESS_TYPE_CODE1").val() == null) {
+                    $("#ACCESS_TYPE_CODE1").val(11);
+                }
+            }
+            if ($("#ACCESS_TYPE_CODE2").is(":visible")) {
+
+                if ($("#ACCESS_TYPE_CODE2").val() == null) {
+                    $("#ACCESS_TYPE_CODE2").val(11);
+                }
+            }
+            
+            var data = $("#SubmitForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "./SaveDataInDatabase",
+                data: data,
+                success: function (result) {
+                    window.location.href = "./index";
+                    $("#MyModal").modal("hide");
+
+                },
+                error: function (result) {
+                    window.location.href = "./index";
+                    $("#MyModal").modal("hide");
+                }
+            })
+        })
+
+        
+         //Show The Popup Modal For DeleteComfirmation
+        function Details(Id) {
+            $("#WORKFLOW_RESPO_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_details").html("<i class='fa fa-eye'></i> @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)");
+            $("#Details").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var sn1 = obj.SERVICE_NUMBER != null ? obj.SERVICE_NUMBER : "";
+                    var na1 = obj.RESPONSEPLE_NAME != null ? obj.RESPONSEPLE_NAME : "";
+                    var ra1 = obj.RANK != null ? obj.RANK : "";
+                    var un1 = obj.UNIT_NAME != null ? obj.UNIT_NAME : "";
+                    var pr1 = obj.STEP_NAME != null ? obj.STEP_NAME : "";
+                    var pre1 = obj.STEP_NAME_E != null ? obj.STEP_NAME_E : "";
+                    var crd_by = obj.CRD_BY != null ? obj.CRD_BY : "";
+                    var upd_by = obj.UPD_BY != null ? obj.UPD_BY : "";
+                    var crd_dt = obj.CRD_DT != null ? dtConvFromJSON(obj.CRD_DT) : "";
+                    var upd_dt = obj.UPD_DT != null ? dtConvFromJSON(obj.UPD_DT) : "";
+                    $("#ID2").val(obj.WORKFLOW_RESPO_CODE);
+                    $("#SN1").text(sn1);
+                    $("#NA1").text(na1);
+                    $("#RA1").text(ra1);
+                    $("#UN1").text(un1);
+                    $("#PR1").text(pr1);
+                    $("#PRE1").text(pre1);
+
+                    if (obj.AD == true) {
+                        $("#AD1").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#AD1").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.VW == true) {
+                        $("#VW1").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#VW1").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.UP == true) {
+                        $("#UP1").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#UP1").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.DL == true) {
+                        $("#DL1").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#DL1").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.ADMIN == true) {
+                        $("#ADMIN1").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#ADMIN1").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.SETTINGS == true) {
+                        $("#SETTINGS1").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#SETTINGS1").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                   
+                    if (obj.DEVELOPER == true) {
+                        $("#DEVELOPER1").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#DEVELOPER1").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.RP == true) {
+                        $("#RP1").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#RP1").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+
+                    if (obj.ACTIVE == false) {
+                        $("#AC1").text("@nactive").removeClass('text-success').addClass('text-danger');
+                    }
+                    else {
+                        $("#AC1").text("@active").removeClass('text-danger').addClass('text-success');
+                    }
+
+                    $("#CRD_BY1").text(crd_by);
+                    $("#CRD_DT1").text(crd_dt);
+                    $("#UPD_BY1").text(upd_by);
+                    $("#UPD_DT1").text(upd_dt);
+                }
+
+
+            })
+
+            var url2 = "./GetSelectdAccess?Id=" + Id;
+            $.ajax({
+                type: "GET",
+                url: url2,
+                success: function (data2) {
+                    var values =[];
+
+                    for (var i = 0; i < data2.length; i++) {
+                        //this method to create new options
+                        //var option = new Option(data2[i].ACCESS_TYPE, data2[i].ACCESS_TYPE_CODE, true, true);
+                        //$("#ACCESS_TYPE_CODE2").append(option).trigger('change');
+                        //this method to get values
+                        values.push(data2[i].ACCESS_TYPE);
+                    }
+
+                    $("#PA1").text(values);
+
+
+
+
+                }
+            })
+
+        }
+        //Show The Popup Modal For DeleteComfirmation
+        function DeleteRecord(Id) {
+            $("#WORKFLOW_RESPO_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_dlt").html("<i class='fa fa-trash'></i> @Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)");
+            $("#DeleteConfirmation").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var sn2 = obj.SERVICE_NUMBER != null ? obj.SERVICE_NUMBER : "";
+                    var na2 = obj.RESPONSEPLE_NAME != null ? obj.RESPONSEPLE_NAME : "";
+                    var ra2 = obj.RANK != null ? obj.RANK : "";
+                    var un2 = obj.UNIT_NAME != null ? obj.UNIT_NAME : "";
+                    var pr2 = obj.STEP_NAME != null ? obj.STEP_NAME : "";
+                    var pre2 = obj.STEP_NAME_E != null ? obj.STEP_NAME_E : "";
+                    var crd_by = obj.CRD_BY != null ? obj.CRD_BY : "";
+                    var upd_by = obj.UPD_BY != null ? obj.UPD_BY : "";
+                    var crd_dt = obj.CRD_DT != null ? dtConvFromJSON(obj.CRD_DT) : "";
+                    var upd_dt = obj.UPD_DT != null ? dtConvFromJSON(obj.UPD_DT) : "";
+                    $("#ID2").val(obj.WORKFLOW_RESPO_CODE);
+                    $("#SN2").text(sn2);
+                    $("#NA2").text(na2);
+                    $("#RA2").text(ra2);
+                    $("#UN2").text(un2);
+                    $("#PR2").text(pr2);
+                    $("#PRE2").text(pre2);
+
+                    if (obj.AD == true) {
+                        $("#AD2").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#AD2").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.VW == true) {
+                        $("#VW2").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#VW2").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.UP == true) {
+                        $("#UP2").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#UP2").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.DL == true) {
+                        $("#DL2").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#DL2").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.ADMIN == true) {
+                        $("#ADMIN2").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#ADMIN2").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.SETTINGS == true) {
+                        $("#SETTINGS2").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#SETTINGS2").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    
+                    if (obj.DEVELOPER == true) {
+                        $("#DEVELOPER2").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#DEVELOPER2").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.RP == true) {
+                        $("#RP2").html("<i class='fa fa-check-circle'></i>").removeClass('text-danger').addClass('text-success');
+                    }
+                    else {
+                        $("#RP2").html("<i class='fa fa-times-circle'></i>").removeClass('text-success').addClass('text-danger');
+                    }
+                    if (obj.ACTIVE == false) {
+                        $("#AC2").text("@nactive").removeClass('text-success').addClass('text-danger');
+                    }
+                    else {
+                        $("#AC2").text("@active").removeClass('text-danger').addClass('text-success');
+                    }
+                    $("#CRD_BY2").text(crd_by);
+                    $("#CRD_DT2").text(crd_dt);
+                    $("#UPD_BY2").text(upd_by);
+                    $("#UPD_DT2").text(upd_dt);
+                }
+
+
+            })
+
+            var url2 = "./GetSelectdAccess?Id=" + Id;
+            $.ajax({
+                type: "GET",
+                url: url2,
+                success: function (data2) {
+                    var values =[];
+
+                    for (var i = 0; i < data2.length; i++) {
+                        //this method to create new options
+                        //var option = new Option(data2[i].ACCESS_TYPE, data2[i].ACCESS_TYPE_CODE, true, true);
+                        //$("#ACCESS_TYPE_CODE2").append(option).trigger('change');
+                        //this method to get values
+                        values.push(data2[i].ACCESS_TYPE);
+                    }
+
+                    $("#PA2").text(values);
+
+
+
+
+                }
+            })
+
+        }
+        function ConfirmDelete () {
+            var Id = $("#WORKFLOW_RESPO_CODE").val();
+            //console.log(Id);
+            $.ajax({
+                type: "POST",
+                url: "./DltRecordById?Id=" + Id,
+                success: function (result) {
+                    $("#DeleteConfirmation").modal("hide");
+                    window.location.href = "./index";
+
+                }
+            })
+        }
+
+        function dtConvFromJSON(data) {
+            jsonDate = data;
+            debugger;
+            var d = new Date(parseInt(jsonDate.substr(6)));
+            var m, day;
+            m = d.getMonth() + 1;
+            if (m < 10)
+                m = '0' + m
+            if (d.getDate() < 10)
+                day = '0' + d.getDate()
+            else
+                day = d.getDate();
+            var formattedDate = d.getFullYear() + "/ " + m + "/ " + day;
+            var hours = (+d.getHours());
+            var minutes = (+d.getMinutes());
+            var formattedTime = hours + ":" + minutes + ":" + (+d.getSeconds());
+            formattedDate = formattedTime + " " + formattedDate;
+            return formattedDate;
+        }
+
+    </script>
+
+
+}

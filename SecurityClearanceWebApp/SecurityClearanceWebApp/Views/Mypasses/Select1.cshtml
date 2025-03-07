@@ -1,0 +1,439 @@
+﻿@using Newtonsoft.Json;
+@using portal.Controllers;
+@using System.Data.Entity;
+@using SecurityClearanceWebApp.Models;
+@using APP.Util
+
+
+@{
+    ViewBag.Title = "Select permit type";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    int station = Convert.ToInt32(ViewBag.Selected_Station);
+    string currentUser = (new UserInfo()).getSNO();
+    bool is_officer = false;
+    if(currentUser.Contains("D1") || currentUser.Contains("D3"))
+    {
+        is_officer = true;
+    }
+
+
+}
+
+<div class="container-fluid" dir="@dir">
+    <div class="page-path">
+        <a href="@Url.Action("Index", ViewBag.controllerName, null)">
+            <i class="fa fa-universal-access"></i>
+            @Resources.Passes.ResourceManager.GetString("mypasses1" + "_" + ViewBag.lang)
+        </a>
+        <span>/</span>
+        <a href="@Url.Action("Forces", ViewBag.controllerName, null)">
+            <i class="fa fa-jedi"></i>
+            @Resources.Settings.ResourceManager.GetString("Forces" + "_" + ViewBag.lang)
+        </a>
+        <span>/</span>
+        <a href="@Url.Action("Stations", ViewBag.controllerName,new { id=@ViewBag.Selected_Force })">
+            <i class="fa fa-university"></i>
+            @Resources.Passes.ResourceManager.GetString("Units" + "_" + ViewBag.lang)
+        </a>
+        <span>/</span>
+        <a href="@Url.Action("Permits", ViewBag.controllerName,  new { id=ViewBag.Selected_Station })">
+            <i class="fa fa-universal-access"></i>
+            @Resources.Passes.ResourceManager.GetString("access_type" + "_" + ViewBag.lang)
+        </a>
+        <span>/</span>
+        <a>
+            <i class="fa fa-hand-pointer"></i>
+            @Resources.Passes.ResourceManager.GetString("Select" + "_" + ViewBag.lang)
+        </a>
+    </div>
+    <div class="card shadow-lg">
+        <div class="card-body">
+
+            <div class="col-lg-12">
+                @if (Language.GetCurrentLang() == "en")
+                {
+                    <h1 class="text-center font-weight-bolder text-primary" style="font-family: Arial;">Choose pass type that you want in  (@ViewBag.Station)</h1>
+                }
+                else
+                {
+                    <h1 class="text-center text-primary">اختر نوع التصريح الذي ترغب فيه في  (@ViewBag.Station)</h1>
+                }
+                <hr />
+                <div class=" row-@dir">
+                    @if (ViewBag.Selected_Station != null)
+                    {
+                        <div class="row justify-content-center">
+
+                            
+                            @if (ViewBag.IS_SECU == true)
+                            {
+                                if (station <= 22)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Permitsdtl/Create?type=2&&permit=11&&station=@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-shield"></i> @Resources.Passes.ResourceManager.GetString("Security_pass_create" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+                            }
+                            @if ((ViewBag.RESPO_STATE >= 1) && ViewBag.ACCESS_TYPE7 == "SECU")
+                            {
+                                if (ViewBag.FORCE_TYPE_CODE == 1)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Securitypass/Search/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-shield"></i> @Resources.Passes.ResourceManager.GetString("Security_pass_Search" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+
+                                if (ViewBag.FORCE_TYPE_CODE == 1 || ViewBag.FORCE_TYPE_CODE == 3)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Securitypass/Otherpermit/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-shield"></i> @Resources.Passes.ResourceManager.GetString("Otherpermit" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+
+                                if (ViewBag.FORCE_TYPE_CODE == 3)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Securitypass/StayAtPortMod/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-shield"></i> @Resources.Passes.ResourceManager.GetString("create_staty_at_port_for_mod" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Securitypass/StayAtPortForOthers/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-shield"></i> @Resources.Passes.ResourceManager.GetString("create_staty_at_port_for_other" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+
+
+                            }
+                            @if (ViewBag.IS_VECHI == true)
+                            {
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/Create/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("vechile_pass_create" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                                if (is_officer == true && station == 26)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/ForRnoOfficersOnly/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("for_rno_officers" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+
+                            }
+                            @if ((ViewBag.RESPO_STATE >= 1) && ViewBag.ACCESS_TYPE6 == "VECHI")
+                            {
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/Search/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("Vechile_pass_Search" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+
+                                if (ViewBag.FORCE_TYPE_CODE == 3)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/ForSpecialArea/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("exception_area" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/Otherpermit/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("OtherpermitVechile" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                                if (ViewBag.FORCE_TYPE_CODE == 2)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/ForOfficerDriver/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("driver_permit" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+
+
+                                }
+
+
+
+                            }
+
+                            @if (ViewBag.IS_FAMILY == true)
+                            {
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Familypass/Create/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-users"></i> @Resources.Passes.ResourceManager.GetString("Create_family_pass" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/Familyvechilepass/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("Create_Family" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                            }
+                            @if ((ViewBag.RESPO_STATE >= 1) && ViewBag.ACCESS_TYPE8 == "FAMILY")
+                            {
+
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/Supercreate/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("Vechile_pass_Supercreate" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Familypass/Supercreate/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-users"></i> @Resources.Passes.ResourceManager.GetString("Create_Special_Family_pass" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+                                if (ViewBag.FORCE_TYPE_CODE == 1)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Familypass/Otherpermit/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-users"></i> @Resources.Passes.ResourceManager.GetString("create_family_pass_for_org" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+                                if (ViewBag.FORCE_TYPE_CODE == 1)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/OtherpermitForFamily/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("Vechile_pass_otherfamily" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+
+                                }
+                            }
+                            @if ((ViewBag.RESPO_STATE >= 1) && ViewBag.ACCESS_TYPE3 == "CONTRACT")
+                            {
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Cuntractedcompanypass/Create/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-archway"></i> @Resources.Passes.ResourceManager.GetString("company_contracted_pass_create" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                            }
+
+                            @if ((ViewBag.RESPO_STATE >= 1) && ViewBag.ACCESS_TYPE2 == "TEMP")
+                            {
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Temprorycompanypass/Create/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-hotel"></i> @Resources.Passes.ResourceManager.GetString("create_for_one_worker" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Temprorycompanypass/Supercreate/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-hotel"></i> @Resources.Passes.ResourceManager.GetString("create_for_many_workers" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/Companypermit/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("companypermit" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/Companypermitgeneraluse/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("Companypermitgeneraluse" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+                                if (ViewBag.FORCE_TYPE_CODE == 3)
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Visitorpass/CompaniesTemporary/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-hotel"></i> @Resources.Passes.ResourceManager.GetString("visitor_company_temp" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+
+                            }
+
+
+                            @if ((ViewBag.RESPO_STATE >= 1) && ViewBag.ACCESS_TYPE4 == "EXCER")
+                            {
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/EventsExercisepass/Create/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-calendar"></i> @Resources.Passes.ResourceManager.GetString("Event_Exercise_Create" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/EventsExercisepass/Search/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-calendar"></i> @Resources.Passes.ResourceManager.GetString("EventExercise_pass_Search" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/EventsExercisepass/Otherpermit/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-calendar"></i> @Resources.Passes.ResourceManager.GetString("create_other_permit_ex" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+                            }
+                            @if (ViewBag.IS_VISIT = true && ViewBag.RESPO_ID == null)
+                            {
+                                if (station == 26)
+                                {
+
+
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Visitorpass/MedicalCenterTemporary/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-clinic-medical"></i> @Resources.Passes.ResourceManager.GetString("medical" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Visitorpass/FamilyTemporary/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-users"></i> @Resources.Passes.ResourceManager.GetString("visitor_family_temp" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Visitorpass/VisitorTemporary/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-clock"></i> @Resources.Passes.ResourceManager.GetString("temp_visitor" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+                            }
+                            @if ((ViewBag.RESPO_STATE >= 1) && ViewBag.ACCESS_TYPE5 == "VISIT")
+                            {
+                                if (station == 26)
+                                {
+
+
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Visitorpass/MedicalCenterTemporary/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-clinic-medical"></i> @Resources.Passes.ResourceManager.GetString("medical" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Visitorpass/FamilyTemporary/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-users"></i> @Resources.Passes.ResourceManager.GetString("visitor_family_temp" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Visitorpass/VisitorTemporary/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-clock"></i> @Resources.Passes.ResourceManager.GetString("temp_visitor" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Visitorpass/Create/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user"></i> @Resources.Passes.ResourceManager.GetString("Visitor_pass_create" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+                            }
+                            @if ((ViewBag.RESPO_STATE >= 1) && ViewBag.ACCESS_TYPE11 == "TRAINEE")
+                            {
+                                if (ViewBag.FORCE_TYPE_CODE != 2)
+                                {
+
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Traineepass/Create/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-cog"></i> @Resources.Passes.ResourceManager.GetString("Trainee_pass_create" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/Trainee/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-car-side"></i> @Resources.Passes.ResourceManager.GetString("trainee_with_car" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                }
+                                if (ViewBag.FORCE_TYPE_CODE == 2)
+                                {
+
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Traineepass/ProveIdentityForWorker/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-cog"></i> @Resources.Passes.ResourceManager.GetString("prove_identity_for_worker" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Traineepass/ProveIdentityForBusAdmin/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-cog"></i> @Resources.Passes.ResourceManager.GetString("prove_identity_for_admin_bus" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Traineepass/Create/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-user-cog"></i> @Resources.Passes.ResourceManager.GetString("Trainee_pass_create" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/ProveIdentity/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("ProveIdentity_car_permit" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/ProveIdentityBusdriver/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("prove_identity_bus_driver" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 m-2">
+                                        <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/Vechilepass/Trainee/@ViewBag.Selected_Station">
+                                            <h5 class="text-center text-uppercase"><i class="fa fa-car-side"></i> @Resources.Passes.ResourceManager.GetString("trainee_with_car" + "_" + ViewBag.lang)</h5>
+                                        </a>
+                                    </div>
+
+                                }
+
+                            }
+
+                            @if ((ViewBag.RESPO_STATE >= 1) && ViewBag.ACCESS_TYPE10 == "AIR")
+                            {
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/AirCrewpass/Create/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-plane"></i> @Resources.Passes.ResourceManager.GetString("create_air_crew" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/AirCrewpass/Search/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-plane"></i> @Resources.Passes.ResourceManager.GetString("search_air_crew" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+
+
+                                <div class="col-md-3 m-2">
+                                    <a class="btn btn-primary btn-block p-4 font-weight-bolder text-center" href="~/@ViewBag.lang/AirCrewpass/Otherpermit/@ViewBag.Selected_Station">
+                                        <h5 class="text-center text-uppercase"><i class="fa fa-plane"></i> @Resources.Passes.ResourceManager.GetString("other_air_crew" + "_" + ViewBag.lang)</h5>
+                                    </a>
+                                </div>
+
+
+
+                            }
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

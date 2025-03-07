@@ -1,0 +1,138 @@
+﻿@using APP.Util
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_ACCESS_SELECT_MST>
+
+
+@{
+    ViewBag.Title = "Permits";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+    int station = Convert.ToInt32(ViewBag.Selected_Station);
+    var cards = new List<string> {};
+
+
+}
+<div class="container-fluid" dir="@dir">
+    <div class="page-path">
+        <a href="@Url.Action("Index", ViewBag.controllerName, null)">
+            <i class="fa fa-universal-access"></i>
+            @Resources.Passes.ResourceManager.GetString("mypasses1" + "_" + ViewBag.lang)
+        </a>
+        <span>/</span>
+        <a href="@Url.Action("Forces", ViewBag.controllerName, null)">
+            <i class="fa fa-jedi"></i>
+            @Resources.Settings.ResourceManager.GetString("Forces" + "_" + ViewBag.lang)
+        </a>
+        <span>/</span>
+        <a href="@Url.Action("Stations", ViewBag.controllerName, new { id =@ViewBag.Selected_Force })">
+            <i class="fa fa-university"></i>
+            @Resources.Passes.ResourceManager.GetString("Units" + "_" + ViewBag.lang)
+        </a>
+        <span>/</span>
+        <i class="fa fa-universal-access"></i>
+        @Resources.Passes.ResourceManager.GetString("main_permits_type" + "_" + ViewBag.lang)
+    </div>
+    <div class="card shadow-lg">
+        <div class="card-body">
+
+            <div class="col-md-12">
+                @if (Language.GetCurrentLang() == "en")
+                {
+                    <h1 class="text-center font-weight-bolder text-primary" style="font-family: Arial;">Choose pass type that you want in  (@ViewBag.Station)</h1>
+                }
+                else
+                {
+                    <h1 class="text-center text-primary">اختر نوع التصريح الذي ترغب فيه في  (@ViewBag.Station)</h1>
+                }
+                <hr />
+                <div class="row justify-content-center row-@dir">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (Language.GetCurrentLang() == "en")
+                            {
+
+                                <div class="col-md-5 m-1">
+                                    <a href="@Url.Content("~/en/Mypasses/Select/" + item.ACCESS_TYPE_CODE)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center text-uppercase" style="font-family:Arial;"><i class="@item.RA42_ACCESS_TYPE_MST.ICON"></i> @item.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E </h1></a>
+                                </div>
+                            }
+                            else
+                            {
+
+                                <div class="col-md-5 m-1">
+                                    <a href="@Url.Content("~/ar/Mypasses/Select/" + item.ACCESS_TYPE_CODE)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center"><i class="@item.RA42_ACCESS_TYPE_MST.ICON"></i> @item.RA42_ACCESS_TYPE_MST.ACCESS_TYPE </h1><span class="text-sm-center">@item.RA42_ACCESS_TYPE_MST.REMARKS</span></a>
+                                </div>
+
+                            }
+
+                            cards.Add(item.ACCESS_TYPE_CODE.ToString());
+
+                        }
+
+                        if (!Model.Any())
+                        {
+                            if (station <= 22)
+                            {
+                                <div class="col-md-5 m-1">
+                                    <a href="@Url.Content("~/" + ViewBag.lang + "/Mypasses/Select/" + 2)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center">
+                                        <h1 class="text-center text-uppercase" @if (ViewBag.lang == "en") { <text> style="font-family:Arial;" </text> }>
+                                            <i class="fa fa-user-shield"></i> @Resources.Passes.ResourceManager.GetString("access_type_security" + "_" + ViewBag.lang)
+                                        </h1><span class="text-sm-center">@Resources.Passes.ResourceManager.GetString("for_car_emp" + "_" + ViewBag.lang)</span>
+                                    </a>
+                                </div>
+                            }
+                            <div class="col-md-5 m-1">
+                                <a href="@Url.Content("~/"+ViewBag.lang+"/Mypasses/Select/" + 3)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center text-uppercase" @if (ViewBag.lang == "en") { <text> style="font-family:Arial;" </text> }><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("access_type_vechile" + "_" + ViewBag.lang) </h1><span class="text-sm-center">@Resources.Passes.ResourceManager.GetString("for_car_emp" + "_" + ViewBag.lang)</span></a>
+                            </div>
+
+                            <div class="col-md-5 m-1">
+                                <a href="@Url.Content("~/"+ViewBag.lang+"/Mypasses/Select/" + 4)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center text-uppercase" @if (ViewBag.lang == "en") { <text> style="font-family:Arial;" </text> }><i class="fa fa-users"></i> @Resources.Passes.ResourceManager.GetString("Family_pass" + "_" + ViewBag.lang) </h1><span class="text-sm-center">@Resources.Passes.ResourceManager.GetString("for_fam" + "_" + ViewBag.lang)</span></a>
+                            </div>
+                            if (station == 26)
+                            {
+                                <div class="col-md-5 m-1">
+                                    <a href="@Url.Content("~/"+ViewBag.lang+"/Mypasses/Select/" + 9)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center text-uppercase" @if (ViewBag.lang == "en") { <text> style="font-family:Arial;" </text> }><i class="fa fa-user"></i> @Resources.Passes.ResourceManager.GetString("Visitor_pass" + "_" + ViewBag.lang) </h1><span class="text-sm-center">@Resources.Passes.ResourceManager.GetString("for_visitors" + "_" + ViewBag.lang)</span></a>
+                                </div>
+
+                            }
+                        }
+                        else
+                        {
+                            if (!cards.Contains("3"))
+                            {
+                                <div class="col-md-5 m-1">
+                                    <a href="@Url.Content("~/"+ViewBag.lang+"/Mypasses/Select/" + 3)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center text-uppercase" @if (ViewBag.lang == "en") { <text> style="font-family:Arial;" </text> }><i class="fa fa-car"></i> @Resources.Passes.ResourceManager.GetString("access_type_vechile" + "_" + ViewBag.lang) </h1><span class="text-sm-center">@Resources.Passes.ResourceManager.GetString("for_car_emp" + "_" + ViewBag.lang)</span></a>
+                                </div>
+
+
+                            }
+
+                            if (!cards.Contains("4"))
+                            {
+                                <div class="col-md-5 m-1">
+                                    <a href="@Url.Content("~/"+ViewBag.lang+"/Mypasses/Select/" + 4)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center text-uppercase" @if (ViewBag.lang == "en") { <text> style="font-family:Arial;" </text> }><i class="fa fa-users"></i> @Resources.Passes.ResourceManager.GetString("Family_pass" + "_" + ViewBag.lang) </h1><span class="text-sm-center">@Resources.Passes.ResourceManager.GetString("for_fam" + "_" + ViewBag.lang)</span></a>
+                                </div>
+                            }
+                            if (!cards.Contains("9") && station == 26)
+                            {
+                                <div class="col-md-5 m-1">
+                                    <a href="@Url.Content("~/"+ViewBag.lang+"/Mypasses/Select/" + 9)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center text-uppercase" @if (ViewBag.lang == "en") { <text> style="font-family:Arial;" </text> }><i class="fa fa-user"></i> @Resources.Passes.ResourceManager.GetString("Visitor_pass" + "_" + ViewBag.lang) </h1><span class="text-sm-center">@Resources.Passes.ResourceManager.GetString("for_visitors" + "_" + ViewBag.lang)</span></a>
+                                </div>
+                            }
+                        }
+                    }
+
+                </div>
+                            </div>
+        </div>
+    </div>
+</div>
+
+

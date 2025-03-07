@@ -1,0 +1,440 @@
+﻿@using APP.Util;
+@using portal.Controllers;
+@using SecurityClearanceWebApp.Models;
+@model SecurityClearanceWebApp.Models.RA42_SECURITY_PASS_DTL
+
+@{
+    ViewBag.Title = "Details";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var b_lign = "left";
+    var left = "-50%";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        b_lign = "right";
+        left = "-85%";
+
+
+    }
+
+    string barcode = Guid.NewGuid().ToString().Substring(0, 5);
+    var col = 12;
+    var controller = "Mypasses";
+    var expired = Resources.Common.ResourceManager.GetString("expired" + "_" + ViewBag.lang);
+    var countinue = Resources.Common.ResourceManager.GetString("countinue" + "_" + ViewBag.lang);
+
+}
+<style>
+    ul.tl li .timestamp {
+        color: #8D8D8D;
+        position: absolute;
+        width: 100%;
+        left: @left;
+        text-align: left;
+        font-size: 12px;
+    }
+</style>
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @if (ViewBag.RESPO_STATE > 1 || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+        {
+        @Html.Partial("Index")
+            controller = ViewBag.controllerName;
+
+        }
+
+        <div class="col-md-@col">
+           
+            <div class="card shadow-sm">
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="fa fa-eye"></i>
+                        @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 @align">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+
+
+                    <div class="row">
+
+                        <div class="col-md-8">
+                            <div class="row">
+
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+
+                                        @{
+                                            var image1 = "";
+                                            var kafeel = Resources.Passes.ResourceManager.GetString("Pass_owner" + "_" + ViewBag.lang);
+
+                                            var image2 = "http://mamrafowebgov01/images/" + Model.SERVICE_NUMBER + ".gif";
+                                            if (Model.PERSONAL_IMAGE != null)
+                                            {
+                                                kafeel = Resources.Passes.ResourceManager.GetString("Pass_responsible" + "_" + ViewBag.lang);
+                                                image1 = "~/Files/Profiles/" + Model.PERSONAL_IMAGE;
+                                            }
+
+
+                                        }
+                                        <div class="card ">
+                                            <div class="card-header">@Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)</div>
+                                            <div class="row p-4">
+                                                <div class="col-2 text-center bg-light p-2">
+                                                    <div class="card-title text-center">@kafeel </div>
+                                                    <img src="@image2" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100">
+                                                </div>
+                                                @if (image1 != "")
+                                                {
+                                                    <div class="col-2 text-center bg-light p-2">
+                                                        <div class="card-title text-center">@Resources.Passes.ResourceManager.GetString("Pass_owner" + "_" + ViewBag.lang)</div>
+                                                        <img src="@Url.Content(image1)" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100">
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <br />
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("access_type" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@(Language.GetCurrentLang() == "en" ? Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E : Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE)</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)
+                                        <p class="text-primary" id="station">@(Language.GetCurrentLang() == "en" ? Model.RA42_STATIONS_MST.STATION_NAME_E : Model.RA42_STATIONS_MST.STATION_NAME_A)</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Service_number" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.SERVICE_NUMBER</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                @if (Model.CIVIL_NUMBER != null)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("Civil_number" + "_" + ViewBag.lang)
+                                            <p class="text-primary">@Model.CIVIL_NUMBER</p>
+                                            <hr />
+                                        </div>
+                                    </div>
+                                }
+
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Rank_a" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.RANK_A</p>
+                                        <hr />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Rank_e" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.RANK_E</p>
+                                        <hr />
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Name_a" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.NAME_A</p>
+                                        <hr />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Name_e" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.NAME_E</p>
+                                        <hr />
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Proffision_a" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.PROFESSION_A</p>
+                                        <hr />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Proffision_e" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.PROFESSION_E</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Unit_a" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.UNIT_A</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Unit_e" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.UNIT_E</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Phone_number" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.PHONE_NUMBER</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Gsm" + "_" + ViewBag.lang)
+
+                                        <p class="text-primary">@Model.GSM</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@(Language.GetCurrentLang() == "en" ? Model.RA42_IDENTITY_MST.IDENTITY_TYPE_E : Model.RA42_IDENTITY_MST.IDENTITY_TYPE_A)</p>
+                                        <hr />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@(Language.GetCurrentLang() == "en" ? Model.RA42_GENDERS_MST.GENDER_E : Model.RA42_GENDERS_MST.GENDER_A)</p>
+                                        <hr />
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Pass_type" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@(Language.GetCurrentLang() == "en" ? Model.RA42_PASS_TYPE_MST.PASS_TYPE_E : Model.RA42_PASS_TYPE_MST.PASS_TYPE)</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.PURPOSE_OF_PASS</p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                        <p class="text-primary">@Model.REMARKS</p>
+                                        <hr />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            @Resources.Passes.ResourceManager.GetString("Duration" + "_" + ViewBag.lang)
+                                        </div>
+                                        <div class="row p-2">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang)
+                                                    <p class="text-primary" id="pro">
+                                                        @if (Model.DATE_FROM != null)
+                                                        {@Model.DATE_FROM.Value.ToString("dd/MM/yyyy")}
+                                                    else { }
+                                                    </p>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)
+
+                                                    <p class="text-primary" id="date">
+                                                        @if (Model.DATE_TO != null)
+                                                        {@Model.DATE_TO.Value.ToString("dd/MM/yyyy")}
+                                                    else { }
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12"><hr /></div>
+                                <br />
+                                <br />
+
+
+
+
+                                <div class="col-lg-6">
+                                    <h6>
+                                        @Resources.Passes.ResourceManager.GetString("Zones" + "_" + ViewBag.lang)
+                                    </h6>
+                                    @foreach (var listZones in ViewBag.GetZones)
+                                    {
+                                        <div class="col-md-12">
+                                            <div class="btn btn-outline-dark  mt-1 btn-block"><i class="fa fa-arrows-alt p-1"></i>@(Language.GetCurrentLang() == "en" ? listZones.RA42_ZONE_AREA_MST.ZONE_NAME_E + " - " + Model.getZoneName(listZones.ZONE_SUB_CODE) : listZones.RA42_ZONE_AREA_MST.ZONE_NAME + " - " + Model.getZoneName(listZones.ZONE_SUB_CODE)) </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <h6>
+                                        @Resources.Passes.ResourceManager.GetString("Documents" + "_" + ViewBag.lang)
+                                    </h6>
+                                    @foreach (var listFiles in ViewBag.GetFiles)
+                                    {
+                                        if (listFiles.FILE_TYPE != null)
+                                        {
+                                            if (!string.IsNullOrWhiteSpace(listFiles.FILE_TYPE_TEXT))
+                                            {
+                                                bool check = DateTime.TryParse(listFiles.FILE_TYPE_TEXT, out DateTime dateTime);
+                                                if (check == true)
+                                                {
+                                                    var exp = countinue;
+                                                    var div = "alert-success";
+                                                    DateTime d = Convert.ToDateTime(listFiles.FILE_TYPE_TEXT);
+                                                    if (d < DateTime.Now)
+                                                    {
+                                                        exp = expired;
+                                                        div = "alert-danger";
+                                                    }
+                                                    <div class="col-md-12">
+                                                        <div class="btn btn-outline-dark mt-1 btn-block">
+                                                            <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E: @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <span class="@div p-1 rounded">@exp | @listFiles.FILE_TYPE_TEXT </span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-md-12">
+                                                        <div class="btn btn-outline-dark mt-1 btn-block">
+                                                            <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E: @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) | <span class="text-primary alert-light  rounded">@listFiles.FILE_TYPE_TEXT</span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-12">
+                                                    <div class="btn btn-outline-dark mt-1 btn-block">
+                                                        <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E: @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+                                    }
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-4 p-1 border-@b_lign p-2">
+                            @{
+                                string created_by = (new UserInfo()).FULL_NAME(Model.CRD_BY);
+                                string approved_by = (new UserInfo()).FULL_NAME(Model.APPROVAL_SN);
+                                string authorized_by = (new UserInfo()).FULL_NAME(Model.AUTHO_SN);
+                                string permited_by = (new UserInfo()).FULL_NAME(Model.PERMIT_SN);
+                            }
+                            <div class="history-tl-container">
+                                <ul class="tl">
+                                    <li class="tl-item" ng-repeat="item in retailer_history">
+                                        <div class="timestamp">
+                                            @Model.CRD_DT
+                                        </div>
+                                        <div class="item-title">@Resources.Passes.ResourceManager.GetString("Applicant" + "_" + ViewBag.lang)</div>
+                                        <div class="item-detail">@created_by</div>
+                                    </li>
+                                    <li class="tl-item" ng-repeat="item in retailer_history">
+                                        <div class="timestamp">
+                                            @Model.APPROVAL_APPROVISION_DATE
+                                        </div>
+                                        <div class="item-title">@Resources.Passes.ResourceManager.GetString("Approval" + "_" + ViewBag.lang)</div>
+                                        <div class="item-detail">@approved_by</div>
+                                    </li>
+                                    <li class="tl-item" ng-repeat="item in retailer_history">
+                                        <div class="timestamp">
+                                            @Model.PERMIT_APPROVISION_DATE
+
+                                        </div>
+                                        <div class="item-title">@Resources.Passes.ResourceManager.GetString("Permited" + "_" + ViewBag.lang)</div>
+                                        <div class="item-detail">@permited_by</div>
+                                    </li>
+
+                                    <li class="tl-item" ng-repeat="item in retailer_history">
+                                        <div class="timestamp">
+                                            @Model.AUTHO_APPROVISION_DATE
+
+                                        </div>
+                                        <div class="item-title">@Resources.Passes.ResourceManager.GetString("Authorized" + "_" + ViewBag.lang)</div>
+                                        <div class="item-detail">@authorized_by</div>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    </div>
+
+</div>
+
+    </div>
+
+
+
+
+

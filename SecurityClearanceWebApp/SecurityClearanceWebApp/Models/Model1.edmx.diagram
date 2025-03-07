@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5055e82d687c4c35a5f9bfb21702fe77" Name="Diagram1">
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_ACCESS_SELECT_MST" Width="1.5" PointX="3" PointY="106.25" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_ACCESS_TYPE_MST" Width="1.5" PointX="0.75" PointY="99" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_AIR_CREW_PASS_DTL" Width="1.5" PointX="11.25" PointY="152.375" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_ANNOUNCEMENT_MST" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_API" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_AUTHORAIZATION_SIGNAURE_MST" Width="1.5" PointX="3.75" PointY="88.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_AUTHORIZATION_PASS_DTL" Width="1.5" PointX="14.25" PointY="139.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_BLOOD_TYPE_MST" Width="1.5" PointX="17.25" PointY="157" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_CARD_DESIGN_DTL" Width="1.5" PointX="14.25" PointY="151.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_CARD_FOR_MST" Width="1.5" PointX="3" PointY="184.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_COMMENTS_MST" Width="1.5" PointX="3" PointY="222.375" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_COMPANY_MST" Width="1.5" PointX="3" PointY="137" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_COMPANY_PASS_DTL" Width="1.5" PointX="5.25" PointY="128.25" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_COMPANY_TYPE_MST" Width="1.5" PointX="0.75" PointY="138.125" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_CONTRACTING_COMPANIES_PASS_DTL" Width="1.5" PointX="17.25" PointY="138.375" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_DOCUMENTS_ACCESS_MST" Width="1.5" PointX="3" PointY="96.25" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_ENTER_EXIT_REGISTERATION_DTL" Width="1.5" PointX="3" PointY="218.375" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_EVENT_EXERCISE_MST" Width="1.5" PointX="17.25" PointY="118.875" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_EVENTS_TYPE_MST" Width="1.5" PointX="15" PointY="119.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_FAMILY_PASS_DTL" Width="1.5" PointX="5.25" PointY="138.125" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_FILE_CARD_MST" Width="1.5" PointX="5.25" PointY="186.125" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_FILE_FORCES_MST" Width="1.5" PointX="6.75" PointY="87.875" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_FILE_NOTE_TYPE_MST" Width="1.5" PointX="1.5" PointY="89.375" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_FILE_TYPE_MST" Width="1.5" PointX="0.75" PointY="93.625" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_FILES_MST" Width="1.5" PointX="6" PointY="105.875" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_FORCES_MST" Width="1.5" PointX="1.5" PointY="75.375" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_GENDERS_MST" Width="1.5" PointX="0.75" PointY="107.25" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_GENERAL_USERS_MST" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_IDENTITY_MST" Width="1.5" PointX="0.75" PointY="117.375" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_MANAGER_SIGNATURE_MST" Width="1.5" PointX="3.75" PointY="70" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_MEMBERS_DTL" Width="1.5" PointX="3" PointY="100.125" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_PASS_TYPE_MST" Width="1.5" PointX="5.25" PointY="116.125" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_PERMITS_DTL" Width="1.5" PointX="19.5" PointY="133.25" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_PLATE_CHAR_MST" Width="1.5" PointX="17.25" PointY="128.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_PLATE_TYPE_MST" Width="1.5" PointX="17.25" PointY="160.625" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_PRINT_MST" Width="1.5" PointX="3" PointY="214.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_RELATIVE_MST" Width="1.5" PointX="10.5" PointY="132.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_RELATIVE_TYPE_MST" Width="1.5" PointX="0.75" PointY="112.625" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_REPORTS_MST" Width="1.5" PointX="3.75" PointY="77.625" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_SEARCH_MST" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_SECTIONS_MST" Width="1.5" PointX="3.75" PointY="74" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_SECURITY_CAVEATES_DTL" Width="1.5" PointX="3.75" PointY="65.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_SECURITY_PASS_DTL" Width="1.5" PointX="11.25" PointY="138.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_SLIDER_DTL" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_STATIONS_MST" Width="1.5" PointX="1.5" PointY="81.375" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_TEMPRORY_COMPANY_PASS_DTL" Width="1.5" PointX="7.5" PointY="114.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_TRAINEES_PASS_DTL" Width="1.5" PointX="5.25" PointY="152.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_TRANSACTION_DTL" Width="1.5" PointX="9" PointY="101" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_TRANSACTION_TYPE_MST" Width="1.5" PointX="6.75" PointY="92" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_VECHILE_CATIGORY_MST" Width="1.5" PointX="17.25" PointY="152.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_VECHILE_COLOR_MST" Width="1.5" PointX="17.25" PointY="164.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_VECHILE_NAME_MST" Width="1.5" PointX="17.25" PointY="132.375" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_VECHILE_PASS_DTL" Width="1.5" PointX="8.25" PointY="137.125" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_VECHILE_VIOLATION_DTL" Width="1.5" PointX="6" PointY="100.625" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_VIOLATIONS_MST" Width="1.5" PointX="3.75" PointY="92.25" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_VISITOR_MST" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_VISITOR_PASS_DTL" Width="1.5" PointX="14.25" PointY="123.75" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_WORKFLOW_MST" Width="1.5" PointX="1.5" PointY="133.25" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_WORKFLOW_RESPONSIBLE_MST" Width="1.5" PointX="0.75" PointY="123.5" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_ZONE_AREA_MST" Width="1.5" PointX="3.75" PointY="82.625" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_ZONE_MASTER_MST" Width="1.5" PointX="6" PointY="96.25" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.RA42_ZONE_SUB_AREA_MST" Width="1.5" PointX="6" PointY="83" />
+        <EntityTypeShape EntityType="RA42_SECURITY_CLEARANCEModel.sysdiagram" Width="1.5" PointX="6.75" PointY="0.75" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_ACCESS_SELECT_MST_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_ACCESS_SELECT_MST_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_AUTHORIZATION_PASS_DTL_dbo_RA42_ACCESS_TYPE_MST_ACCESS_TYPE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_COMPANY_PASS_DTL_dbo_RA42_ACCESS_TYPE_MST_ACCESS_TYPE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_FAMILY_PASS_DTL_dbo_RA42_ACCESS_TYPE_MST_ACCESS_TYPE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_PERMITS_DTL_dbo_RA42_ACCESS_TYPE_MST_ACCESS_TYPE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_SECURITY_PASS_DTL_dbo_RA42_ACCESS_TYPE_MST_ACCESS_TYPE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_VECHILE_PASS_DTL_dbo_RA42_ACCESS_TYPE_MST_ACCESS_TYPE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AIR_CREW_PASS_DTL_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CARD_DESIGN_DTL_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CARD_FOR_MST_ToRA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_COMMENTS_MST_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CONTRACTING_COMPANIES_PASS_DTL_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_DOCUMENTS_ACCESS_MST_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_ENTER_EXIT_REGISTERATION_DTL_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FILES_MST_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_MEMBERS_DTL_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PRINT_MST_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TEMPRORY_COMPANY_PASS_DTL_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TRAINEES_PASS_DTL_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TRANSACTION_MST_ToACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_VIOLATION_MST_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_ZONE_MASTER_MST_RA42_ACCESS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AIR_CREW_PASS_DTL_RA42_BLOOD_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AIR_CREW_PASS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AIR_CREW_PASS_DTL_RA42_CARD_FOR_MST1" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AIR_CREW_PASS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AIR_CREW_PASS_DTL_RA42_IDENTITY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AIR_CREW_PASS_DTL_RA42_PASS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AIR_CREW_PASS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AIR_CREW_PASS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AUTHORAIZATION_SIGNAURE_MST_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AUTHORIZATION_PASS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AUTHORIZATION_PASS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_AUTHORIZATION_PASS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_BLOOD_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CARD_DESIGN_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CARD_DESIGN_DTL_RA42_FORCES_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_COMPANY_PASS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CONTRACTING_COMPANIES_PASS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FAMILY_PASS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FILE_CARD_MST_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_SECURITY_PASS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TRAINEES_PASS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_CARD_FOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_COMPANY_PASS_DTL_dbo_RA42_COMPANY_MST_COMPANY_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_COMPANY_MST_RA42_COMPANY_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_COMPANY_MST_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CONTRACTING_COMPANIES_PASS_DTL_RA42_COMPANY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_COMPNY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_SECURITY_PASS_DTL_RA42_COMPNY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_COMPNY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_COMPANY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_COMPANY_PASS_DTL_RA42_COMPANY_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_COMPANY_PASS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_COMPANY_PASS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_COMPANY_PASS_DTL" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TEMPRORY_COMPANY_PASS_DTL_RA42_COMPANY_PASS_DTL" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CONTRACTING_COMPANIES_PASS_DTL_RA42_COMPANY_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_CONTRACTING_COMPANIES_PASS_DTL_dbo_RA42_IDENTITY_MST_IDENTITY_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CONTRACTING_COMPANIES_PASS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CONTRACTING_COMPANIES_PASS_DTL_RA42_PASS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CONTRACTING_COMPANIES_PASS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_CONTRACTING_COMPANIES_PASS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_DOCUMENTS_ACCESS_MST_RA42_FILE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_EVENT_EXERCISE_MST_ToEvents" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_EVENT_EXERCISE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_FAMILY_PASS_DTL_dbo_RA42_IDENTITY_MST_IDENTITY_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FAMILY_PASS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FAMILY_PASS_DTL_RA42_PASS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FAMILY_PASS_DTL_RA42_RELATIVE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FAMILY_PASS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FAMILY_PASS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_RELATIVE_MST_RA42_FAMILY_PASS_DTL" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FILE_CARD_MST_RA42_FILE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FILE_FORCES_MST_RA42_FILE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FILE_FORCES_MST_RA42_FORCES_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FILE_FORCES_MST_ToFileType" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FILE_FORCES_MST_ToForce" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FILE_TYPE_MST_RA42_FILE_NOTE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_FILES_MST_RA42_FILE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_MANAGER_SIGNATURE_MST_ToFORCES_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_SECURITY_CAVEATES_DTL_RA42_FORCES_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_STATIONS_MST_RA42_FORCES_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TRANSACTION_TYPE_MST_ToFORCES" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_MEMBERS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_RELATIVE_MST_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_SECURITY_PASS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TEMPRORY_COMPANY_PASS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TRAINEES_PASS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_GENDERS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_MEMBERS_DTL_RA42_IDENTITY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_IDENTITY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_RELATIVE_MST_RA42_IDENTITY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_SECURITY_PASS_RA42_IDENTITY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TEMPRORY_COMPANY_PASS_DTL_RA42_IDENTITY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TRAINEES_PASS_DTL_RA42_IDENTITY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_IDENTITY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_IDENTITY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_MEMBERS_DTL_RA42_RELATIVE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_PASS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_SECURITY_PASS_DTL_RA42_PASS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TEMPRORY_COMPANY_PASS_DTL_RA42_PASS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_PASS_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_PERMITS_DTL_dbo_RA42_PLATE_TYPE_MST_PLATE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_PERMITS_DTL_dbo_RA42_VECHILE_CATIGORY_MST_VECHILE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_PERMITS_DTL_dbo_RA42_VECHILE_COLOR_MST_VECHILE_COLOR_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_PLATE_CHAR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_RELATIVE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_VECHILE_NAME_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_PERMITS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_PLATE_CHAR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_PLATE_CHAR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_VECHILE_PASS_DTL_dbo_RA42_PLATE_TYPE_MST_PLATE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_PLATE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_RELATIVE_MST_RA42_RELATIVE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_RELATIVE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_RELATIVE_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_REPORTS_MST_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_SECTIONS_MST_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_SECURITY_PASS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_SECURITY_PASS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TRAINEES_PASS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_WORKFLOW_RESPONSIBLE_MST_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_ZONE_AREA_MST_RA42_STATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TRAINEES_PASS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_TRANSACTION_MST_ToRA42_TRANSACTION_TYPE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_VECHILE_NAME_MST_dbo_RA42_VECHILE_CATIGORY_MST_VECHILE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_VECHILE_PASS_DTL_dbo_RA42_VECHILE_CATIGORY_MST_VECHILE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_VECHILE_CATIGORY_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_VECHILE_PASS_DTL_dbo_RA42_VECHILE_COLOR_MST_VECHILE_COLOR_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_VECHILE_COLOR_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_VECHILE_NAME_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_VECHILE_NAME_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_PASS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VECHILE_VIOLATION_DTL_RA42_VIOLATIONS_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_VISITOR_PASS_DTL_RA42_WORKFLOW_RESPONSIBLE_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_WORKFLOW_RESPONSIBLE_MST_RA42_WORKFLOW_MST" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_dbo_RA42_ZONE_SUB_AREA_MST_dbo_RA42_ZONE_AREA_MST_ZONE_CODE" />
+        <AssociationConnector Association="RA42_SECURITY_CLEARANCEModel.FK_RA42_ZONE_MASTER_MST_RA42_ZONE_AREA_MST" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

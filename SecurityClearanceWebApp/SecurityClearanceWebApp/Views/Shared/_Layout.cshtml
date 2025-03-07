@@ -1,0 +1,321 @@
+﻿@using System.Threading.Tasks;
+@using APP.Filters;
+@using APP.Util;
+@using portal.Controllers;
+
+
+@{
+
+
+
+
+
+//string currentUser = (new UserInfo()).getSNO();
+
+//User user = null;
+//Task<User> callTask = Task.Run(
+//    () => (new UserInfo()).getUserInfoFromAPI(currentUser)
+//    );
+//callTask.Wait();
+//user = callTask.Result;
+
+//if (user == null)
+//{
+//    Response.Redirect("~/ar/Errors/JundError");
+
+//}
+
+
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewBag.controllerNamePlural</title>
+    <link rel="icon" href="@Url.Content("~/Content/images/mod.png")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/jquery-ui.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/fontawesome.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/toast/iziToast.css")">
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/datatables/datatables.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/datatables/buttons.bootstrap4.min.css")">
+
+    <link rel="@Url.Content("~/Content/datatables/bootstrap.css")">
+    <link rel="@Url.Content("~/Content/datatables/dataTables.bootstrap4.min.css")">
+    <link rel="@Url.Content("~/Content/datatables/buttons.bootstrap4.min.css")">
+
+    @*@Styles.Render("~/Content/ej2/bootstrap.css")*@
+    @*@Scripts.Render("~/Scripts/ej2/ej2.min.js")*@
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/site.css")">
+    <style>
+        body {
+            background-color: whitesmoke;
+            background: url("@Url.Content("~/Content/images/back013.png")")
+        }
+
+         td, th {
+        text-align: center !important;
+        vertical-align: middle !important;
+        }
+         .text-danger{
+             font-size: 20px !important;
+             font-weight: bolder;
+         }
+
+
+    </style>
+
+    @if (ViewBag.lang == "en")
+    {
+        <style>
+            p, a, h1, h2, h3, h4, h5, li, th, td, input, label, button, div, textarea, select, option {
+                font-family: Arial !important;
+                font-weight: bold !important;
+            }
+        </style>
+    }
+    @RenderSection("style", required: false)
+
+    @if (ViewBag.lang == "ar")
+    {
+        <style>
+            .body-content-section * {
+                text-align: right;
+            }
+
+            .btn-group {
+                direction: ltr;
+                text-align: left;
+            }
+
+            .pagination {
+                direction: ltr;
+            }
+        </style>
+    }
+
+
+</head>
+
+<body>
+
+    <section class="navbar-section">
+        @Html.Partial("_navbar")
+    </section>
+
+
+    <section class="body-content-section">
+        
+        @RenderBody()
+
+        @*<br />*@
+        @*@Html.Partial("_footer")*@
+    </section>
+
+    <section class="modals-section">
+        @Html.Partial("_modals")
+    </section>
+
+    @*<section class="javascript-template-section">
+        @Html.Partial("_jstemplate")
+    </section>*@
+
+    <script>
+        var lang = '@Language.GetCurrentLang()';
+    </script>
+    <script src="@Url.Content("~/Scripts/jquery-1.10.2.js")"></script>
+    @*<script src="@Url.Content("~/Scripts/jquery-3.3.1.js")"></script>
+        <script src="@Url.Content("~/Scripts/popper.min.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/toast/iziToast.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/datatables/datatables.js")"></script>
+    <script src="@Url.Content("~/Scripts/datatables/dataTables.bootstrap4.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/datatables/dataTables.buttons.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/datatables/buttons.bootstrap4.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/datatables/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/datatables/pdfmake.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/datatables/vfs_fonts.js")"></script>
+    <script src="@Url.Content("~/Scripts/datatables/buttons.html5.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/datatables/buttons.print.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/datatables/buttons.colVis.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/MilitaryInformation.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/site.js")"></script>
+    <script src="@Url.Content("~/Scripts/detect.js")"></script>
+
+    <script>
+
+        move();
+        BrowserDetection();
+
+        function BrowserDetection() {
+            console.log("check browser");
+            var user = detect.parse(navigator.userAgent);
+            console.log(user.browser.family);
+            if (user.browser.family === "Chrome" || user.browser.family === "Chrome Mobile") {
+
+            }
+            else {
+                window.location.href = "./NotSupported";
+            }
+
+        }
+
+
+
+
+
+
+    </script>
+
+
+    @if (Language.GetCurrentLang() == "ar")
+    {
+        <script>
+            $(document).ready(function () {
+
+
+                var table = $('.data-table').DataTable({
+                    lengthChange: true,
+                    stateSave: true,
+                    "language":
+                    {
+                        "sProcessing": "جارٍ التحميل ... ",
+                        "sLengthMenu": " أظهر _MENU_ مدخلات ",
+                        "sZeroRecords": "لم يعثر على أية سجلات ",
+                        "sInfo": " إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل ",
+                        "sInfoEmpty": " يعرض 0 إلى 0 من أصل 0 سجل ",
+                        "sInfoFiltered": " (منتقاة من مجموع _MAX_ مُدخل) ",
+                        "sInfoPostFix": " ",
+                        "sSearch": " ابحث: ",
+                        "sUrl": "",
+                        "oPaginate": {
+                            "sFirst": "الأول",
+                            "sPrevious": "السابق",
+                            "sNext": "التالي",
+                            "sLast": "الأخير"
+                        }
+                    },
+
+                    buttons: [
+                        { extend: 'print', text: 'ملف بي دي اف' },
+                        { extend: 'excel', text: 'ملف أكسل' },
+                        { extend: 'colvis', text: 'الأعمدة' }
+                    ]
+
+                });
+                table.buttons().container()
+                    .insertBefore('.data-table');
+
+
+            });
+
+
+            var table1 = $('.data-table1').DataTable({
+                lengthChange: true,
+
+                buttons: [
+                    'colvis',
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    'excel'
+                ]
+            });
+            table1.buttons().container()
+                .insertBefore('.data-table1');
+
+        </script>
+    }
+    else
+    {
+        <script>
+            $(document).ready(function () {
+                var table = $('.data-table').DataTable({
+                    lengthChange: true,
+                    stateSave: true,
+
+
+                    buttons: [
+                        'colvis',
+                        {
+                            extend: 'print',
+                            exportOptions:
+                            {
+                                columns: ':visible'
+                            }
+                        },
+                        'excel'
+                    ]
+                });
+                table.buttons().container()
+                    .insertBefore('.data-table');
+
+                var table1 = $('.data-table1').DataTable({
+                    lengthChange: true,
+
+                    buttons: [
+                        'colvis',
+                        {
+                            extend: 'print',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        },
+                        'excel'
+                    ]
+                });
+                table1.buttons().container()
+                    .insertBefore('.data-table1');
+            });
+        </script>
+    }
+
+    <script>
+
+        $(document).ready(function () {
+
+        $(".datepicker").datepicker();
+        setRequestUrl("@Url.Action("GetInfo", "MilitaryInformation")");
+
+        @if (@TempData["toasts"] != null)
+        {
+            var toasts = (List<Toast>)TempData["toasts"];
+            foreach (var toast in toasts)
+            {
+                <text>
+                    iziToast.show({
+                        timeout: '@toast.timeout',
+                        position: '@toast.position',
+                        backgroundColor: '@toast.color',
+                        theme: '@toast.theme',
+                        progressBarColor: '@toast.progressBarColor',
+                        messageColor: '@toast.messageColor',
+                        titleColor: '@toast.titleColor',
+                        message: '@toast.message',
+                        icon: '@toast.icon',
+                        messageSize: '@toast.MessageSize',
+                        rtl: '@toast.rtl'
+                    });
+                </text>
+            }
+        }
+
+
+    });
+
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

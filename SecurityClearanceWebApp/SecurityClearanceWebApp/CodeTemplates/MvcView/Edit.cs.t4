@@ -1,0 +1,287 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cshtml" #>
+<#@ include file="Imports.include.t4" #>
+@model <#= ViewDataTypeName #>
+<#
+// "form-control" attribute is only supported for all EditorFor() in System.Web.Mvc 5.1.0.0 or later versions, except for checkbox, which uses a div in Bootstrap
+string boolType = "System.Boolean";
+Version requiredMvcVersion = new Version("5.1.0.0");
+bool isControlHtmlAttributesSupported = MvcVersion >= requiredMvcVersion;
+// The following chained if-statement outputs the file header code and markup for a partial view, a view using a layout page, or a regular view.
+if(IsPartialView) {
+#>
+
+<#
+} else if(IsLayoutPageSelected) {
+#>
+
+@{
+	ViewBag.Title = "<#= ViewName#>";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+<#
+if (!String.IsNullOrEmpty(LayoutPageFile)) {
+#>
+	Layout = "<#= LayoutPageFile#>";
+<#
+}
+#>
+}
+
+<#
+} else {
+#>
+
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title><#= ViewName #></title>
+</head>
+<body>
+<#
+	PushIndent("    ");
+}
+#>
+<#
+if (ReferenceScriptLibraries) {
+#>
+<#
+	if (!IsLayoutPageSelected && IsBundleConfigPresent) {
+#>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+<#
+	}
+#>
+<#
+	else if (!IsLayoutPageSelected) {
+#>
+<script src="~/Scripts/jquery-<#= JQueryVersion #>.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<#
+	}
+#>
+
+<#
+}
+#>
+
+<div class="container" dir="@dir">
+	<div class="row justify-content-center align-self-center">
+		<div class="col-md-12">
+		 <div class="page-path">
+                <a href="@Url.Action("Index", ViewBag.controllerName, null)">
+                    <i class="fa fa-file"></i>
+                    @Resources.Common.ResourceManager.GetString("list" + "_" + ViewBag.lang)
+                </a>
+                <span>/</span>
+<#
+string pkName = GetPrimaryKeyName();
+if (pkName != null) {
+#>
+                <a href="@Url.Action("Details", ViewBag.controllerName, new { id= Model.<#= pkName #> })">
+				<#
+} else {
+#>
+<a href="@Url.Action("Details", ViewBag.controllerName, new { /* id=Model.PrimaryKey */ })">
+<#
+}
+#>
+                     <i class="fa fa-eye"></i>
+                    @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)
+                </a>
+                <span>/</span>
+                <a>
+                   <i class="fa fa-edit"></i>
+                    @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)
+                </a>
+            </div>
+			<div class="card shadow-sm">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-6 justify-content-center">
+							<h4>
+								<i class="@ViewBag.controllerIconClass"></i>&nbsp;
+								Edit @ViewBag.controllerNameSingular
+							</h4>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+				@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	
+	<div class="row">
+<# 
+	if (isControlHtmlAttributesSupported) {
+#>
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<#        
+	} else {
+#>
+		@Html.ValidationSummary(true)
+<#      
+	}
+#>
+<#
+foreach (PropertyMetadata property in ModelMetadata.Properties) {
+	if (property.Scaffold && !property.IsAssociation) {
+		if (property.IsPrimaryKey) {
+#>
+		@Html.HiddenFor(model => model.<#= property.PropertyName #>)
+
+<#
+		} else if (!property.IsReadOnly) {
+#>
+		<div class="col-md-4">
+			<div class="form-group">
+<#
+			if (property.IsForeignKey) {
+#>
+			@Html.LabelFor(model => model.<#= property.PropertyName #>, "<#= GetAssociationName(property) #>", htmlAttributes: new { @class = "control-label" })
+<#
+			} else {
+#>
+			@Html.LabelFor(model => model.<#= property.PropertyName #>, htmlAttributes: new { @class = "control-label" })
+<#
+			}
+#>
+<#
+			bool isCheckbox = property.TypeName.Equals(boolType);
+			if (property.IsForeignKey) {
+#>
+<# 
+			if (isControlHtmlAttributesSupported) {
+#>
+				@Html.DropDownList("<#= property.PropertyName #>", null, htmlAttributes: new { @class = "form-control" })
+<#
+			} else {
+#>
+				@Html.DropDownList("<#= property.PropertyName #>", String.Empty)
+<#
+			}
+#>
+<#
+			} else  if (isControlHtmlAttributesSupported) {
+				if (isCheckbox) {
+#>
+				<div class="checkbox">
+<#
+					PushIndent("    ");
+#>
+				@Html.EditorFor(model => model.<#= property.PropertyName #>)
+<#
+				} else if (property.IsEnum && !property.IsEnumFlags) {
+#>
+				@Html.EnumDropDownListFor(model => model.<#= property.PropertyName #>, htmlAttributes: new { @class = "form-control" })
+<#
+				} else {
+#>
+				@Html.EditorFor(model => model.<#= property.PropertyName #>, new { htmlAttributes = new { @class = "form-control" } })
+<#
+				}
+			} else {
+#>
+				@Html.EditorFor(model => model.<#= property.PropertyName #>)
+<#
+			}
+#>
+<# 
+			if (isControlHtmlAttributesSupported) {
+#>
+				@Html.ValidationMessageFor(model => model.<#= property.PropertyName #>, "", new { @class = "text-danger" })
+<#        
+			} else {
+#>
+				@Html.ValidationMessageFor(model => model.<#= property.PropertyName #>)
+<#      
+			}
+#>
+<#
+			if (isCheckbox && isControlHtmlAttributesSupported) {
+				PopIndent();
+#>
+				</div>
+<#
+			}
+#>
+			</div>
+		</div>
+
+<#
+		}
+	}
+}
+#>
+		 <div class="col-md-12">
+                                <div class="form-group @align">
+									<button type="submit" value="Save" class="btn btn-warning   ">
+										 <i class="fa fa-save"></i>
+                                        @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)
+                                    </button>
+								</div>
+							</div>
+	</div>
+}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+<#
+if(IsLayoutPageSelected && ReferenceScriptLibraries && IsBundleConfigPresent) {
+#>
+
+@section Scripts {
+
+}
+<#
+}
+#>
+<#
+else if(IsLayoutPageSelected && ReferenceScriptLibraries) {
+#>
+
+<script src="~/Scripts/jquery-<#= JQueryVersion #>.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<#
+}
+#>
+<#
+// The following code closes the tag used in the case of a view using a layout page and the body and html tags in the case of a regular view page
+#>
+<#
+if(!IsPartialView && !IsLayoutPageSelected) {
+	ClearIndent();
+#>
+</body>
+</html>
+<#
+}
+#>
+<#@ include file="ModelMetadataFunctions.cs.include.t4" #>

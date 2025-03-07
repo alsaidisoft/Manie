@@ -1,0 +1,726 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ACTIONS_ar" xml:space="preserve">
+    <value>الإجراءات</value>
+  </data>
+  <data name="ACTIONS_en" xml:space="preserve">
+    <value>ACTIONS</value>
+  </data>
+  <data name="controller_Name_ar" xml:space="preserve">
+    <value>نوع سير العمل باللغة الإنجليزية</value>
+  </data>
+  <data name="controller_Name_en" xml:space="preserve">
+    <value>Workflow type in english</value>
+  </data>
+  <data name="CRD_BY_ar" xml:space="preserve">
+    <value>المنشئ</value>
+  </data>
+  <data name="CRD_BY_en" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="CRD_DT_ar" xml:space="preserve">
+    <value>تاريخ الإنشاء</value>
+  </data>
+  <data name="CRD_DT_en" xml:space="preserve">
+    <value>Created date</value>
+  </data>
+  <data name="REMARKS_ar" xml:space="preserve">
+    <value>ملاحظات</value>
+  </data>
+  <data name="REMARKS_en" xml:space="preserve">
+    <value>Remarks</value>
+  </data>
+  <data name="SERVICE_NUMBER_ar" xml:space="preserve">
+    <value>الرقم العسكري</value>
+  </data>
+  <data name="SERVICE_NUMBER_en" xml:space="preserve">
+    <value>Service number</value>
+  </data>
+  <data name="UNIT_CODE_ar" xml:space="preserve">
+    <value>القاعدة</value>
+  </data>
+  <data name="UNIT_CODE_en" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="UPD_BY_ar" xml:space="preserve">
+    <value>محدث البيانات</value>
+  </data>
+  <data name="UPD_BY_en" xml:space="preserve">
+    <value>Updated by</value>
+  </data>
+  <data name="UPD_DT_ar" xml:space="preserve">
+    <value>تاريخ التحديث</value>
+  </data>
+  <data name="UPD_DT_en" xml:space="preserve">
+    <value>Updated date</value>
+  </data>
+  <data name="WORKFLOW_TYPE_ar" xml:space="preserve">
+    <value>سير العمل باللغة الإنجليزية</value>
+  </data>
+  <data name="WORKFLOW_TYPE_en" xml:space="preserve">
+    <value>Workflow</value>
+  </data>
+  <data name="NAME_ar" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="NAME_en" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Step_name_ar" xml:space="preserve">
+    <value>نوع الخطوة باللغة الإنجليزية</value>
+  </data>
+  <data name="Step_name_en" xml:space="preserve">
+    <value>Step type in english</value>
+  </data>
+  <data name="AccessName_ar" xml:space="preserve">
+    <value>اسم التصريح باللغة الإنجليزية</value>
+  </data>
+  <data name="AccessName_en" xml:space="preserve">
+    <value>Access name in english</value>
+  </data>
+  <data name="ACCESS_TYPE_ar" xml:space="preserve">
+    <value>التصاريح باللغة الإنجليزية</value>
+  </data>
+  <data name="ACCESS_TYPE_en" xml:space="preserve">
+    <value>Access type in english</value>
+  </data>
+  <data name="Activated_ar" xml:space="preserve">
+    <value>مفعل</value>
+  </data>
+  <data name="Activated_en" xml:space="preserve">
+    <value>Activated</value>
+  </data>
+  <data name="Active_ar" xml:space="preserve">
+    <value>حالة المستخدم </value>
+  </data>
+  <data name="Active_en" xml:space="preserve">
+    <value>User status</value>
+  </data>
+  <data name="Admin_ar" xml:space="preserve">
+    <value>صلاحية مدير النظام</value>
+  </data>
+  <data name="Admin_en" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="Ad_ar" xml:space="preserve">
+    <value>صلاحية الإضافة</value>
+  </data>
+  <data name="Ad_en" xml:space="preserve">
+    <value>Add permission</value>
+  </data>
+  <data name="Choose_permission_ar" xml:space="preserve">
+    <value>حدد الصلاحيات التي تود إعطائها للمستخدم</value>
+  </data>
+  <data name="Choose_permission_en" xml:space="preserve">
+    <value>Detrmine permissions that you wanted for user</value>
+  </data>
+  <data name="COLOR_ar" xml:space="preserve">
+    <value>لون السيارة باللغة الإنجليزية</value>
+  </data>
+  <data name="COLOR_en" xml:space="preserve">
+    <value>Vehicle color in english</value>
+  </data>
+  <data name="Delete_ar" xml:space="preserve">
+    <value>صلاحية الحذف</value>
+  </data>
+  <data name="Delete_en" xml:space="preserve">
+    <value>Delete permission</value>
+  </data>
+  <data name="File_type_name_ar" xml:space="preserve">
+    <value>نوع الوثيقة باللغة الإنجليزية</value>
+  </data>
+  <data name="File_type_name_en" xml:space="preserve">
+    <value>Document type in english</value>
+  </data>
+  <data name="GENDER_ar" xml:space="preserve">
+    <value>الجنس باللغة الإنجليزية</value>
+  </data>
+  <data name="GENDER_en" xml:space="preserve">
+    <value>Gender in english</value>
+  </data>
+  <data name="HOST_SERVICE_NUMBER_ar" xml:space="preserve">
+    <value>المضيف</value>
+  </data>
+  <data name="HOST_SERVICE_NUMBER_en" xml:space="preserve">
+    <value>Host name</value>
+  </data>
+  <data name="IDENTITY_TYPE_ar" xml:space="preserve">
+    <value>نوع الهوية باللغة الإنجليزية</value>
+  </data>
+  <data name="IDENTITY_TYPE_en" xml:space="preserve">
+    <value>Identity type in english</value>
+  </data>
+  <data name="ID_NUMBER_ar" xml:space="preserve">
+    <value>الرقم المدني للقريب</value>
+  </data>
+  <data name="ID_NUMBER_en" xml:space="preserve">
+    <value>Relative id number</value>
+  </data>
+  <data name="Namepost_ar" xml:space="preserve">
+    <value>الاسم والمنصب</value>
+  </data>
+  <data name="Namepost_en" xml:space="preserve">
+    <value>Name and post</value>
+  </data>
+  <data name="NATIONALITY_ar" xml:space="preserve">
+    <value>الجنسية باللغة الإنجليزية</value>
+  </data>
+  <data name="NATIONALITY_en" xml:space="preserve">
+    <value>Nationality in english</value>
+  </data>
+  <data name="NotActivated_ar" xml:space="preserve">
+    <value>محظور</value>
+  </data>
+  <data name="NotActivated_en" xml:space="preserve">
+    <value>Not activated</value>
+  </data>
+  <data name="Passestypes_ar" xml:space="preserve">
+    <value>التصاريح المخول بها</value>
+  </data>
+  <data name="Passestypes_en" xml:space="preserve">
+    <value>Authoraizes passes</value>
+  </data>
+  <data name="pass_type_ar" xml:space="preserve">
+    <value>نوع التصريح باللغة الإنجليزية</value>
+  </data>
+  <data name="pass_type_en" xml:space="preserve">
+    <value>Pass type in english</value>
+  </data>
+  <data name="PersonalImage_ar" xml:space="preserve">
+    <value>صورة شخصية</value>
+  </data>
+  <data name="PersonalImage_en" xml:space="preserve">
+    <value>Personal Image</value>
+  </data>
+  <data name="Pervilage_ar" xml:space="preserve">
+    <value>الصلاحية</value>
+  </data>
+  <data name="Pervilage_en" xml:space="preserve">
+    <value>Privilage</value>
+  </data>
+  <data name="Pervilleges_ar" xml:space="preserve">
+    <value>الصلاحيات</value>
+  </data>
+  <data name="Pervilleges_en" xml:space="preserve">
+    <value>Permissions</value>
+  </data>
+  <data name="PLATE_CHAR_ar" xml:space="preserve">
+    <value>رمز اللوحة باللغة الإنجليزية</value>
+  </data>
+  <data name="PLATE_CHAR_en" xml:space="preserve">
+    <value>Plate char in english</value>
+  </data>
+  <data name="PLATE_TYPE_ar" xml:space="preserve">
+    <value>نوع اللوحة باللغة الإنجليزية</value>
+  </data>
+  <data name="PLATE_TYPE_en" xml:space="preserve">
+    <value>Plate type in english</value>
+  </data>
+  <data name="Rank_ar" xml:space="preserve">
+    <value>الرتبة</value>
+  </data>
+  <data name="Rank_en" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="RELATIVE_NAME_ar" xml:space="preserve">
+    <value>اسم القريب</value>
+  </data>
+  <data name="RELATIVE_NAME_en" xml:space="preserve">
+    <value>Relative name</value>
+  </data>
+  <data name="RELATIVE_TYPE_ar" xml:space="preserve">
+    <value>نوع القرابة باللغة الإنجليزية</value>
+  </data>
+  <data name="RELATIVE_TYPE_en" xml:space="preserve">
+    <value>Relative type in english</value>
+  </data>
+  <data name="Respo_name_ar" xml:space="preserve">
+    <value>صاحب التصريح</value>
+  </data>
+  <data name="Respo_name_en" xml:space="preserve">
+    <value>Pass owner</value>
+  </data>
+  <data name="Rp_ar" xml:space="preserve">
+    <value>صلاحية التقارير</value>
+  </data>
+  <data name="Rp_en" xml:space="preserve">
+    <value>Reports permission</value>
+  </data>
+  <data name="same_area_number_ar" xml:space="preserve">
+    <value>نفس رقم المنطقة موجود مسبقا لنفس القاعدة</value>
+  </data>
+  <data name="same_area_number_en" xml:space="preserve">
+    <value>Same area number exicts for same station</value>
+  </data>
+  <data name="Settings_ar" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+  <data name="Settings_en" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Signatur_ar" xml:space="preserve">
+    <value>التوقيع</value>
+  </data>
+  <data name="Signatur_en" xml:space="preserve">
+    <value>Signature</value>
+  </data>
+  <data name="Stations_ar" xml:space="preserve">
+    <value>صلاحيات القواعد</value>
+  </data>
+  <data name="Stations_en" xml:space="preserve">
+    <value>Stations privelages</value>
+  </data>
+  <data name="Station_ar" xml:space="preserve">
+    <value>القاعدة</value>
+  </data>
+  <data name="Station_en" xml:space="preserve">
+    <value>Station</value>
+  </data>
+  <data name="Status_ar" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="Status_en" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Subzone_ar" xml:space="preserve">
+    <value>المناطق الفرعية</value>
+  </data>
+  <data name="Subzone_en" xml:space="preserve">
+    <value>Sub zones</value>
+  </data>
+  <data name="SUB_ZONE_NAME_ar" xml:space="preserve">
+    <value>اسم المنطقة الفرعية باللغة الإنجليزية</value>
+  </data>
+  <data name="SUB_ZONE_NAME_en" xml:space="preserve">
+    <value>Sub zone name in english</value>
+  </data>
+  <data name="Unitcode_ar" xml:space="preserve">
+    <value>الوحدة</value>
+  </data>
+  <data name="Unitcode_en" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="Unit_ar" xml:space="preserve">
+    <value>الوحدة</value>
+  </data>
+  <data name="Unit_en" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="Up_ar" xml:space="preserve">
+    <value>صلاحية التعديل</value>
+  </data>
+  <data name="Up_en" xml:space="preserve">
+    <value>Update permission</value>
+  </data>
+  <data name="VECHILE_CAT_ar" xml:space="preserve">
+    <value>نوع الوكالة باللغة الإنجليزية</value>
+  </data>
+  <data name="VECHILE_CAT_en" xml:space="preserve">
+    <value>Vehicle agency in english</value>
+  </data>
+  <data name="VECHILE_NAME_ar" xml:space="preserve">
+    <value>نوع المركبة باللغة الإنجليزية</value>
+  </data>
+  <data name="VECHILE_NAME_en" xml:space="preserve">
+    <value>Vehicle type in english</value>
+  </data>
+  <data name="View_ar" xml:space="preserve">
+    <value>صلاحية العرض</value>
+  </data>
+  <data name="View_en" xml:space="preserve">
+    <value>View permission</value>
+  </data>
+  <data name="VIOLATION_DATE_ar" xml:space="preserve">
+    <value>تاريخ المخالفة</value>
+  </data>
+  <data name="VIOLATION_DATE_en" xml:space="preserve">
+    <value>Violation date</value>
+  </data>
+  <data name="VIOLATION_DESC_ar" xml:space="preserve">
+    <value>تفاصيل المخالفة</value>
+  </data>
+  <data name="VIOLATION_DESC_en" xml:space="preserve">
+    <value>Violation description</value>
+  </data>
+  <data name="Zones_ar" xml:space="preserve">
+    <value>المناطق الرئيسية</value>
+  </data>
+  <data name="Zones_en" xml:space="preserve">
+    <value>Main Zones</value>
+  </data>
+  <data name="ZONE_NAME_ar" xml:space="preserve">
+    <value>اسم المنطقة باللغة الإنجليزية</value>
+  </data>
+  <data name="ZONE_NAME_en" xml:space="preserve">
+    <value>Zone name in english</value>
+  </data>
+  <data name="ZONE_NUMBER_ar" xml:space="preserve">
+    <value>رقم المنطقة</value>
+  </data>
+  <data name="ZONE_NUMBER_en" xml:space="preserve">
+    <value>Zone Number</value>
+  </data>
+  <data name="Block_active_users_ar" xml:space="preserve">
+    <value>حظر وتفعيل المستخدمين</value>
+  </data>
+  <data name="Block_active_users_en" xml:space="preserve">
+    <value>Block and active users</value>
+  </data>
+  <data name="file_type_ar" xml:space="preserve">
+    <value>الوثائق</value>
+  </data>
+  <data name="file_type_en" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="Settings_pr_ar" xml:space="preserve">
+    <value>صلاحية الإعدادات</value>
+  </data>
+  <data name="Settings_pr_en" xml:space="preserve">
+    <value>Settings permissions</value>
+  </data>
+  <data name="WORKFLOW_TYPE_Permissions_ar" xml:space="preserve">
+    <value>صلاحيات سير العمل باللغة الإنجليزية</value>
+  </data>
+  <data name="WORKFLOW_TYPE_Permissions_en" xml:space="preserve">
+    <value>Workflow permissions</value>
+  </data>
+  <data name="Autho_ar" xml:space="preserve">
+    <value>صلاحية التفويض </value>
+  </data>
+  <data name="Autho_en" xml:space="preserve">
+    <value>Authoraization  permission</value>
+  </data>
+  <data name="Companies_ar" xml:space="preserve">
+    <value>الشركات باللغة الإنجليزية</value>
+  </data>
+  <data name="Companies_en" xml:space="preserve">
+    <value>Companies in english</value>
+  </data>
+  <data name="Eng_ar" xml:space="preserve">
+    <value>صلاحية الشركات المتعاقدة</value>
+  </data>
+  <data name="Eng_en" xml:space="preserve">
+    <value>Contracted companies permission</value>
+  </data>
+  <data name="Company_name_ar" xml:space="preserve">
+    <value>اسم الشركة باللغة الإنجليزية</value>
+  </data>
+  <data name="Company_name_en" xml:space="preserve">
+    <value>Company name in english</value>
+  </data>
+  <data name="Company_type_ar" xml:space="preserve">
+    <value>نوع الشركة باللغة الإنجليزية</value>
+  </data>
+  <data name="Company_type_en" xml:space="preserve">
+    <value>Company type in english</value>
+  </data>
+  <data name="Not_active_ar" xml:space="preserve">
+    <value>غير مفعل</value>
+  </data>
+  <data name="Not_active_en" xml:space="preserve">
+    <value>Not activeted</value>
+  </data>
+  <data name="Drive_ar" xml:space="preserve">
+    <value>صلاحية القيادة في المدرج</value>
+  </data>
+  <data name="Drive_en" xml:space="preserve">
+    <value>Runway drive permission</value>
+  </data>
+  <data name="Exersice_ar" xml:space="preserve">
+    <value>صلاحية التمارين والمناسبات</value>
+  </data>
+  <data name="Exersice_en" xml:space="preserve">
+    <value>Excersice &amp; events permission</value>
+  </data>
+  <data name="Signature_ar" xml:space="preserve">
+    <value>التوقيع</value>
+  </data>
+  <data name="Signature_en" xml:space="preserve">
+    <value>Signature</value>
+  </data>
+  <data name="Visitor_ar" xml:space="preserve">
+    <value>صلاحية إضافة زائر</value>
+  </data>
+  <data name="Visitor_en" xml:space="preserve">
+    <value>Visitor permission</value>
+  </data>
+  <data name="All_permissions_ar" xml:space="preserve">
+    <value>جميع الصلاحيات</value>
+  </data>
+  <data name="All_permissions_en" xml:space="preserve">
+    <value>All permissions</value>
+  </data>
+  <data name="Gsm_ar" xml:space="preserve">
+    <value>الجوال</value>
+  </data>
+  <data name="Gsm_en" xml:space="preserve">
+    <value>Gsm</value>
+  </data>
+  <data name="Phone_number_ar" xml:space="preserve">
+    <value>رقم الهاتف</value>
+  </data>
+  <data name="Phone_number_en" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="Website_ar" xml:space="preserve">
+    <value>الموقع الإلكتروني</value>
+  </data>
+  <data name="Website_en" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="Temprory_ar" xml:space="preserve">
+    <value>صلاحية الشركات المؤقتة</value>
+  </data>
+  <data name="Temprory_en" xml:space="preserve">
+    <value>Temprory companies permission</value>
+  </data>
+  <data name="eve_exc_ar" xml:space="preserve">
+    <value>التمارين والمناسبات</value>
+  </data>
+  <data name="eve_exc_en" xml:space="preserve">
+    <value>Events Excersice</value>
+  </data>
+  <data name="Duration_ar" xml:space="preserve">
+    <value>المدة</value>
+  </data>
+  <data name="Duration_en" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="eve_exc_image_ar" xml:space="preserve">
+    <value>شعار المناسبة أو التمرين</value>
+  </data>
+  <data name="eve_exc_image_en" xml:space="preserve">
+    <value>Logo of event or excersice</value>
+  </data>
+  <data name="eve_exc_name_ar" xml:space="preserve">
+    <value>اسم التمرين أو المناسبة باللغة الإنجليزية</value>
+  </data>
+  <data name="eve_exc_name_en" xml:space="preserve">
+    <value>Event or Excersice name in english</value>
+  </data>
+  <data name="eve_exc_type_ar" xml:space="preserve">
+    <value>النوع باللغة الإنجليزية</value>
+  </data>
+  <data name="eve_exc_type_en" xml:space="preserve">
+    <value>Type in english</value>
+  </data>
+  <data name="from_ar" xml:space="preserve">
+    <value>من</value>
+  </data>
+  <data name="from_en" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="to_ar" xml:space="preserve">
+    <value>إلى</value>
+  </data>
+  <data name="to_en" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="continue_ar" xml:space="preserve">
+    <value>مستمر</value>
+  </data>
+  <data name="continue_en" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="ended_ar" xml:space="preserve">
+    <value>منتهي</value>
+  </data>
+  <data name="ended_en" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="Exercise_status_ar" xml:space="preserve">
+    <value>حالة التمرين / المناسبة</value>
+  </data>
+  <data name="Exercise_status_en" xml:space="preserve">
+    <value>Exercise / Event status</value>
+  </data>
+  <data name="caveates_img_ar" xml:space="preserve">
+    <value>صورة </value>
+  </data>
+  <data name="caveates_img_en" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="autho_signature_ar" xml:space="preserve">
+    <value>سلطة التخويل</value>
+  </data>
+  <data name="autho_signature_en" xml:space="preserve">
+    <value>Authoraization</value>
+  </data>
+  <data name="Reports_ar" xml:space="preserve">
+    <value>التقارير</value>
+  </data>
+  <data name="Reports_en" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="report_name_ar" xml:space="preserve">
+    <value>اسم التقرير باللغة الإنجليزية</value>
+  </data>
+  <data name="report_name_en" xml:space="preserve">
+    <value>Report name in english</value>
+  </data>
+  <data name="report_url_ar" xml:space="preserve">
+    <value>رابط التقرير</value>
+  </data>
+  <data name="report_url_en" xml:space="preserve">
+    <value>Report url</value>
+  </data>
+  <data name="Developer_ar" xml:space="preserve">
+    <value>مطور</value>
+  </data>
+  <data name="Developer_en" xml:space="preserve">
+    <value>Developer</value>
+  </data>
+  <data name="announcee_ar" xml:space="preserve">
+    <value>الإعلان باللغة الإنجليزية</value>
+  </data>
+  <data name="announcee_en" xml:space="preserve">
+    <value>Announcemnt in english</value>
+  </data>
+  <data name="card_for_ar" xml:space="preserve">
+    <value>بطاقة لـ باللغة الانجليزية</value>
+  </data>
+  <data name="card_for_en" xml:space="preserve">
+    <value>Card for in english</value>
+  </data>
+  <data name="card_for_a_ar" xml:space="preserve">
+    <value>بطاقة لـ باللغة الإنجليزية</value>
+  </data>
+  <data name="card_for_a_en" xml:space="preserve">
+    <value>Card for in english</value>
+  </data>
+  <data name="force_a_ar" xml:space="preserve">
+    <value>اسم السلاح باللغة الإنجليزية</value>
+  </data>
+  <data name="force_a_en" xml:space="preserve">
+    <value>Force name in english</value>
+  </data>
+  <data name="station_camp_a_ar" xml:space="preserve">
+    <value>الكتيبة - القاعدة - المعسكر (باللغة الإنجليزية)</value>
+  </data>
+  <data name="station_camp_a_en" xml:space="preserve">
+    <value>Battalion - Station - Camp (in english)</value>
+  </data>
+  <data name="Violation_type_ar" xml:space="preserve">
+    <value>نوع المخالفة باللغة الإنجليزية</value>
+  </data>
+  <data name="Violation_type_en" xml:space="preserve">
+    <value>Violation type in english</value>
+  </data>
+</root>

@@ -1,0 +1,288 @@
+﻿@using SecurityClearanceWebApp.Util;
+@using System
+@using System.Collections
+@using APP.Util
+@model List<ClearanceSearchResult>
+
+
+@{
+    ViewBag.Title = "Search";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+    }
+
+    var urlHttp = Resources.Common.ResourceManager.GetString("urlHttp" + "_" + ViewBag.lang);
+    var app_name = Resources.Common.ResourceManager.GetString("app_name" + "_" + ViewBag.lang);
+
+    var request = Request.QueryString["char_num"];
+}
+
+<style>
+    th, td {
+        text-align: center !important;
+    }
+
+
+
+    /*input[type=text]:focus {
+            width: 100%;
+        }*/
+</style>
+
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+       
+        @if (ViewBag.RESPO_STATE == 11)
+        {
+            @Html.Partial("TempRnoTabs")
+
+        }
+
+
+        <div class="card-body">
+
+
+
+            <div class="col-md-12">
+               
+                   
+                        @{
+                            var search_txt_null = Resources.Common.ResourceManager.GetString("search_txt_null" + "_" + ViewBag.lang);
+                        }
+                        @using (Html.BeginForm("_search_by_car", "Permitsdtl", FormMethod.Get))
+                        {
+                            <div class="col-md-12">
+                                <div class="row">
+
+
+                                    <div class="col-md-2 p-1">
+                                        <div class="form-group">
+                                            <select name="char_num" id="PLATECHARCODE" required class="w-100">
+                                                <option value="">--@Resources.Passes.ResourceManager.GetString("Plate_char" + "_" + ViewBag.lang)--</option>
+                                                @foreach (var item in ViewBag.PLATE_CHAR_CODE)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <input type="number" class="form-control pt-2 pb-2" required="" oninvalid="this.setCustomValidity('@search_txt_null')" oninput="setCustomValidity('')" name="plate_number" autofocus placeholder="بحث برقم المركبة" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <button class="btn btn-primary" type="submit" value="Search"> <i class="fa fa-search"></i> @Resources.Common.ResourceManager.GetString("Search" + "_" + ViewBag.lang)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                }
+
+
+
+                                <br />
+
+                @if (Model.Any())
+                {
+
+                    <table class="table table-bordered table-hover table-responsive text-center" style="display:table;">
+                        <thead class="bg-primary text-white">
+
+                            <tr>
+                                <th>#</th>
+
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("access_type" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("personel_info" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("Falied_pass" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int rowNo = 0;
+                                string servicenum = ViewBag.Search;
+
+                                var dash = "-";
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    @{rowNo++;}
+                                    <td>@rowNo</td>
+                                    <td>@item.PermitType</td>
+                                    <td>@item.StationName</td>
+                                    <td>
+                                        @if (item.PesronalImage != null)
+                                        {
+                                            <img src="~/Files/Profiles/@item.PesronalImage" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100">
+                                        }
+                                        else
+                                        {
+
+                                            var image = "http://mamrafowebgov01/images/" + item.ServiceNumber + ".gif";
+
+                                            <img src="@image" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100">
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.Raw(item.PersonalInfo)
+                                    </td>
+                                    <td>
+                                        @item.PurposeOfPass
+                                    </td>
+                                    <td class=" @if (item.IsExpired) { <text> text-danger </text> } else { <text> text-primary </text>} ">
+                                        @if (item.IsExpired)
+                                        {
+                                            if (Language.GetCurrentLang() == "en")
+                                            {
+                                                <span class="alert alert-danger">
+                                                    <i class="fa fa-clock"></i>
+                                                    Expired
+                                                </span>
+
+
+                                            }
+                                            else
+                                            {
+                                                <span class="alert alert-danger">
+
+                                                    <i class="fa fa-clock"></i>
+                                                    منتهي
+                                                </span>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Language.GetCurrentLang() == "en")
+                                            {
+                                                <span class="alert alert-primary">
+                                                    <i class="fa fa-clock"></i>
+                                                    Active
+
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="alert alert-primary">
+                                                    <i class="fa fa-clock"></i>
+                                                    مستمر
+                                                </span>
+                                            }
+
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group p-2 justify-content-center">
+
+                                            <a class="btn btn-primary details text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("Details", item.ControllerName, new { id = item.Id })">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+
+
+                }
+            else
+            {
+                    if(request != null)
+                {
+            <div class="alert alert-danger text-center">
+                @Resources.Passes.ResourceManager.GetString("no_result" + "_" + ViewBag.lang)
+            </div>
+                }
+            }
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+@section scripts{
+
+    <link href="~/Content/Kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/Kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="~/Scripts/Kendo/js/kendo.all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#PLATECHARCODE").kendoComboBox({
+                filter: "contains",
+                change: function (e) {
+                    var widget = e.sender;
+
+                    if (widget.value() && widget.select() === -1) {
+                        //custom has been selected
+                        widget.value(""); //reset widget
+                        //widget.trigger("change");
+                    }
+                }
+            });
+        });
+
+    </script>
+
+
+
+    <script src="@Url.Content("~/Scripts/JsBarcode.all.js")"></script>
+    <script>
+        $(function () {
+            $(".barcode-image").each(function () {
+                console.log($(this).data("imageid"));
+
+                var imageid = "#" + $(this).data("imageid");
+                var code = $(this).data("barcode");
+
+                JsBarcode(imageid, code, {
+                    format: "code39",
+                    displayValue: false,
+                    fontSize: 20,
+                    height: 30,
+                    width: 1
+                });
+
+                $("#base-64-input").val($(this).attr("src"));
+            });
+        });
+
+
+    </script>
+}

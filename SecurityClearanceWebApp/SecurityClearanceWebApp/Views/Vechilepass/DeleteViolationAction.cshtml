@@ -1,0 +1,197 @@
+﻿@using Newtonsoft.Json;
+@using portal.Controllers;
+@using SecurityClearanceWebApp.Models;
+@using APP.Util;
+@model SecurityClearanceWebApp.Models.RA42_VECHILE_VIOLATION_DTL
+
+@{
+    ViewBag.Title = "DeleteViolation";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var violation_ = @Resources.Common.ResourceManager.GetString("add_violation" + "_" + ViewBag.lang);
+    var required = Resources.Common.ResourceManager.GetString("required" + "_" + ViewBag.lang);
+
+    var col = 12;
+
+    var controller = "Mypasses";
+}
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+
+        @if ((ViewBag.RESPO_STATE > 1 && ViewBag.RESPO_STATE < 11) || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+        {
+            if (ViewBag.RESPO_STATE != 9)
+            {
+                @Html.Partial("Index")
+
+                controller = ViewBag.controllerName;
+            }
+        }
+
+        <div class="col-md-@col">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="fa fa-trash"></i>
+                        @Resources.Passes.ResourceManager.GetString("delete_violation" + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 @align">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @{
+                        if (TempData["Success"] != null)
+                        {
+                            <p class="alert alert-success">@TempData["Success"]</p>
+                        }
+                        if (TempData["Erorr"] != null)
+                        {
+                            <p class="alert alert-danger">@TempData["Erorr"]</p>
+                        }
+                    }
+
+
+                    <div class="row">
+
+
+
+
+                        <div class="col-md-12">
+
+
+                            <div class="form-group">
+
+                                <div class="card-body" style="background: #fbc6c6; border-radius:5px;">
+                                    <p class="bg-white p-1 rounded">
+                                        @{
+
+                                            string name = Resources.Passes.ResourceManager.GetString("Autho_type" + "_" + ViewBag.lang) + ": " + (new UserInfo()).WorkFlowType(Model.CRD_BY) + " - " + (new UserInfo()).FULL_NAME(Model.CRD_BY);
+
+                                            @name
+
+                                        }
+                                        - @Resources.Passes.ResourceManager.GetString("Violation_date" + "_" + ViewBag.lang) - @Model.VIOLATION_DATE
+                                    </p>
+
+                                    <br />
+                                    @Resources.Passes.ResourceManager.GetString("Violation_type" + "_" + ViewBag.lang) :
+                                    @(Language.GetCurrentLang()=="en"? Model.RA42_VIOLATIONS_MST.VIOLATION_TYPE_E:Model.RA42_VIOLATIONS_MST.VIOLATION_TYPE_A)
+                                    <hr />
+
+                                    @Resources.Passes.ResourceManager.GetString("violation_desc" + "_" + ViewBag.lang) :
+                                    @Model.VIOLATION_DESC
+                                    <hr /> @Resources.Passes.ResourceManager.GetString("Violation_price" + "_" + ViewBag.lang) : @Model.VIOLATION_PRICE
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <div class="col-md-12 text-right">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-actions no-color">
+                                    <h4 class="@align">
+                                        @Resources.Common.ResourceManager.GetString("delete_question" + "_" + ViewBag.lang)
+                                    </h4>
+                                    <div class="@align">
+                                        <button type="submit" value="Delete" class="btn btn-danger btn-sm">
+                                            <i class="fa fa-trash"></i>
+                                            @Resources.Common.ResourceManager.GetString("delete_confirm" + "_" + ViewBag.lang)
+                                        </button>
+                                        <a href="@Url.Action("Violations", "Mypasses", null)" class="btn btn-success btn-sm">
+                                            <i class="fa fa-thumbs-up"></i>
+                                            @Resources.Common.ResourceManager.GetString("cancel" + "_" + ViewBag.lang)
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+@section Scripts {
+
+
+
+    <link href="~/Content/Kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/Kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="~/Scripts/Kendo/js/kendo.all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#VIOLATION_DATE").kendoDateTimePicker({
+                format: "dd/MM/yyyy hh:mm tt"
+            });
+
+            $('#deletviolation a').click(function (e) {
+            e.preventDefault();
+
+            var id = $(this).attr("Id");
+
+            var MSG = confirm("@Resources.Passes.ResourceManager.GetString("Violation_confirm_delete" + "_" + ViewBag.lang)");
+
+            if (MSG) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteViolation")',
+                    data: { id: id },
+                    dataType: "json",
+                    success: function () {
+                        setTimeout(function () { location.reload(); }, 1);
+                    },
+                    error: function () {
+                        alert("@Resources.Passes.ResourceManager.GetString("Error_delete_violation" + "_" + ViewBag.lang)");
+                    }
+                });
+            }
+            })
+        });
+    </script>
+
+
+
+}
+

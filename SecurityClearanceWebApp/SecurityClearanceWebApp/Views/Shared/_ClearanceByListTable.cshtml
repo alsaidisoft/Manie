@@ -1,0 +1,349 @@
+﻿@using SecurityClearanceWebApp.Util;
+@using System
+@using System.Collections
+@using APP.Util
+
+@model  List<ClearanceSearchResult>
+@{
+    ViewBag.Title = "Permits list";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+    }
+
+    var cards = new List<string> { "11", "12", "13", "14", "16" };
+    var companies_cards = new List<string> { "24", "25", "29" };
+
+    
+
+    }
+
+<table class="table table-bordered table-hover table-responsive text-center @table" style="display:table;">
+    <thead class="bg-primary text-white">
+
+        <tr>
+            <th>#</th>
+
+            <th>
+                @Resources.Passes.ResourceManager.GetString("access_type" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("personel_info" + "_" + ViewBag.lang)
+            </th>
+            <th>@Resources.Passes.ResourceManager.GetString("car_details" + "_" + ViewBag.lang)</th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("Pass_type" + "_" + ViewBag.lang)
+            </th>
+            <th>@Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)</th>
+
+            <th>
+                @Resources.Passes.ResourceManager.GetString("Falied_pass" + "_" + ViewBag.lang)
+            </th>
+            <th>
+                @Resources.Passes.ResourceManager.GetString("Status" + "_" + ViewBag.lang)
+            </th>
+            <th class="border-right" width="20%">
+                @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int rowNo = 0;
+            var dash = " | ";
+        }
+        @foreach (var item in Model)
+        {
+            if (cards.Contains(item.CardFor.ToString()) && item.ExpiredDate < DateTime.Today)
+            {
+
+            }
+            else
+            {
+        <tr>
+            @{rowNo++;}
+            <td>@rowNo</td>
+            <td>@item.PermitType</td>
+            <td>@item.StationName</td>
+            <td>
+                @if (item.PesronalImage != null)
+                {
+                    <img src="~/Files/Profiles/@item.PesronalImage" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100">
+                }
+                else
+                {
+
+                    var image = "http://mamrafowebgov01/images/" + item.ServiceNumber + ".gif";
+
+                    <img src="@image" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100">
+                }
+            </td>
+            <td>
+                @Html.Raw(item.PersonalInfo)
+            </td>
+            @if (item.CarName != "-")
+            {
+                <td width="17%">
+                    <span>
+                        @Resources.Passes.ResourceManager.GetString("Vechile_cat" + "_" + ViewBag.lang): @item.CarName
+                        <br />
+                        @Resources.Passes.ResourceManager.GetString("Vechile_name" + "_" + ViewBag.lang): @item.CarType
+                        <br />
+                        @Resources.Passes.ResourceManager.GetString("Vechile_color" + "_" + ViewBag.lang): @item.CarColor
+                        <br />
+                        @Resources.Passes.ResourceManager.GetString("car_number" + "_" + ViewBag.lang): @item.PlateNumber
+
+                    </span>
+                </td>
+            }
+            else
+            {
+                <td>@item.PlateNumber</td>
+            }
+            <td>
+                @item.PurposeOfPass
+            </td>
+            <td>@item.PassType</td>
+            <td> @item.ExpiredDate.ToShortDateString()</td>
+            <td width="10%" class=" @if (item.IsExpired)
+            { <text> text-danger </text> }
+            else
+            { <text> text-dark </text>} ">
+                @if (item.Status == true && item.Printed == true)
+                {
+                if (item.IsExpired)
+                {
+                    if (Language.GetCurrentLang() == "en")
+                    {
+                        <span class="alert alert-danger">
+                            <i class="fa fa-clock"></i>
+                            Expired
+                        </span>
+
+
+                    }
+                    else
+                    {
+                        <span class="alert alert-danger">
+
+                            <i class="fa fa-clock"></i>
+                            منتهي
+                        </span>
+
+                    }
+                }
+                else
+                {
+                    if (Language.GetCurrentLang() == "en")
+                    {
+                        <span class="alert alert-primary">
+                            <i class="fa fa-clock"></i>
+                            Active
+
+                        </span>
+
+
+                    }
+                    else
+                    {
+                        <span class="alert alert-primary">
+                            <i class="fa fa-clock"></i>
+                            مستمر
+                        </span>
+
+                    }
+
+                }
+                }
+            </td>
+            <td class=" @if (item.StatusTitle.Equals("مؤكد"))
+            { <text> alert-success</text> }  @if (item.StatusTitle.Equals("مرفوض"))
+            { <text> alert-danger </text>} @if (item.StatusTitle.Equals("قيد المتابعة"))
+            { <text> alert-warning </text>} ">
+                @{ List<int> w = new List<int> { 3, 4 };}
+                @if (item.StatusTitle.Equals("مؤكد"))
+                {
+                    <i class="fa fa-check"></i> @item.StatusTitle
+                    if (item.Printed == true)
+                    {
+
+                        if (item.Delivered == true)
+                        {
+                            <hr /> <i class="fa fa-receipt"></i> @Resources.Passes.ResourceManager.GetString("delivery_status" + "_" + ViewBag.lang)
+
+                        }
+                        else
+                        {
+                            <hr /> <i class="fa fa-print"></i> @Resources.Passes.ResourceManager.GetString("printed_done" + "_" + ViewBag.lang)
+                        }
+                    }
+                    else
+                    {
+
+
+                        <hr /> @Resources.Passes.ResourceManager.GetString("not_printed" + "_" + ViewBag.lang) @dash @Resources.Passes.ResourceManager.GetString("your_request_now" + "_" + ViewBag.lang) if (!w.Contains(item.WorkflowId))
+                        { @item.Workflow}
+                    else
+                    {
+                        @item.Workflow.Split('-')[0];
+                    }
+                }
+            }
+                @if (item.StatusTitle.Equals("مرفوض"))
+                {<i class="fa fa-times"></i> @item.StatusTitle <hr /> @Resources.Passes.ResourceManager.GetString("your_request_now" + "_" + ViewBag.lang) if (!w.Contains(item.WorkflowId))
+                { @item.Workflow}
+            else
+            {
+                @item.Workflow.Split('-')[0];
+            }
+        }
+                @if (item.StatusTitle.Equals("قيد المتابعة"))
+                {<i class="fa fa-hourglass-half"></i> @item.StatusTitle <hr /> @Resources.Passes.ResourceManager.GetString("your_request_now" + "_" + ViewBag.lang) if (!w.Contains(item.WorkflowId))
+                { @item.Workflow}
+            else
+            {
+                @item.Workflow.Split('-')[0];
+            }
+        }
+            </td>
+            <td class="border-right">
+                
+                <div class="">
+                    <div class="row justify-content-center">
+                        <div class="btn-group p-2 justify-content-center">
+                            @if (item.Printed != true)
+                            {
+                                if (item.WorkflowId == 2)
+                                {
+
+
+                                    <a class="btn btn-info text-center" href="@Url.Action("Comments", item.ControllerName, new { id = item.Id })" title="@Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)">
+                                        <i class="fa fa-comment"></i>@item.Comments
+
+                                    </a>
+
+                                }
+                            }
+                            @if (item.Opened != true && (item.WorkflowId == 2))
+                            {
+                                if (companies_cards.Contains(item.CardFor.ToString()))
+                                {
+                                    <a class="btn btn-danger text-center" title="@Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)" href="@Url.Action("CompanyPermitDelete", item.ControllerName, new { id = item.CompanyPermitId })">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-danger text-center" title="@Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)" href="@Url.Action("Delete", item.ControllerName, new { id = item.Id })">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                }
+                            }
+
+
+                            @if (item.Printed == true)
+                            {
+
+                                if ((DateTime.Now > item.ExpiredDate) || item.IsExpiringWithinOneMonth(item.ExpiredDate))
+                                {
+                                    if (item.ControllerName.Equals("Permitsdtl"))
+                                    {
+                                       
+                                                    <a class="btn btn-success text-center" title="@Resources.Common.ResourceManager.GetString("Renew" + "_" + ViewBag.lang)" href="@Url.Action("Renew", item.ControllerName, new { id = item.Id })">
+                                                        <i class="fa fa-paste"></i>
+                                                    </a>
+                                        
+                                    }
+                                }
+
+                            }
+
+
+                            @if (item.ControllerName.Equals("Temprorycompanypass"))
+                            {
+                                <a class="btn btn-primary details text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("DetailsTemproryPass", item.ControllerName, new { id = item.Id })">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                if (companies_cards.Contains(item.CardFor.ToString()))
+                                {
+                                    <a class="btn btn-primary details text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("CompanyPermitDetails", item.ControllerName, new { id = item.CompanyPermitId })">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary details text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("Details", item.ControllerName, new { id = item.Id })">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                }
+                            }
+
+
+
+
+
+
+                            @if (item.Status != true)
+                            {
+
+                                if (item.ControllerName.Equals("Temprorycompanypass"))
+                                {
+                                    <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("Edit", item.ControllerName, new { id = item.CompanyPermitId })">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    if (companies_cards.Contains(item.CardFor.ToString()))
+                                    {
+                                        <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("CompanyPermitEdit", item.ControllerName, new { id = item.CompanyPermitId })">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("Edit", item.ControllerName, new { id = item.Id })">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    }
+                                }
+
+                            }
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </td>
+        </tr>
+                    }
+                }
+
+    </tbody>
+</table>

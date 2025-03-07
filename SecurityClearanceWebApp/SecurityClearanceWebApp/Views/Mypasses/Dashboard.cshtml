@@ -1,0 +1,916 @@
+﻿@using APP.Util;
+@using System.Collections.Generic;
+
+@{
+    ViewBag.Title = "Dashboard";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var autho = Resources.Passes.ResourceManager.GetString("access_type_autho" + "_" + ViewBag.lang);
+    var secu = Resources.Passes.ResourceManager.GetString("access_type_security" + "_" + ViewBag.lang);
+    var vech = Resources.Passes.ResourceManager.GetString("access_type_vechile" + "_" + ViewBag.lang);
+    var famil = Resources.Passes.ResourceManager.GetString("Family_pass" + "_" + ViewBag.lang);
+    var tcompa = Resources.Passes.ResourceManager.GetString("TemproryCompanyPass" + "_" + ViewBag.lang);
+    var ccompa = Resources.Passes.ResourceManager.GetString("ContractedCompanyPass" + "_" + ViewBag.lang);
+    var exev = Resources.Passes.ResourceManager.GetString("Event_Exercise_pass" + "_" + ViewBag.lang);
+    var visit = Resources.Passes.ResourceManager.GetString("Visitor_pass" + "_" + ViewBag.lang);
+    var trainee = Resources.Passes.ResourceManager.GetString("Trainees_pass" + "_" + ViewBag.lang);
+    var aircrew = Resources.Passes.ResourceManager.GetString("AirCrew" + "_" + ViewBag.lang);
+    var total = Resources.Common.ResourceManager.GetString("total" + "_" + ViewBag.lang);
+
+
+    var rafo = Resources.Common.ResourceManager.GetString("rafo" + "_" + ViewBag.lang);
+    var rano = Resources.Common.ResourceManager.GetString("rano" + "_" + ViewBag.lang);
+    var rao = Resources.Common.ResourceManager.GetString("rao" + "_" + ViewBag.lang);
+    var modes = Resources.Common.ResourceManager.GetString("modes" + "_" + ViewBag.lang);
+    var mtc = Resources.Common.ResourceManager.GetString("Asds" + "_" + ViewBag.lang);
+}
+<!-- Page Wrapper -->
+<div id="wrapper" dir="@dir">
+
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+
+                <div class="card shadow-lg">
+
+                    @*<div class="card-header text-secondary mb-2"><h4><i class="fa fa-tachometer-alt"></i> @Resources.Passes.ResourceManager.GetString("dashboard" + "_" + ViewBag.lang)</h4></div>*@
+                    <h1 class="card-header text-primary">
+
+
+                        <i class="fa fa-chart-pie"></i>
+                        @Resources.Passes.ResourceManager.GetString("dashboard" + "_" + ViewBag.lang)
+
+                    </h1>
+
+                    <div class="p-4">
+                        <!-- Content Row -->
+                        <!-- Content Row -->
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-12">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+
+                                            @Resources.Common.ResourceManager.GetString("total_permits_by_station" + "_" + ViewBag.lang)
+                                        </h6>
+                                        @*<div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Dropdown Header:</div>
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>*@
+                                    </div>
+
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        <div class="chart-pie pt-4 pb-3">
+                                            <canvas id="myPieChart"></canvas>
+                                        </div>
+                                        <div class="mt-4 text-center small">
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle" style="color:#4c8cdc"></i> @rafo
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-success"></i> @rao
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-info"></i> @rano
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle" style="color:#e559d5; "></i> @modes
+                                            </span>
+
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle" style="color:#e5843c; "></i> @mtc
+                                            </span>
+
+                                            @*<span class="mr-2">
+                                                <i class="fas fa-circle" style="color:#ed3d78; "></i> @kh
+                                            </span>
+
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle" style="color:#f3c047; "></i> @ada
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle" style="color:#f74545; "></i> @ma
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle" style="color:#a0a0a0; "></i> @thu
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle" style="color:#303030; "></i> @sal
+                                            </span>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-4">
+
+                                <!-- Bar Chart -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">@Resources.Common.ResourceManager.GetString("nmber_of_permits" + "_" + ViewBag.lang)</h6>
+                                    </div>
+                                    <div class="card-body pb-lg-5">
+                                        <div class="chart-bar">
+                                            <canvas id="myBarChart"></canvas>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Content Row -->
+                        <div class="row">
+                            <!-- Content Column -->
+                            <div class="col-lg-6 mb-4">
+                                <!-- Project Card Example -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            @Resources.Common.ResourceManager.GetString("permits_status" + "_" + ViewBag.lang)
+
+                                        </h6>
+                                    </div>
+                                    <div class="card-body pb-4">
+                                        <h4 class="small font-weight-bold">
+                                            @Resources.Common.ResourceManager.GetString("rejected_permits" + "_" + ViewBag.lang): <span>@ViewBag.REJECTED_TOTAL</span>
+
+                                        </h4>
+                                        <div class="progress mb-4">
+                                            @{var rnum = @ViewBag.REJECTED_TOTAL / 100;
+                                            }
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: @rnum%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h4 class="small font-weight-bold">
+                                            @Resources.Common.ResourceManager.GetString("progress_permits" + "_" + ViewBag.lang): <span>@ViewBag.PROGRESS_TOTAL</span>
+
+                                        </h4>
+                                        <div class="progress mb-4">
+                                            @{var pnum = @ViewBag.PROGRESS_TOTAL / 100;
+                                            }
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: @pnum%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+
+                                        @{var cnum = @ViewBag.COMPLETE_TOTAL / 50;
+                                        }
+                                        <h4 class="small font-weight-bold">@Resources.Common.ResourceManager.GetString("approved_permits" + "_" + ViewBag.lang): <span>@ViewBag.COMPLETE_TOTAL</span></h4>
+                                        <div class="progress mb-4">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width:@cnum%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+
+                                        <h4 class="small font-weight-bold">@Resources.Common.ResourceManager.GetString("printed_permits" + "_" + ViewBag.lang): <span>@ViewBag.PRINTED_TOTAL</span></h4>
+                                        <div class="progress mb-3">
+                                            @{var num = @ViewBag.PRINTED_TOTAL / 500;
+                                            }
+                                            <div class="progress-bar bg-dark" role="progressbar" style="width:@num%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-12">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            @{
+
+                                                var station = "";
+                                                var url = Url.RequestContext.RouteData.Values["id"].ToString();
+                                                int id = int.Parse(url.ToString());
+
+                                                station = ViewBag.STATION_CAMP_NAME;
+
+                                            }
+
+                                            @Resources.Common.ResourceManager.GetString("permit_type_in" + "_" + ViewBag.lang)  @station
+                                        </h6>
+                                        <div class="dropdown no-arrow">
+                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                                <div class="dropdown-header"> @Resources.Common.ResourceManager.GetString("choose_station" + "_" + ViewBag.lang)</div>
+                                                @if (ViewBag.STATIONS != null)
+                                                {
+                                                    foreach (var stn in ViewBag.STATIONS)
+                                                    {
+                                                        if (Language.GetCurrentLang() == "en")
+                                                        {
+                                                            <a class="dropdown-item" href="@Url.Action("Dashboard", "Mypasses",new { id = stn.STATION_CODE })">@stn.STATION_NAME_E</a>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="dropdown-item" href="@Url.Action("Dashboard", "Mypasses",new { id = stn.STATION_CODE })">@stn.STATION_NAME_A</a>
+
+                                                        }
+                                                    }
+                                                }
+                                               
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        <div class="chart-pie pt-5 pb-5">
+                                            <canvas id="myBar2Chart"></canvas>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <!-- Content Column -->
+                            <div class="col-xl-12 col-lg-12">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+
+
+                                            @{
+
+                                                var station1 = "";
+                                                var url1 = Url.RequestContext.RouteData.Values["id"].ToString();
+                                                int id1 = int.Parse(url1.ToString());
+
+                                                station1 = ViewBag.STATION_CAMP_NAME;
+
+                                            }
+
+                                            @Resources.Common.ResourceManager.GetString("permits_status" + "_" + ViewBag.lang):  @station1
+                                        </h6>
+                                        <div class="dropdown no-arrow">
+                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right shadow animated-fade-in" aria-labelledby="dropdownMenuLink">
+                                                <div class="dropdown-header"> @Resources.Common.ResourceManager.GetString("choose_station" + "_" + ViewBag.lang)</div>
+                                                @if (ViewBag.STATIONS != null)
+                                                {
+                                                    foreach (var stn in ViewBag.STATIONS)
+                                                    {
+                                                        if (Language.GetCurrentLang() == "en")
+                                                        {
+                                                            <a class="dropdown-item" href="@Url.Action("Dashboard", "Mypasses",new { id = stn.STATION_CODE })">@stn.STATION_NAME_E</a>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="dropdown-item" href="@Url.Action("Dashboard", "Mypasses",new { id = stn.STATION_CODE })">@stn.STATION_NAME_A</a>
+
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- Card Body -->
+                                    <div class="col-lg-12">
+                                        <div class="chart-pie pt-5 pb-5 w-100">
+                                            <canvas id="myPolarChart"></canvas>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        @if (ViewBag.DEVELOPER == true)
+                        {
+                        <div class="row justify-content-center p-4">
+                            <div class="col-md-12"></div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2 alert-primary">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_permits" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-info">@ViewBag.TOTAL_PERMITS</div>
+                                                @{
+                                                    double per = (0.1 * ViewBag.TOTAL_PERMITS) / 100;
+                                                }
+                                                @*<div class="col">
+                                    <div class="progress progress-sm mr-2">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: @per%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>*@
+                                            </div>
+
+                                            <div class="col-auto">
+                                                <i class="fa fa-universal-access fa-2x text-info"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+
+
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2 alert-success">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_zones" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-success">@ViewBag.ZONES_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fa fa-braille fa-2x text-success"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-info shadow h-100 py-2 alert-secondary">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_respo" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-secondary">@ViewBag.WORKRESP_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fa fa-expand-arrows-alt fa-2x text-secondary"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2 alert-danger">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_company" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-danger">@ViewBag.COMPANY_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fa fa-building fa-2x text-danger"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 alert-info">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_car" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-info">@ViewBag.CAR_CAT_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-car fa-2x text-info"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 bg-white">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_announcment" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-dark">@ViewBag.ANNOUNCMENT_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-bullhorn fa-2x text-dark"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pending Requests Card Example -->
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 bg-info">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_comments" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-white">@ViewBag.COMMENTS_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-comments fa-2x text-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pending Requests Card Example -->
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 bg-success">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-light text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_evex" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-light">@ViewBag.EVEX_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-calendar-alt fa-2x text-light"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 bg-warning">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-light text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_files" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-light">
+                                                    @ViewBag.FILES_COUNT
+
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-file-alt fa-2x text-light"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-dark shadow h-100 py-2 alert-dark">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_size" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h6 mb-0 font-weight-bold text-dark">
+
+                                                    @Resources.Passes.ResourceManager.GetString("Documents" + "_" + ViewBag.lang) (@ViewBag.TotalFileLength_d) | @Resources.Common.ResourceManager.GetString("profiles" + "_" + ViewBag.lang) (@ViewBag.TotalFileLength_p)
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-file-archive fa-2x text-dark"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 bg-primary">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-light text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_reports" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-light"><a href="~/ar/Home/Reports" class="text-white pointer-event">@ViewBag.REPORTS_COUNT</a></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-file-excel fa-2x text-light"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 alert-warning">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_identity" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-warning">@ViewBag.IDENTITY_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-fingerprint fa-2x text-warning"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                                <div class="col-xl-2 col-md-4 mb-4">
+                                    <div class="card border-left-warning shadow h-100 py-2 bg-danger">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-light text-uppercase mb-1">
+                                                        @Resources.Common.ResourceManager.GetString("total_violation" + "_" + ViewBag.lang)
+                                                    </div>
+                                                    <div class="h5 mb-0 font-weight-bold text-light"><a href="~/ar/Mypasses/Violations" class="text-white pointer-event">@ViewBag.VIOLATION_COUNT</a></div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-user-times fa-2x text-light"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 bg-dark">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-light text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_print" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-light">@ViewBag.PRINTED_TOTAL</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-print fa-2x text-light"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 bg-gray">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-light text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_search" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-light">@ViewBag.SEARCH_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-search fa-2x text-light"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*<div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2" style="background-color: #8c31dc">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("visitor_now" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-white"><a href="~/ar/Mypasses/OnlineUsers/@ViewBag.VISITORS_ONLINE" class="text-white pointer-event">@ViewBag.VISITORS_ONLINE</a></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-server fa-2x text-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+
+                            <div class="col-xl-2 col-md-4 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2 bg-secondary">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-light text-uppercase mb-1">
+                                                    @Resources.Common.ResourceManager.GetString("total_visitor" + "_" + ViewBag.lang)
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-light">@ViewBag.VISITOR_COUNT</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-globe fa-2x text-light"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                                                    }
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- End of Main Content -->
+
+            </div>
+            <!-- End of Content Wrapper -->
+        </div>
+
+    </div>
+
+
+</div>
+<br />
+
+@section Scripts {
+    @*<link rel="stylesheet" href="~/Content/sb-admin-2.min.css" />*@
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="~/Scripts/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="~/Scripts/sb-admin-2.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="~/Scripts/Chart.min.js"></script>
+
+
+    <script>
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+                                                            Chart.defaults.global.defaultFontColor = '#858796';
+
+                                                            function number_format(number, decimals, dec_point, thousands_sep) {
+            // *     example: number_format(1234.56, 2, ',', ' ');
+            // *     return: '1 234,56'
+            number = (number + '').replace(',', '').replace(' ', '');
+                                                        var n = !isFinite(+number) ? 0 : +number,
+                                                            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                                                            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                                                            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                                                            s = '',
+                                                            toFixedFix = function (n, prec) {
+                    var k = Math.pow(10, prec);
+                    return '' + Math.round(n * k) / k;
+                };
+                                                    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+                                                    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+            if (s[0].length > 3) {
+                s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+            }
+            if ((s[1] || '').length < prec) {
+                s[1] = s[1] || '';
+                s[1] += new Array(prec - s[1].length + 1).join('0');
+            }
+            return s.join(dec);
+        }
+
+        // Bar Chart Example
+        var ctx = document.getElementById("myBarChart");
+                                                var myBarChart = new Chart(ctx, {
+
+                                                    type: 'bar',
+                                                    data: {
+
+                                                        labels: ["@autho", "@secu", "@vech", "@famil", "@tcompa", "@ccompa", "@exev", "@visit", "@trainee", "@aircrew"],
+                                                        datasets: [{
+                    label: "@total",
+                                                            backgroundColor: "#4e73df",
+                                                            hoverBackgroundColor: "#2e59d9",
+                                                            borderColor: "#4e73df",
+                                                            data: [@ViewBag.AUTHO_COUNT_P, @ViewBag.SEC_COUNT_P, @ViewBag.VEC_COUNT_P, @ViewBag.FAM_COUNT_P, @ViewBag.TCOM_COUNT_P,@ViewBag.CCOM_COUNT_P,@ViewBag.EXEV_COUNT_P,@ViewBag.VISI_COUNT_P,@ViewBag.TRAIN_COUNT_P,@ViewBag.AIR_COUNT_P],
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 10,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'month'
+                        },
+                        gridLines: {
+                            display: true,
+                            drawBorder: true
+                        },
+                        ticks: {
+                            maxTicksLimit: 9
+                        },
+                        maxBarThickness: 25,
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: @ViewBag.TOTAL_PERMITS,
+                            maxTicksLimit: 5,
+                            padding: 10,
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                                return '' + number_format(value);
+                            }
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: true,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: true,
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function (tooltipItem, chart) {
+                                                    var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                                                    return datasetLabel + ':' + number_format(tooltipItem.yLabel);
+                                                }
+                    }
+                },
+            }
+        });
+
+    </script>
+
+    <script>
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        // Pie Chart Example
+        var ctx = document.getElementById("myPieChart");
+        var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["@rafo", "@rao", "@rano", "@modes", "@mtc"@*, "@kh", "@ada", "@ma", "@thu", "@sal"*@],
+                datasets: [{
+                    data: [@ViewBag.TOTAL_PERMITS_IN_RAFO, @ViewBag.TOTAL_PERMITS_IN_RAO, @ViewBag.TOTAL_PERMITS_IN_RANO,@ViewBag.TOTAL_PERMITS_IN_MODES,@ViewBag.TOTAL_PERMITS_IN_MTC@*,@ViewBag.TOTAL_PERMITS_KH,@ViewBag.TOTAL_PERMITS_AD,@ViewBag.TOTAL_PERMITS_MA,@ViewBag.TOTAL_PERMITS_TH,@ViewBag.TOTAL_PERMITS_SAL*@],
+                    backgroundColor: ['#007bff', '#28a745', '#17a2b8', '#e559d5', '#e5843c'/*, '#ed3d78', '#f3c047', '#f74545', '#a0a0a0','#303030'*/],
+                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#b733bd', '#ff6a00'/*, '#c81b70', '#d0a720', '#bf0c0c', '#605f5f','#000000'*/],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: false
+                },
+                cutoutPercentage: 80,
+            },
+        });
+
+
+
+
+    </script>
+
+    <script>
+         // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        // Pie Chart Example
+        var ctx = document.getElementById("myBar2Chart");
+
+        var myPieChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["@autho", "@secu", "@vech", "@famil", "@tcompa", "@ccompa", "@exev", "@visit", "@trainee", "@aircrew"],
+                datasets: [{
+                    data: [@ViewBag.AUTHO_COUNT_STN, @ViewBag.SEC_COUNT_STN, @ViewBag.VEC_COUNT_STN,@ViewBag.FAM_COUNT_STN,@ViewBag.TCOM_COUNT_STN,@ViewBag.CCOM_COUNT_STN,@ViewBag.EXEV_COUNT_STN,@ViewBag.VISI_COUNT_STN,@ViewBag.TRAIN_COUNT_STN,@ViewBag.AIR_COUNT_STN],
+                    backgroundColor:  '#ed3d78',
+                    hoverBackgroundColor: '#c81b70',
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: false
+                },
+                cutoutPercentage: 80,
+            },
+        });
+    </script>
+
+
+    <script>
+         // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        // Pie Chart Example
+        var ctx = document.getElementById("myPolarChart");
+
+
+        var rejected = ' @Resources.Common.ResourceManager.GetString("rejected_permits" + "_" + ViewBag.lang)';
+        var progress = ' @Resources.Common.ResourceManager.GetString("progress_permits" + "_" + ViewBag.lang)';
+        var complete = ' @Resources.Common.ResourceManager.GetString("approved_permits" + "_" + ViewBag.lang)';
+        var printed = ' @Resources.Common.ResourceManager.GetString("printed_permits" + "_" + ViewBag.lang)';
+        var myPieChart = new Chart(ctx, {
+            type: 'polarArea',
+            animateScale: true,
+            data: {
+                labels: [rejected, progress, complete, printed],
+                datasets: [{
+                    data: [@ViewBag.TOTAL_PERMITS_STATIONS_R, @ViewBag.TOTAL_PERMITS_STATIONS_P, @ViewBag.TOTAL_PERMITS_STATIONS_C,@ViewBag.TOTAL_PERMITS_STATIONS_PR],
+                    backgroundColor: ['#de1212', '#edcf1f', '#31a745', '#303030'],
+                    hoverBackgroundColor: ['#a00b0b', '#aaac0a', '#0a6509', '#000000'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: true,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: true,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 80,
+            },
+        });
+    </script>
+}

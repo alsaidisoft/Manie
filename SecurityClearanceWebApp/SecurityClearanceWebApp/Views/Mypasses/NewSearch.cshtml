@@ -1,0 +1,616 @@
+﻿@using SecurityClearanceWebApp.Util;
+@using System
+@using System.Collections
+@using APP.Util
+@using System.Globalization;
+@model List<ClearanceSearchResult>
+
+@{
+    ViewBag.Title = "Search";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+    }
+
+    var urlHttp = Resources.Common.ResourceManager.GetString("urlHttp" + "_" + ViewBag.lang);
+    var app_name = Resources.Common.ResourceManager.GetString("app_name" + "_" + ViewBag.lang);
+
+    var cards = new List<string> {
+                        "11","12","13","14","16"};
+
+    var request = Request.QueryString["search"];
+
+}
+
+<style>
+    th, td {
+        text-align: center !important;
+    }
+
+    input[type=text] {
+        width: 900px;
+        box-sizing: border-box;
+        border: 2px solid #007bff;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: white;
+        background-image: url('@urlHttp/@app_name/Content/images/search.png');
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        padding: 12px 20px 12px 40px;
+        -webkit-transition: width 0.4s ease-in-out;
+        transition: width 0.4s ease-in-out;
+    }
+    .suggestions-dropdown {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        background-color: white;
+        border: 1px solid #ddd;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none; /* Hidden initially */
+    }
+
+        .suggestions-dropdown div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+            .suggestions-dropdown div:hover {
+                background-color: #f0f0f0;
+            }
+    /*input[type=text]:focus {
+            width: 100%;
+        }*/
+</style>
+
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+        <h1 class="card-header  text-primary"><i class="fa fa-search"></i> @Resources.Common.ResourceManager.GetString("Search" + "_" + ViewBag.lang)</h1>
+
+        <div class="card-body">
+            <br />
+
+
+
+            <div class="col-md-12">
+                <div class="row w-100 justify-content-center align-items-center">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            @{
+                                var search_txt_null = Resources.Common.ResourceManager.GetString("search_txt_null" + "_" + ViewBag.lang);
+                            }
+                            @using (Html.BeginForm("NewSearch", "Mypasses", FormMethod.Get))
+                            {
+
+                                <button class="btn btn-outline-primary" style="display: none;" id="b_input" type="submit" value="Search"> <i class="fa fa-search"></i> @Resources.Common.ResourceManager.GetString("Search" + "_" + ViewBag.lang)</button>
+
+                                <input type="text" class="form-control text-primary col-md-12 pt-2 pb-2" id="t_input" autocomplete="off" required="" oninvalid="this.setCustomValidity('@search_txt_null')" oninput="setCustomValidity('')" style="text-transform: uppercase;" name="search" autofocus placeholder="@Resources.Passes.ResourceManager.GetString("by_barcode_servicenumber" + "_" + ViewBag.lang)" />
+
+                            }
+
+                            <div id="suggestions" class="suggestions-dropdown"></div>
+
+
+                            <br />
+                        </div>
+                    </div>
+                </div>
+
+                <!--<table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("access_type" + "_" + ViewBag.lang)
+                            </th>
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)
+                            </th>
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)
+                            </th>
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("personel_info" + "_" + ViewBag.lang)
+                            </th>
+
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                            </th>
+                            <th width="10%">
+                                @Resources.Passes.ResourceManager.GetString("Falied_pass" + "_" + ViewBag.lang)
+                            </th>
+                            <th>
+                                @Resources.Passes.ResourceManager.GetString("Status" + "_" + ViewBag.lang)
+                            </th>
+
+                            <th width="10%">
+                                @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="searchResults">-->
+                <!-- Search results will go here -->
+                <!--</tbody>
+                </table>-->
+
+                @if (Model.Any())
+                {
+
+                    <table class="table table-bordered table-hover table-responsive text-center" style="display:table;">
+                        <thead class="bg-primary text-white">
+
+                            <tr>
+                                <th>#</th>
+
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("access_type" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("personel_info" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)
+                                </th>
+                                <th width="10%">
+                                    @Resources.Passes.ResourceManager.GetString("Falied_pass" + "_" + ViewBag.lang)
+                                </th>
+                                @if (ViewBag.workflowIDType == 3)
+                                {
+                                    <th width="10%">@Resources.Passes.ResourceManager.GetString("status_returned" + "_" + ViewBag.lang)</th>
+                                }
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("Status" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th width="10%">
+                                    @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int rowNo = 0;
+                                string servicenum = ViewBag.Search;
+
+                                var dash = "-";
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    @{rowNo++;}
+                                    <td>@rowNo</td>
+                                    <td>@item.PermitType</td>
+                                    <td>@item.StationName</td>
+                                    <td>
+                                        @if (item.PesronalImage != null)
+                                        {
+                                            <img src="~/Files/Profiles/@item.PesronalImage" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100">
+                                        }
+                                        else
+                                        {
+
+                                            var image = "http://mamrafowebgov01/images/" + item.ServiceNumber + ".gif";
+
+                                            <img src="@image" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="user image" width="100" height="100">
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.Raw(item.PersonalInfo)
+                                    </td>
+                                    <td>
+                                        @item.PurposeOfPass
+                                    </td>
+                                    <td>
+                                        @*@{DateTime date = DateTime.Parse(item.IssueingDate, new CultureInfo("en-US"));
+        }
+        @date.ToString("dd/MM/yyyy")*@
+                                        @{string dateString = item.IssueingDate;
+                                            DateTime date = DateTime.Parse(dateString);
+                                            DateTime onlyDate = date.Date; // Truncates time
+                                        }
+                                        @onlyDate.ToShortDateString()
+
+                                    </td>
+                                    <td>
+                                        @item.ExpiredDate.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td class=" @if (item.IsExpired) { <text> text-danger </text> } else { <text> text-primary </text>} ">
+                                        @if (item.IsExpired)
+                                        {
+                                            if (Language.GetCurrentLang() == "en")
+                                            {
+                                                <span class="alert alert-danger">
+                                                    <i class="fa fa-clock"></i>
+                                                    Expired
+                                                </span>
+
+
+                                            }
+                                            else
+                                            {
+                                                <span class="alert alert-danger">
+
+                                                    <i class="fa fa-clock"></i>
+                                                    منتهي
+                                                </span>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Language.GetCurrentLang() == "en")
+                                            {
+                                                <span class="alert alert-primary">
+                                                    <i class="fa fa-clock"></i>
+                                                    Active
+
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="alert alert-primary">
+                                                    <i class="fa fa-clock"></i>
+                                                    مستمر
+                                                </span>
+                                            }
+
+                                        }
+                                    </td>
+                                    @if (ViewBag.workflowIDType == 3)
+                                    {
+                                        <td>
+                                            @if (item.Printed == true)
+                                            {
+                                                if (item.Returned == true)
+                                                {
+                                                    <i class="fa fa-handshake"></i> @Resources.Passes.ResourceManager.GetString("returned" + "_" + ViewBag.lang);
+                                                }
+                                                else
+                                                {
+                                                    if (item.ControllerName.Equals("Permitsdtl"))
+                                                    {
+                                                        <span id="return_p"><a href="" id="@item.Id" class="btn btn-outline-dark text-center" data-foo="1000" title="@Resources.Passes.ResourceManager.GetString("the_returned" + "_" + ViewBag.lang)"><i class="fa fa-check-circle"></i></a></span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <span id="return_p"><a href="" id="@item.Id" class="btn btn-outline-dark text-center" data-foo="@item.AccessNumber" title="@Resources.Passes.ResourceManager.GetString("the_returned" + "_" + ViewBag.lang)"><i class="fa fa-check-circle"></i></a></span>
+
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-times-circle text-danger"></i> @Resources.Passes.ResourceManager.GetString("not_returned" + "_" + ViewBag.lang);
+
+                                            }
+                                        </td>
+                                    }
+                                    <td class=" @if (item.StatusTitle.Equals("مؤكد")) { <text> alert-success</text> }  @if(item.StatusTitle.Equals("مرفوض")) { <text> alert-danger </text>} @if(item.StatusTitle.Equals("قيد المتابعة")) { <text> alert-warning </text>} ">
+                                        @if (item.StatusTitle.Equals("مؤكد"))
+                                        {
+                                            if (item.Printed != true)
+                                            {
+                                                <i class="fa fa-check"></i> @item.StatusTitle
+
+                                            }
+                                            if (item.Printed == true)
+                                            {
+                                                if (item.Delivered == true)
+                                                {
+                                                    <i class="fa fa-receipt"></i> @Resources.Passes.ResourceManager.GetString("delivery_status" + "_" + ViewBag.lang)
+
+
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-print"></i> @Resources.Passes.ResourceManager.GetString("printed_done" + "_" + ViewBag.lang)
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <hr />
+                                                @Resources.Passes.ResourceManager.GetString("not_printed" + "_" + ViewBag.lang)@dash @Resources.Passes.ResourceManager.GetString("your_request_now" + "_" + ViewBag.lang) @item.Workflow}
+                                        }
+                                        @if (item.StatusTitle.Equals("مرفوض"))
+                                        {<i class="fa fa-times"></i> @item.StatusTitle
+                                        <hr /> @Resources.Passes.ResourceManager.GetString("your_request_now" + "_" + ViewBag.lang) @item.Workflow}
+                                        @if (item.StatusTitle.Equals("قيد المتابعة"))
+                                        {
+                                            <i class="fa fa-hourglass-half"></i> @item.StatusTitle <hr /> @Resources.Passes.ResourceManager.GetString("your_request_now" + "_" + ViewBag.lang) @item.Workflow
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        <div class="btn-group p-2 justify-content-center">
+                                            @if (item.ControllerName.Equals("Temprorycompanypass"))
+                                            {
+                                                <a class="btn btn-primary details text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("DetailsTemproryPass", item.ControllerName, new { id = item.Id })">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-primary details text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)" href="@Url.Action("Details", item.ControllerName, new { id = item.Id })">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            }
+                                            @if (ViewBag.workflowIDType == 3 || ViewBag.workflowIDType == 11 || ViewBag.workflowIDType == 4 || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+                                            {
+
+
+                                                if (item.ControllerName.Equals("Temprorycompanypass"))
+                                                {
+                                                    <a class="btn btn-warning text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("Edit", item.ControllerName, new { id = item.CompanyPermitId })">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    if (item.Printed == true)
+                                                    {
+                                                        if (item.IsExpired || item.IsExpiringWithinOneMonth(item.ExpiredDate))
+                                                        {
+                                                            if (item.ControllerName.Equals("Permitsdtl"))
+                                                            {
+                                                                <a class="btn btn-success text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("Renew" + "_" + ViewBag.lang)" href="@Url.Action("CompanyPermitRenew", item.ControllerName, new { id = item.CompanyPermitId })">
+                                                                    <i class="fa fa-paste"></i>
+                                                                </a>
+                                                            }
+                                                        }
+                                                    }
+                                                    if (item.Status == true && ViewBag.workflowIDType == 3)
+                                                    {
+
+                                                        <a class="btn btn-dark text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("Print" + "_" + ViewBag.lang)" href="@Url.Action("Card", item.ControllerName, new { id = item.Id })">
+                                                            <i class="fa fa-id-card-alt"></i>
+                                                        </a>
+                                                    }
+                                                }
+                                                else
+                                                {
+
+                                                    if (item.Printed == true)
+                                                    {
+                                                        if (item.IsExpired || item.IsExpiringWithinOneMonth(item.ExpiredDate))
+                                                        {
+                                                            if (item.ControllerName.Equals("Permitsdtl"))
+                                                            {
+                                                                <a class="btn btn-success text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("Renew" + "_" + ViewBag.lang)" href="@Url.Action("Renew", item.ControllerName, new { id = item.Id })">
+                                                                    <i class="fa fa-paste"></i>
+                                                                </a>
+                                                            }
+                                                        }
+
+                                                    }
+                                                    <a class="btn btn-warning text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="@Url.Action("Edit", item.ControllerName, new { id = item.Id })">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+
+                                                    if (item.Status == true && ViewBag.workflowIDType == 3 && !cards.Contains(item.CardFor.ToString()))
+                                                    {
+                                                        <a class="btn btn-dark text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("Print" + "_" + ViewBag.lang)" href="@Url.Action("Card", item.ControllerName, new { id = item.Id })">
+                                                            <i class="fa fa-id-card-alt"></i>
+                                                        </a>
+                                                    }
+                                                    if (item.Status == true && ViewBag.workflowIDType == 11)
+                                                    {
+                                                        <a class="btn btn-dark text-center" target="_blank" title="@Resources.Common.ResourceManager.GetString("Print" + "_" + ViewBag.lang)" href="@Url.Action("CardTemp", item.ControllerName, new { id = item.Id })">
+                                                            <i class="fa fa-id-card-alt"></i>
+                                                        </a>
+                                                    }
+                                                }
+
+
+                                            }
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+
+
+                }
+                else
+                {
+                    if (request != null)
+                    {
+                        <div class="alert alert-danger text-center">
+                            @Resources.Passes.ResourceManager.GetString("no_result" + "_" + ViewBag.lang)
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+@section scripts{
+
+    <script>
+        (function ($) {
+            $.fn.extend({
+                donetyping: function (callback, timeout) {
+                    timeout = timeout || 2e3; // 1 second default timeout
+                    var timeoutReference,
+                        doneTyping = function (el) {
+                            if (!timeoutReference) return;
+                            timeoutReference = null;
+                            callback.call(el);
+                        };
+                    return this.each(function (i, el) {
+                        var $el = $(el);
+                        // Chrome Fix (Use keyup over keypress to detect backspace)
+                        // thank you
+                        $el.is(':input') && $el.on('keyup keypress paste', function (e) {
+                            // This catches the backspace button in chrome, but also prevents
+                            // the event from triggering too preemptively. Without this line,
+                            // using tab/shift+tab will make the focused element fire the callback.
+                            if (e.type == 'keyup' && e.keyCode != 8) return;
+
+                            // Check if timeout has been set. If it has, "reset" the clock and
+                            // start over again.
+                            if (timeoutReference) clearTimeout(timeoutReference);
+                            timeoutReference = setTimeout(function () {
+                                // if we made it here, our timeout has elapsed. Fire the
+                                // callback
+                                doneTyping(el);
+                            }, timeout);
+                        }).on('blur', function () {
+                            // If we can, fire the event since we're leaving the field
+                            doneTyping(el);
+                        });
+                    });
+                }
+            });
+        })(jQuery);
+
+        $('#deliver a').click(function (e) {
+                e.preventDefault();
+
+                var id = $(this).attr("Id");
+                var acc = $(this).attr("data-foo");
+                console.log(id);
+                console.log(acc);
+                //confirm(access);
+                var MSG = confirm("@Resources.Passes.ResourceManager.GetString("delivery" + "_" + ViewBag.lang)");
+
+                if (MSG) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Delivery")',
+                        data: { id: id,access : acc },
+                        dataType: "json",
+                        success: function () {
+                            setTimeout(function () { location.reload(); }, 1);
+                        },
+                        error: function () {
+                            alert("@Resources.Passes.ResourceManager.GetString("error" + "_" + ViewBag.lang)");
+                        }
+                    });
+                }
+        })
+
+         $('#return_p a').click(function (e) {
+         e.preventDefault();
+
+         var id = $(this).attr("Id");
+         var acc = $(this).attr("data-foo");
+         console.log(id);
+         console.log(acc);
+         //confirm(access);
+         var MSG = confirm("@Resources.Passes.ResourceManager.GetString("are_you_sure_you_want_return" + "_" + ViewBag.lang)");
+
+         if (MSG) {
+
+             $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("Returned")',
+                 data: { id: id,access : acc },
+                 dataType: "json",
+                 success: function () {
+                     setTimeout(function () { location.reload(); }, 1);
+                 },
+                 error: function () {
+                     alert("@Resources.Passes.ResourceManager.GetString("error" + "_" + ViewBag.lang)");
+                 }
+             });
+         }
+     })
+
+
+    </script>
+
+
+
+
+
+    @*<script>
+
+        $(document).ready(function () {
+
+
+                $("#t_input").on("input", function () {
+                let query = $(this).val();
+
+                if (query !== "") {
+                    // Send the search query and populate the table with results
+                    $.ajax({
+                        url: '@Url.Action("SearchResults")',
+                        type: 'GET',
+                        data: { search: query },
+                        success: function (data) {
+                            populateTable(data); // Directly populate the table with results
+                        },
+                        error: function () {
+                            alert("An error occurred while searching.");
+                        }
+                    });
+                } else {
+                    // Clear the table if input is empty
+                    $("#searchResults").empty();
+                }
+            });
+        });
+
+        // Populate the results table
+        function populateTable(data) {
+            let tbody = $("#searchResults");
+            tbody.empty(); // Clear previous results
+
+            if (data.length > 0) {
+                data.forEach((item, index) => {
+                    let row =
+                `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.PermitType}</td>
+                    <td>${item.StationName}</td>
+                    <td><img src="${item.PesronalImage}" alt="User image" style="width:50px;height:50px;" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'"></td>
+                    <td>${item.PersonalInfo}</td>
+                    <td>${item.PurposeOfPass}</td>
+                    <td>${item.ExpiredDate}</td>
+                    <td>${item.Status}</td>
+                    <td>
+                        <button class="btn btn-info">View</button>
+                        <button class="btn btn-warning">Edit</button>
+                        <button class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>`;
+                    tbody.append(row);
+                });
+            } else {
+                tbody.append('<tr><td colspan="9" class="text-center alert alert-danger"> @Resources.Passes.ResourceManager.GetString("no_result" + "_" + ViewBag.lang)</td></tr>');
+            }
+                }
+
+
+            </script>*@
+}

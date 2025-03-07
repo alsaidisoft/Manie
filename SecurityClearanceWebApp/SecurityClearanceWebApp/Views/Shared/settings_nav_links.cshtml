@@ -1,0 +1,302 @@
+﻿
+
+<div class="col-md-2 right">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="btn-group-vertical w-100">
+                @if (ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+                {
+
+                    if (ViewBag.DEVELOPER == true)
+                    {
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Forcesmst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Forcesmst", null)">
+                            <i class="fa fa-jedi" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("Forces" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Stationsmst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Stationsmst", null)">
+                            <i class="fa fa-university" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("stations_camps" + "_" + ViewBag.lang)
+                        </a>
+                        <a class="btn btn-outline-primary text-center @if (ViewBag.controllerName == "Accesstypemst")
+                    { <text>active</text>} " href="@Url.Action("Index", "Accesstypemst", null)">
+                            <i class="fa fa-universal-access" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("ACCESS_TYPE" + "_" + ViewBag.lang)
+                        </a>
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Cardformst")
+                        { <text>active</text>}" href="@Url.Action("Index", "Cardformst", null)">
+                            <i class="fa fa-id-card" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("card_for" + "_" + ViewBag.lang)
+                        </a>
+                        <a class="btn btn-outline-primary btn-block text-center  @if (ViewBag.controllerName == "Reportsmst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Reportsmst", null)">
+                            <i class="fa fa-file-excel" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("Reports" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Workflowmst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Workflowmst", null)">
+                            <i class="fa fa-exchange-alt" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("WORKFLOW_TYPE" + "_" + ViewBag.lang)
+                        </a>
+
+                        @*<a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Companytypemst")
+                { <text>active</text>} " href="@Url.Action("Index", "Companytypemst", null)">
+                        <i class="fa fa-warehouse" aria-hidden="true"></i>
+                        @Resources.Settings.ResourceManager.GetString("company_type_a" + "_" + ViewBag.lang)
+                    </a>*@
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Filetypemst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Filetypemst", null)">
+                            <i class="fa fa-file-pdf" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("file_type" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Transactiontypesmst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Transactiontypesmst", null)">
+                            <i class="fa fa-file-invoice-dollar" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("Transaction" + "_" + ViewBag.lang)
+                        </a>
+
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "CardDesign")
+                    { <text>active</text>}" href="@Url.Action("Index", "CardDesign", null)">
+                            <i class="fa fa-credit-card" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("card_design" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Violationstypesmst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Violationstypesmst", null)">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("Violations_type" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Generalusersmst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Generalusersmst", null)">
+                            <i class="fa fa-user-slash" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("Block_active_users" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Sliderdtl")
+                    { <text>active</text>}" href="@Url.Action("Index", "Sliderdtl", null)">
+                            <i class="fa fa-images" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("slidr_images" + "_" + ViewBag.lang)
+                        </a>
+
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Passtypemst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Passtypemst", null)">
+                            <i class="fa fa-id-badge" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("pass_type_a" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Platetypemst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Platetypemst", null)">
+                            <i class="fa fa-ruler-horizontal" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("plate_type_a" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Relativetypemst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Relativetypemst", null)">
+                            <i class="fa fa-user-friends" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)
+                        </a>
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Identitymst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Identitymst", null)">
+                            <i class="fa fa-fingerprint" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("identity_type_a" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "EventExcersicemst")
+                    { <text>active</text>} " href="@Url.Action("Index", "EventExcersicemst", null)">
+                            <i class="fa fa-calendar-alt" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("eve_exc" + "_" + ViewBag.lang)
+                        </a>
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Platecharmst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Platecharmst", null)">
+                            <i class="fa fa-th" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("plate_char_a" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Managersignaturemst")
+                    { <text>active</text>} " href="@Url.Action("Index", "Managersignaturemst", null)">
+                            <i class="fa fa-signature" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("Managersign" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Announcementmst")
+                    { <text>active</text>} " href="@Url.Action("Index", "Announcementmst", null)">
+                            <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("Announce" + "_" + ViewBag.lang)
+                        </a>
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Authosignaturemst")
+                    { <text>active</text>} " href="@Url.Action("Index", "Authosignaturemst", null)">
+                            <i class="fa fa-file-signature" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("autho_signature" + "_" + ViewBag.lang)
+                        </a>
+                    }
+
+
+
+
+                    if (ViewBag.ADMIN == true && ViewBag.DEVELOPER != true)
+                    {
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Authosignaturemst")
+                    { <text>active</text>} " href="@Url.Action("Index", "Authosignaturemst", null)">
+                            <i class="fa fa-file-signature" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("autho_signature" + "_" + ViewBag.lang)
+                        </a>
+                    }
+
+
+
+                    <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Workflowresponsiblemst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Workflowresponsiblemst", null)">
+                        <i class="fa fa-expand-arrows-alt" aria-hidden="true"></i>
+                        @Resources.Settings.ResourceManager.GetString("WORKFLOW_TYPE_Permissions" + "_" + ViewBag.lang)
+                    </a>
+
+                    <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Companiesmst")
+                    { <text>active</text>} " href="@Url.Action("Index", "Companiesmst", null)">
+                        <i class="fa fa-building" aria-hidden="true"></i>
+                        @Resources.Settings.ResourceManager.GetString("Companies" + "_" + ViewBag.lang)
+                    </a>
+                    <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Zoneareamst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Zoneareamst", null)">
+                        <i class="fa fa-braille" aria-hidden="true"></i>
+                        @Resources.Settings.ResourceManager.GetString("Zones" + "_" + ViewBag.lang)
+                    </a>
+                    @*<a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Zonesubareamst")
+            { <text>active</text>}" href="@Url.Action("Index", "Zonesubareamst", null)">
+                <i class="fa fa-clone" aria-hidden="true"></i>
+                @Resources.Settings.ResourceManager.GetString("Subzone" + "_" + ViewBag.lang)
+            </a>*@
+
+
+
+
+                    <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Securitycaveates")
+                    { <text>active</text>} " href="@Url.Action("Index", "Securitycaveates", null)">
+                        <i class="fa fa-exclamation" aria-hidden="true"></i>
+                        @Resources.Passes.ResourceManager.GetString("Security_caves" + "_" + ViewBag.lang)
+                    </a>
+
+
+
+
+
+
+
+                    if (ViewBag.ADMIN != true && ViewBag.DEVELOPER == true)
+                    {
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Vechilecatigorymst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Vechilecatigorymst", null)">
+                            <i class="fa fa-car" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("vehicle_cat_a" + "_" + ViewBag.lang)
+                        </a>
+                    }
+                    <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Vechilenamemst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Vechilenamemst", null)">
+                        <i class="fa fa-car-side" aria-hidden="true"></i>
+                        @Resources.Settings.ResourceManager.GetString("vehicle_name_a" + "_" + ViewBag.lang)
+                    </a>
+                    <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Vechilecolormst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Vechilecolormst", null)">
+                        <i class="fa fa-palette" aria-hidden="true"></i>
+                        @Resources.Settings.ResourceManager.GetString("vehicle_color_a" + "_" + ViewBag.lang)
+                    </a>
+
+
+
+
+
+                }
+                else
+                {
+
+                    if (ViewBag.STN == true)
+                    {
+
+
+                        if (ViewBag.workflowIDType == 4)
+                        {
+
+                            <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Authosignaturemst")
+                        { <text>active</text>} " href="@Url.Action("Index", "Authosignaturemst", null)">
+                                <i class="fa fa-file-signature" aria-hidden="true"></i>
+                                @Resources.Settings.ResourceManager.GetString("autho_signature" + "_" + ViewBag.lang)
+                            </a>
+
+                            <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Zoneareamst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Zoneareamst", null)">
+                                <i class="fa fa-braille" aria-hidden="true"></i>
+                                @Resources.Settings.ResourceManager.GetString("Zones" + "_" + ViewBag.lang)
+                            </a>
+                        }
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Workflowresponsiblemst")
+                    { <text>active</text>}" href="@Url.Action("Index", "Workflowresponsiblemst", null)">
+                            <i class="fa fa-expand-arrows-alt" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("WORKFLOW_TYPE_Permissions" + "_" + ViewBag.lang)
+                        </a>
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Companiesmst")
+                    { <text>active</text>} " href="@Url.Action("Index", "Companiesmst", null)">
+                            <i class="fa fa-building" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("Companies" + "_" + ViewBag.lang)
+                        </a>
+
+                        if (ViewBag.RP == true)
+                        {
+                            @*<div class="col-sm m-1">
+                        <a class="btn btn-outline-secondary btn-block text-center text-lg-center @if (ViewBag.controllerName == "Reportsmst")
+                    { <text>active</text>}" href="@Url.Action("BrowseReports", "Reportsmst", null)">
+                            <i class="fa fa-file-excel" aria-hidden="true"></i>
+                            @Resources.Settings.ResourceManager.GetString("Reports" + "_" + ViewBag.lang)
+                        </a>
+
+                    </div>*@
+                        }
+
+
+                    }
+                }
+
+                @if (ViewBag.workflowIDType == 6)
+                {
+                    <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Managersignaturemst")
+                    { <text>active</text>} " href="@Url.Action("Index", "Managersignaturemst", null)">
+                        <i class="fa fa-signature" aria-hidden="true"></i>
+                        @Resources.Settings.ResourceManager.GetString("Managersign" + "_" + ViewBag.lang)
+                    </a>
+                }
+
+                @if (ViewBag.workflowIDType == 3 || ViewBag.workflowIDType == 4 || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+                {
+                    if (ViewBag.FORCE_TYPE_CODE == 2 || ViewBag.DEVELOPER == true)
+                    {
+
+
+                        <a class="btn btn-outline-primary btn-block text-center @if (ViewBag.controllerName == "Sectionsmst")
+                        { <text>active</text>} " href="@Url.Action("Index", "Sectionsmst", null)">
+                            <i class="fa fa-object-group" aria-hidden="true"></i>
+                            @Resources.Passes.ResourceManager.GetString("sections" + "_" + ViewBag.lang)
+                        </a>
+                    }
+
+
+                    <a class="btn btn-outline-primary btn-block text-center" href="@Url.Action("PrinterSettings", "Home", null)">
+                        <i class="fa fa-video" aria-hidden="true"></i>
+                        @Resources.Settings.ResourceManager.GetString("printer_settings" + "_" + ViewBag.lang)
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+</div>
+<hr />
+<br />

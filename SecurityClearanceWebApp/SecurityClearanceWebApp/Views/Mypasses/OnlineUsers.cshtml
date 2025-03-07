@@ -1,0 +1,110 @@
+﻿@model IEnumerable<SecurityClearanceWebApp.Models.RA42_VISITOR_MST>
+@using System.Threading.Tasks;
+@using APP.Filters;
+@using APP.Util;
+@using portal.Controllers;
+
+@{
+    ViewBag.Title = "Online users";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+
+    }
+
+}
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @*@{
+                Html.RenderPartial("settings_nav_links");
+
+            }*@
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 justify-content-center text-primary">
+                            <h4>
+                                <i class="fa fa-users"></i>&nbsp;
+                                @Resources.Common.ResourceManager.GetString("visitor_now" + "_" + ViewBag.lang)
+                            </h4>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered table-hover table-responsive  @table  text-center" style="display: table">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    @Resources.Common.ResourceManager.GetString("service_number" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Common.ResourceManager.GetString("rank" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Common.ResourceManager.GetString("name" + "_" + ViewBag.lang)
+                                </th>
+
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int rowNo = 0;
+
+                               
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    @{rowNo++;
+
+                                        User user = null;
+                                        Task<User> callTask = Task.Run(
+                                            () => (new UserInfo()).getUserInfoFromAPI(item.SERVICE_NUMBER)
+                                            );
+                                        callTask.Wait();
+                                        user = callTask.Result;
+                                        }
+                                    <td>@rowNo</td>
+
+
+
+
+
+                                    <td>
+                                        @item.SERVICE_NUMBER
+                                    </td>
+                                    <td>
+                                        @user.NAME_RANK_A
+                                    </td>
+                                    <td>
+                                        @user.NAME_EMP_A
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

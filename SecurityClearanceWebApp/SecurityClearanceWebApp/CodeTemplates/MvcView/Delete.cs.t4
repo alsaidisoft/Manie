@@ -1,0 +1,170 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cshtml" #>
+<#@ include file="Imports.include.t4" #>
+@model <#= ViewDataTypeName #>
+<#
+// The following chained if-statement outputs the file header code and markup for a partial view, a view using a layout page, or a regular view.
+if(IsPartialView) {
+#>
+
+<#
+} else if(IsLayoutPageSelected) {
+#>
+
+@{
+	ViewBag.Title = "<#= ViewName#>";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+<#
+if (!String.IsNullOrEmpty(LayoutPageFile)) {
+#>
+	Layout = "<#= LayoutPageFile#>";
+<#
+}
+#>
+}
+
+
+
+<#
+} else {
+#>
+
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title><#= ViewName #></title>
+</head>
+<body>
+<#
+	PushIndent("    ");
+}
+#>
+
+
+
+
+<div class="container" dir="@dir">
+	<div class="row justify-content-center align-self-center">
+		<div class="col-md-12">
+			<div class="page-path">
+                <a href="@Url.Action("Index", ViewBag.controllerName, null)">
+                   <i class="fa fa-file"></i>
+                    @Resources.Common.ResourceManager.GetString("list" + "_" + ViewBag.lang)
+                </a>
+                <span>/</span>
+<#
+string pkName = GetPrimaryKeyName();
+if (pkName != null) {
+#>
+                <a href="@Url.Action("Details", ViewBag.controllerName, new { id= Model.<#= pkName #> })">
+				<#
+} else {
+#>
+<a href="@Url.Action("Details", ViewBag.controllerName, new { /* id=Model.PrimaryKey */ })">
+<#
+}
+#>
+                     <i class="fa fa-eye"></i>
+                    @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)
+                </a>
+                <span>/</span>
+                <a>
+                    <i class="fa fa-trash"></i>
+                    @Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)
+                </a>
+            </div>
+			<div class="card shadow-sm">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-6 justify-content-center">
+							<h4>
+								<i class="@ViewBag.controllerIconClass"></i>
+								@ViewBag.controllerNameSingular Details
+							</h4>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<div class="row">
+
+					<#
+foreach (PropertyMetadata property in ModelMetadata.Properties) {
+	if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+#>
+<#
+		// We do not want to show any association properties for which there is
+		// no associated foreign key.
+		if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+			continue;
+		}
+#>
+<div class="col-md-4">
+	<h6 class="details-info-title">@Html.DisplayNameFor(model => model.<#= GetValueExpression(property) #>)</h6>
+	<h6 class="details-info-content">@Html.DisplayFor(model => model.<#= GetValueExpression(property) #>)</h6>
+	<hr />
+</div>
+
+<#
+	}
+}
+#>
+
+<div class="col-md-12 text-right">
+@using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-actions no-color">
+                                    <h4 class="@align">
+                                        @Resources.Common.ResourceManager.GetString("delete_question" + "_" + ViewBag.lang)
+                                    </h4>
+                                    <div class="@align">
+                                        <button type="submit" value="Delete" class="btn btn-danger btn-sm">
+                                            <i class="fa fa-trash"></i>
+                                            @Resources.Common.ResourceManager.GetString("delete_confirm" + "_" + ViewBag.lang)
+                                        </button>
+                                        <a href="@Url.Action("Index", ViewBag.controllerName, null)" class="btn btn-success btn-sm">
+                                            <i class="fa fa-thumbs-up"></i>
+                                            @Resources.Common.ResourceManager.GetString("cancel" + "_" + ViewBag.lang)
+                                        </a>
+                                    </div>
+                                </div>
+                            }			
+</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<#
+// The following code closes the tag used in the case of a view using a layout page and the body and html tags in the case of a regular view page
+#>
+<#
+if(!IsPartialView && !IsLayoutPageSelected) {
+	ClearIndent();
+#>
+</body>
+</html>
+<#
+}
+#>
+<#@ include file="ModelMetadataFunctions.cs.include.t4" #>
+

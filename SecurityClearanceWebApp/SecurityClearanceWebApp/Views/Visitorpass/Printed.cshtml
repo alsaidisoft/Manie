@@ -1,0 +1,379 @@
+﻿
+
+
+@{
+    ViewBag.Title = "Printed permits";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var app_name = Resources.Common.ResourceManager.GetString("app_name" + "_" + ViewBag.lang);
+    var hq = Resources.Common.ResourceManager.GetString("hq" + "_" + ViewBag.lang);
+    var seeb = Resources.Common.ResourceManager.GetString("seeb" + "_" + ViewBag.lang);
+    var ansab = Resources.Common.ResourceManager.GetString("ansab" + "_" + ViewBag.lang);
+    var sal = Resources.Common.ResourceManager.GetString("sal" + "_" + ViewBag.lang);
+    var mus = Resources.Common.ResourceManager.GetString("musi" + "_" + ViewBag.lang);
+    var mas = Resources.Common.ResourceManager.GetString("masan" + "_" + ViewBag.lang);
+    var thu = Resources.Common.ResourceManager.GetString("thu" + "_" + ViewBag.lang);
+    var kh = Resources.Common.ResourceManager.GetString("kha" + "_" + ViewBag.lang);
+    var adam = Resources.Common.ResourceManager.GetString("ada" + "_" + ViewBag.lang);
+    var ghala = Resources.Common.ResourceManager.GetString("ghala" + "_" + ViewBag.lang);
+    var expired = Resources.Common.ResourceManager.GetString("expired" + "_" + ViewBag.lang);
+    var countinue = Resources.Common.ResourceManager.GetString("countinue" + "_" + ViewBag.lang);
+    var urlHttp = Resources.Common.ResourceManager.GetString("urlHttp" + "_" + ViewBag.lang);
+    var returned = Resources.Passes.ResourceManager.GetString("returned" + "_" + ViewBag.lang);
+
+
+
+}
+
+<style>
+    td, th {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @Html.Partial("Index")
+
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="fa fa-print"></i>
+                        &nbsp;
+                        @Resources.Passes.ResourceManager.GetString("printed_permits" + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive table-striped table-bordered text-center" id="tb" style="width:100%; display: block;">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>#</th>
+
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("sympol" + "_" + ViewBag.lang)
+                                </th>
+
+
+                                <th width="20%">
+                                    @Resources.Passes.ResourceManager.GetString("Visitor_name" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)
+
+                                </th>
+
+
+                                <th>
+                                    @Resources.Passes.ResourceManager.GetString("Phone" + "_" + ViewBag.lang)
+                                </th>
+
+
+                                <th width="20%">
+                                    @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th width="10%">
+                                    @Resources.Passes.ResourceManager.GetString("Falied_pass" + "_" + ViewBag.lang)
+                                </th>
+                                <th>@Resources.Passes.ResourceManager.GetString("the_returned" + "_" + ViewBag.lang)</th>
+
+                                <th style="border-right:1px solid #ccc; width:20%">
+                                    @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+                                </th>
+                            </tr>
+                        </thead>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+
+    <script>
+    $(document).ready(function () {
+        var lang = '@ViewBag.lang';
+        var l = {}
+        var is_expired = false;
+        if (lang == "ar") {
+            l = {
+                "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                "sLoadingRecords": "جارٍ التحميل...",
+                "sProcessing": "يتم التحميل <img style='width:30px; height:30px;' src='@Url.Content("~/Content/images/loadingNew.gif")' />",
+                "sLengthMenu": "أظهر _MENU_ مدخلات",
+                "sZeroRecords": "لم يعثر على أية سجلات",
+                "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                "sInfoPostFix": "",
+                "sSearch": "ابحث:",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "الأول",
+                    "sPrevious": "السابق",
+                    "sNext": "التالي",
+                    "sLast": "الأخير"
+                },
+                "oAria": {
+                    "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                    "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                }
+            }
+        }
+            $("#tb").DataTable({
+                "ajax": {
+                    "url": "./GetListPrinted",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "VISITOR_PASS_CODE", "name": "VISITOR_PASS_CODE" },
+
+                    { "data": function (data, type, row, meta) {
+
+                        d = "";
+                        if (data.CIVIL_NUMBER != null) {
+                            d = data.CIVIL_NUMBER;
+                        }
+                        data = d;
+
+
+                            return data;
+                    }, "name": "CIVIL_NUMBER"},
+                    {
+                        "data": function (data, type, row, meta) {
+
+                                data = data.NAME_A;
+
+
+
+                            return data;
+                        }, "name": "NAME_E"},
+
+
+                    {
+
+                        "data": function (data, type, row, meta) {
+                            var link = "";
+
+                            if (data.PERSONAL_IMAGE != null) {
+
+
+                                link = '<img src="@urlHttp@app_name/Files/Profiles/' + data.PERSONAL_IMAGE + '" onerror="this.onerror = null; this.src=@Url.Content("~/Content/images/adminpic.png")"  width="100" height="100"/>';
+
+                            }
+                            else {
+                                @*var image = new Image();
+                                var url = 'http://mamrafowebgov01/images/' + data.SERVICE_NUMBER + '.gif';
+                                image.src = url;
+
+                                if (image.width == 0) {
+                                    link = '<img src="@Url.Content("~/Content/images/adminpic.png")"    width="100" height="100"/>';
+
+                                }
+                                else {
+                                    link = '<img src="' + url + '"    width="100" height="100"/>';
+
+                                }*@
+                                 link = '<img src="@Url.Content("~/Content/images/adminpic.png")"    width="100" height="100"/>';
+
+                            }
+                            data = link;
+
+
+                            return data;
+                        }, "name": "VISITOR_PASS_CODE"
+                    },
+
+                    {
+                        "data": function (data, type, row, meta) {
+
+                            d = "";
+                            if (data.GSM != null) {
+                                d = data.GSM;
+                            }
+                            data = d;
+
+
+                            return data;
+                        }
+                    }, { "data": "PURPOSE_OF_PASS", "name": "PURPOSE_OF_PASS" },
+
+                    {
+                     "data": function (data, type, row, meta) {
+                            var d = "";
+
+                            if (data.DATE_TO != null) {
+
+                                jd = dtConvFromJSONNoTime(data.DATE_TO);
+                                var today = new Date();
+                                var dd = String(today.getDate()).padStart(2, '0');
+                                var mm = String(today.getMonth() + 1).padStart(2, '0');
+                                var yy = today.getFullYear();
+
+                                today = yy + '-' + mm + '-' + dd;
+                                j =  Date.parse(jd);
+                                t =  Date.parse(today);
+                                if (t <= j) {
+                                    d = '<div class="alert alert-primary p-2 text-center"><i class="fa fa-clock"></i> @countinue</div>';
+                                    is_expired = false;
+                                }
+                                else {
+                                    d = '<div class="alert alert-danger p-2 text-center"><i class="fa fa-clock"></i> @expired</div>';
+                                    is_expired = true;
+                                }
+
+
+
+                            }
+                            else {
+
+                                 d = '';
+
+                            }
+                            data = d + dtConvFromJSONNoTime(data.DATE_TO);
+
+                            return data;
+                        }, "name": "DATE_TO"
+                    },{ "data": function (data, type, row, meta) {
+                            var d = "";
+
+                        if (data.RETURNED == true) {
+
+
+                                    d = '<div class="text-center"> @returned</div>';
+
+
+                            }
+                            else {
+
+                            d = Return(data.VISITOR_PASS_CODE, data.ACCESS_TYPE_CODE);
+                            }
+                            data = d;
+
+                            return data;
+                    }, "name": "VISITOR_PASS_CODE"
+                    },
+                     {
+
+                            "data": function (data, type, row, meta) {
+                                 var ex = "";
+                                if (is_expired == true) {
+                                    ex = '<a href="../@ViewBag.controllerName/Renew/' + data.VISITOR_PASS_CODE + '" class="btn btn-success text-center" title="@Resources.Passes.ResourceManager.GetString("renew" + "_" + ViewBag.lang)"><i class="fa fa-paste"></i></a>';
+
+                                }
+
+                             data = ' <div class="btn-group" dir="ltr"><a href="../@ViewBag.controllerName/card/' + data.VISITOR_PASS_CODE + '" class="btn btn-dark text-center"><i class="fa fa-print"></i></a><a href="../@ViewBag.controllerName/Comments/' + data.VISITOR_PASS_CODE + '" class="btn btn-info text-center"><i class="fa fa-comment"></i>' + data.COMMENTS + '</a><a href="../@ViewBag.controllerName/Details/' + data.VISITOR_PASS_CODE + '" class="btn btn-primary details text-center"><i class="fa fa-eye"></i></a><a href="../@ViewBag.controllerName/Edit/' + data.VISITOR_PASS_CODE + '" class="btn btn-warning text-center"><i class="fa fa-edit"></i></a><a href="../@ViewBag.controllerName/Delete/' + data.VISITOR_PASS_CODE + '" class="btn btn-danger text-center"><i class="fa fa-trash"></i></a>'+ex+'</div>';
+
+
+                                 return data;
+                        }, "name": "VISITOR_PASS_CODE"
+                    }
+
+
+
+
+
+                ],
+                "stateSave": true,
+                "scrollCollapse": true,
+                "serverSide": "true",
+                "scrollX": true,
+                "order": [[0, "desc"]],
+                "lengthMenu": [[10, 25, 50, 250, -1], [10, 25, 50, 250]],
+                "processing": "true",
+                "bInfo": true,
+
+                    "language": l
+
+                ,
+
+                //dom: 'Bfrtip',
+                //buttons: [
+                //    { extend: 'excel', text: 'طباعة' },
+                //    { extend: 'colvis', text: 'الأعمدة' }
+                //]
+
+
+
+            });
+
+
+
+
+            function dtConvFromJSONNoTime(data) {
+                jsonDate = data;
+                debugger;
+                var d = new Date(parseInt(jsonDate.substr(6)));
+                d.toLocaleTimeString('en-GB');
+                var m, day;
+                m = d.getMonth() + 1;
+                if (m < 10)
+                    m = '0' + m
+                if (d.getDate() < 10)
+                    day = '0' + d.getDate()
+                else
+                    day = d.getDate();
+                var formattedDate = d.getFullYear() + "-" + m + "-" + day;
+
+
+                //var formattedTime = hours + ":" + minutes + " " + PM_AM;
+                formattedDate = formattedDate;
+                return formattedDate;
+        }
+
+
+         function Return(id, acc) {
+
+                console.log(id);
+                console.log(acc);
+            return '<a href="#" onclick="ret('+id+')"  class="btn btn-outline-dark" title="@Resources.Passes.ResourceManager.GetString("are_you_sure_you_want_return" + "_" + ViewBag.lang)"><i class="fa fa-check-circle"></i></a>';
+
+            }
+
+
+        });
+
+        function ret(id) {
+            var MSG = confirm("@Resources.Passes.ResourceManager.GetString("are_you_sure_you_want_return" + "_" + ViewBag.lang)");
+
+                if (MSG) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Returned", "Mypasses",null)',
+                        data: { id: id,access : 9 },
+                        dataType: "json",
+                        success: function () {
+                            setTimeout(function () { location.reload(); }, 1);
+                        },
+                        error: function () {
+                            alert("@Resources.Passes.ResourceManager.GetString("error" + "_" + ViewBag.lang)");
+                        }
+                    });
+               }
+        }
+
+    </script>
+
+}

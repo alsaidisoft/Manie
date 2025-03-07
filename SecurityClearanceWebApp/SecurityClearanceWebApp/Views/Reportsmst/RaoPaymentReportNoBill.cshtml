@@ -1,0 +1,163 @@
+﻿@using APP.Util
+
+
+
+@{
+    ViewBag.Title = "payment_report";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+@*<style>
+        td {
+            font-family: Arial !important;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>*@
+
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+        <h1 class="card-header  text-primary"><i class="fa fa-file-excel"></i> @Resources.Passes.ResourceManager.GetString("payment_report" + "_" + ViewBag.lang)</h1>
+        @using (Html.BeginForm("RaoPaymentReportNoBill", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>@Resources.Common.ResourceManager.GetString("From" + "_" + ViewBag.lang)</label>
+                            <input type="date" name="From" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>@Resources.Common.ResourceManager.GetString("To" + "_" + ViewBag.lang)</label>
+                            <input type="date" name="To" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt-4">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> @Resources.Common.ResourceManager.GetString("Search" + "_" + ViewBag.lang)</button>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <hr />
+            </div>
+        }
+    <div class="card-body">
+        <div class="col-md-12" dir="@dir">
+            <button type="button" id="cmd" class="btn btn-secondary"><i class="fa fa-print"></i> طباعة</button>
+        </div>
+        <hr />
+      
+        <div class="col-md-12" id="pdf" dir="rtl">
+            <div class="text-center" @*style="display:none"*@>
+                <center>
+                    <img src="~/Content/images/1.png" width="100" />
+                    <h4><u>محدود</u></h4>
+                    <h4><u>حصر مبالغ التصاريح الإلكترونية لدخول</u></h4>
+                    <h4>@ViewBag.CAMP_NAME</h4>
+                </center>
+                <hr />
+                <center style="font-family: Arial !important">@ViewBag.Date</center>
+                <br />
+            </div>
+            <hr />
+            <table border="1" cellpadding="3" dir="rtl" class="table table-bordered" style="width:100% !important; white-space: nowrap">
+                <thead class="bg-light">
+                    <tr>
+                        <th>ت</th>
+                        <th>رقم التصريح</th>
+                        <th>الرمز</th>
+                        <th>الاسم</th>
+                        <th>نوع التصريح</th>
+                        <th>الوحدة</th>
+                        <th>نوع المعاملة</th>
+                        <th>الرسوم</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        double total = 0;
+                    }
+                    @foreach (var item in ViewBag.Result)
+                    {
+                        i = i + 1;
+                        total = total + item.Amount;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Id</td>
+                            <td>@item.Sympol</td>
+                            <td>@item.Name</td>
+                            <td>@item.AccessType</td>
+                            <td>@item.Unit</td>
+                            <td>
+                                @if (item.TransactionType.Contains("تصريح مدفوع"))
+                                {
+                                    string payment = "تصريح مدفوع";
+                                    @payment
+                                }
+                                else
+                                {
+                                    if (item.TransactionType.Contains("بدل فاقد"))
+                                    {
+                                        string missing = "بدل فاقد";
+                                        @missing
+                                    }
+                                }
+                                                    </td>
+                            <td>@item.Amount ريال عماني</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="7">المجمـــــــــــــــــــــــــوع</td>
+                        <td>@total ريال عماني</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+        </div>
+</div>
+
+
+@section Scripts {
+    
+
+    <script>
+
+
+
+
+        function printData() {
+            var divToPrint = document.getElementById("pdf");
+            newWin = window.open("");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        $('#cmd').on('click', function () {
+            printData();
+        });
+    </script>
+
+
+}

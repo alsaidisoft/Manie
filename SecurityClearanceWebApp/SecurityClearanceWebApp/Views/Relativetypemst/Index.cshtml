@@ -1,0 +1,428 @@
+﻿@model IEnumerable<SecurityClearanceWebApp.Models.RA42_RELATIVE_TYPE_MST>
+
+@{
+    ViewBag.Title = "Index";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+
+    }
+
+}
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @{
+            Html.RenderPartial("settings_nav_links");
+
+        }
+        <div class="col-md-10">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 justify-content-center text-primary">
+                            <h4>
+                                <i class="@ViewBag.controllerIconClass"></i>&nbsp;
+                                @Resources.Settings.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)
+                            </h4>
+                        </div>
+                        <div class="col-6 text-white @align">
+                            <a class="btn btn-success" href="#" onclick="AddNew(0)">
+                                <i class="fa fa-plus-circle"></i>
+                                &nbsp;
+                                @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered table-hover table-responsive  @table  text-center" style="display: table">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.SettingsE.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)
+                                </th>
+                               
+                                <th style="border-right: 1px solid #ccc;">
+                                    @Resources.Settings.ResourceManager.GetString("ACTIONS" + "_" + ViewBag.lang)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int rowNo = 0;}
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                @{rowNo++;}
+                                <td>@rowNo</td>
+
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RELATIVE_TYPE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RELATIVE_TYPE_E)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.REMARKS)
+                                </td>
+
+
+                              
+                                <td style="border-right: 1px solid #ccc;">
+                                    <div class="btn-group" dir="ltr">
+                                        <a class="btn btn-primary details btn-sm" href="#" onclick="Details(@item.RELATIVE_TYPE_CODE)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a class="btn btn-warning btn-sm" href="#" onclick="EditRecord(@item.RELATIVE_TYPE_CODE)">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-danger btn-sm text-white" href="#" onclick="DeleteRecord(@item.RELATIVE_TYPE_CODE)">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Create A Popup Modal With Registration Form For Add Or Edit Student Record*@
+
+<div class="modal fade" id="MyModal" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="form">
+                    <fieldset id="SubmitForm">
+                        <input type="hidden" name="RELATIVE_TYPE_CODE" id="RELATIVE_TYPE_CODE" />
+                        <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="RELATIVE_TYPE" id="RELATIVE_TYPE" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Resources.SettingsE.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="RELATIVE_TYPE_E" id="RELATIVE_TYPE_E" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <textarea name="REMARKS" class="form-control" id="REMARKS"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <a href="#" class="btn btn-block text-center" id="SaveRecord"></a>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Create A PopUp Modal For DeleteConfirmation*@
+
+<div class="modal fade" id="DeleteConfirmation" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_dlt"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <h4>
+                    @Resources.Common.ResourceManager.GetString("delete_question" + "_" + ViewBag.lang)
+                </h4>
+
+
+
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="TYPE_A"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="TYPE_E"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="RE"></h6>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success" data-dismiss="modal" id="r"> <i class="fa fa-thumbs-up"></i> @Resources.Common.ResourceManager.GetString("cancel" + "_" + ViewBag.lang)</a>
+                &thinsp;
+                <a href="#" class="btn btn-danger" onclick="ConfirmDelete()">
+                    <i class="fa fa-trash"></i>
+                    @Resources.Common.ResourceManager.GetString("delete_confirm" + "_" + ViewBag.lang)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Details" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_details"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+
+
+
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="TYPE_A2"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("RELATIVE_TYPE" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="TYPE_E2"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="RE2"></h6>
+                    <hr />
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_BY" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="CRD_BY"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_DT" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="CRD_DT"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_BY" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="UPD_BY"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_DT" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="UPD_DT"></h6>
+                        <hr />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+
+    <script>
+
+
+        function AddNew(id) {
+            $("#form")[0].reset();
+            $("#RELATIVE_TYPE_CODE").val(0);
+            $("#ModalTitle").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)").removeClass('btn-warning').addClass("btn-success");
+            $("#MyModal").modal();
+
+        }
+
+        //Show The Popup Modal For Edit Student Record
+
+        function EditRecord(Id) {
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle").html("<i class='fa fa-edit'></i> @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-save'></i> @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)").removeClass('btn-success').addClass("btn-warning");
+            $("#MyModal").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    $("#RELATIVE_TYPE_CODE").val(obj.RELATIVE_TYPE_CODE);
+                    $("#RELATIVE_TYPE").val(obj.RELATIVE_TYPE);
+                    $("#RELATIVE_TYPE_E").val(obj.RELATIVE_TYPE_E);
+                    $("#REMARKS").val(obj.REMARKS);
+
+
+                }
+            })
+        }
+
+        $("#SaveRecord").click(function () {
+            var data = $("#SubmitForm").serialize();
+            $.ajax({
+                type: "Post",
+                url: "./SaveDataInDatabase",
+                data: data,
+                success: function (result) {
+                    window.location.href = "./index";
+                    $("#MyModal").modal("hide");
+
+                }
+            })
+        })
+         //Show The Popup Modal For DeleteComfirmation
+        function Details(Id) {
+            $("#RELATIVE_TYPE_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_details").html("<i class='fa fa-eye'></i> @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)");
+            $("#Details").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var type = obj.RELATIVE_TYPE != null ? obj.RELATIVE_TYPE : "";
+                    var typeE = obj.RELATIVE_TYPE_E != null ? obj.RELATIVE_TYPE_E : "";
+                    var remarks = obj.REMARKS != null ? obj.REMARKS : "";
+                    var crd_by = obj.CRD_BY != null ? obj.CRD_BY : "";
+                    var upd_by = obj.UPD_BY != null ? obj.UPD_BY : "";
+                    var crd_dt = obj.CRD_DT != null ? dtConvFromJSON(obj.CRD_DT) : "";
+                    var upd_dt = obj.UPD_DT != null ? dtConvFromJSON(obj.UPD_DT) : "";
+                    $("#ID2").val(obj.RELATIVE_TYPE_CODE);
+                    $("#TYPE_A2").text(type);
+                    $("#TYPE_E2").text(typeE);
+                    $("#RE2").text(remarks);
+                    $("#CRD_BY").text(crd_by);
+                    $("#CRD_DT").text(crd_dt);
+                    $("#UPD_BY").text(upd_by);
+                    $("#UPD_DT").text(upd_dt);
+                }
+            })
+
+        }
+        //Show The Popup Modal For DeleteComfirmation
+        function DeleteRecord(Id) {
+            $("#RELATIVE_TYPE_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_dlt").html("<i class='fa fa-trash'></i> @Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)");
+            $("#DeleteConfirmation").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    $("#ID").val(obj.RELATIVE_TYPE_CODE);
+                    $("#TYPE_A").text(obj.RELATIVE_TYPE);
+                    $("#TYPE_E").text(obj.RELATIVE_TYPE_E);
+                    $("#RE").text(obj.REMARKS);
+                }
+            })
+
+        }
+        function ConfirmDelete () {
+            var Id = $("#RELATIVE_TYPE_CODE").val();
+            //console.log(Id);
+            $.ajax({
+                type: "POST",
+                url: "./DltRecordById?Id=" + Id,
+                success: function (result) {
+                    $("#DeleteConfirmation").modal("hide");
+                    window.location.href = "./index";
+
+                }
+            })
+        }
+
+        function dtConvFromJSON(data) {
+            jsonDate = data;
+            debugger;
+            var d = new Date(parseInt(jsonDate.substr(6)));
+            var m, day;
+            m = d.getMonth() + 1;
+            if (m < 10)
+                m = '0' + m
+            if (d.getDate() < 10)
+                day = '0' + d.getDate()
+            else
+                day = d.getDate();
+            var formattedDate = d.getFullYear() + "/ " + m + "/ " + day;
+            var hours = (+d.getHours());
+            var minutes = (+d.getMinutes());
+            var formattedTime = hours + ":" + minutes + ":" + (+d.getSeconds());
+            formattedDate = formattedTime + " " + formattedDate;
+            return formattedDate;
+        }
+
+    </script>
+
+
+}
+

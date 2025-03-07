@@ -1,0 +1,164 @@
+﻿@*@using APP.Util
+@{
+    ViewBag.Title = "Index";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+    var col = 12;
+
+
+}
+
+<style>
+    td, th {
+        text-align: center !important;
+    }
+</style>
+@{
+    Html.RenderPartial("_pass_nav_");
+
+}
+
+<div class="container-fluid mb-3" dir="@dir">
+    <div class="row">
+
+
+        <div class="col-md-@col">
+
+
+
+            <div class="card shadow-lg">
+                <div class="card-header text-primary mb-2"><h4><i class="fa fa-plane"></i> @Resources.Passes.ResourceManager.GetString("AirCrew" + "_" + ViewBag.lang)</h4></div>
+
+                <div class="card-body text-center">
+                    <div class="row justify-content-center">
+
+                        <div class="btn btn-group">
+
+                            @if (ViewBag.RESPO_STATE == 3 || ViewBag.RESPO_STATE == 10)
+                            {
+
+
+
+
+                                <a class="btn btn-outline-primary p-2  text-center @if (ViewBag.activetab == "Privatepass") { <text>active</text>} " href="@Url.Action("Choosecreatetype", ViewBag.controllerName, null)">
+                                    <h5 class="text-center text-uppercase">
+                                        <i class="fa fa-plus-circle"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("Choosecreatetype" + "_" + ViewBag.lang)
+                                    </h5>
+                                </a>
+
+
+
+                                <a class="btn btn-outline-primary p-2 text-center  @if (ViewBag.COUNTAIR != 0)
+                { <text>notification</text>} @if (ViewBag.activetab == "Newpasses") { <text>active</text>} " href="@Url.Action("Newpasses", ViewBag.controllerName, null)">
+                                    <h5 class="text-center text-uppercase">
+                                        <i class="fa fa-passport"></i>
+                                        &nbsp;
+                                        @if (ViewBag.COUNTAIR != 0)
+                                        {
+                                            <span class="badge2 numbersfont2">@ViewBag.COUNTAIR</span>
+
+                                        }
+                                        @Resources.Passes.ResourceManager.GetString("Newpasses" + "_" + ViewBag.lang)
+                                    </h5>
+                                </a>
+
+                                if (ViewBag.RESPO_STATE == 3)
+                                {
+
+                                    <a class="btn btn-outline-primary  p-2  text-center @if (ViewBag.COUNTAIRTOPRINT != 0)
+                                { <text>notification</text>}  @if (ViewBag.activetab == "ToPrint")
+                                { <text>active</text>} " href="@Url.Action("ToPrint", ViewBag.controllerName, null)">
+                                        <h5 class="text-center text-uppercase">
+                                            <i class="fa fa-vr-cardboard"></i>
+                                            &nbsp;
+                                            @if (ViewBag.COUNTAIRTOPRINT != 0)
+                                            {
+                                                <span class="badge2 numbersfont2">@ViewBag.COUNTAIRTOPRINT</span>
+
+                                            }
+                                            @Resources.Passes.ResourceManager.GetString("to_print" + "_" + ViewBag.lang)
+                                        </h5>
+                                    </a>
+                                    <a class="btn btn-outline-primary p-2  text-center @if (ViewBag.activetab == "Printed")
+                                { <text>active</text>} " href="@Url.Action("Printed", ViewBag.controllerName, null)">
+                                        <h5 class="text-center text-uppercase">
+                                            <i class="fa fa-print"></i>
+                                            &nbsp;
+                                            @Resources.Passes.ResourceManager.GetString("printed_permits" + "_" + ViewBag.lang)
+                                        </h5>
+                                    </a>
+
+                                }
+
+                            }
+                            @if (ViewBag.RESPO_STATE == 2)
+                            {
+
+
+                                <a class="btn btn-outline-primary p-2  text-center @if (ViewBag.activetab == "Privatepass") { <text>active</text>} " href="@Url.Action("Choosecreatetype", ViewBag.controllerName, null)">
+                                    <h5 class="text-center text-uppercase">
+                                        <i class="fa fa-plus-circle"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("Choosecreatetype" + "_" + ViewBag.lang)
+                                    </h5>
+                                </a>
+
+
+
+
+
+                                <a class="btn btn-outline-primary p-2  text-center  @if (ViewBag.COUNTAIR != 0)
+                { <text>notification</text>} @if (ViewBag.activetab == "Authopasses") { <text>active</text>} " href="@Url.Action("Authopasses", ViewBag.controllerName, null)">
+                                    <h5 class="text-center text-uppercase">
+                                        <i class="fa fa-passport"></i>
+                                        &nbsp;
+                                        @if (ViewBag.COUNTAIR != 0)
+                                        {
+                                            <span class="badge2 numbersfont2">@ViewBag.COUNTAIR</span>
+
+                                        }
+                                        @Resources.Passes.ResourceManager.GetString("Authopasses" + "_" + ViewBag.lang)
+                                    </h5>
+                                </a>
+
+                            }
+
+                            @if (ViewBag.DEVELOPER == true || ViewBag.ADMIN == true)
+                            {
+
+
+
+                                <a class="btn btn-outline-primary p-2  text-center @if (ViewBag.activetab == "Allpasses") { <text>active</text>} " href="@Url.Action("Allpasses", ViewBag.controllerName, null)">
+                                    <h5 class="text-center text-uppercase">
+                                        <i class="fa fa-globe"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("Browse_all_air_passes" + "_" + ViewBag.lang)
+                                    </h5>
+                                </a>
+
+                            }
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+</div>*@
+
+
+

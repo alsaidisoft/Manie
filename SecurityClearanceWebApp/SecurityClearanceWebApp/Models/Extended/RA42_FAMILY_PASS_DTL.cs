@@ -1,0 +1,121 @@
+﻿using APP.Util;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+using System.Web.Http;
+
+namespace SecurityClearanceWebApp.Models
+{
+    [MetadataType(typeof(RA42_FAMILY_PASS_DTLMetadata))]
+    public partial class RA42_FAMILY_PASS_DTL
+    {
+        RA42_SECURITY_CLEARANCEEntities db = new RA42_SECURITY_CLEARANCEEntities();
+        private int ACCESS_TYPE = 4;
+        public static implicit operator RA42_FAMILY_PASS_DTL(HttpPostedFileBase v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int countCommennts(int pass_code)
+        {
+           
+            var v = db.RA42_COMMENTS_MST.Where(a => a.PASS_ROW_CODE == pass_code && a.ACCESS_TYPE_CODE == ACCESS_TYPE).Count();
+            return v;
+        }
+
+
+      
+
+
+        public string CheckDate(DateTime date)
+        {
+            string check = "";
+            if(date < DateTime.Today)
+            {
+                check = "منتهي";
+            }
+            else
+            {
+                check = "مستمر";
+            }
+            return check;
+        }
+
+       
+
+        public List<RA42_ZONE_MASTER_MST> Zones(int? pass_code)
+        {
+            List<RA42_ZONE_MASTER_MST> zone = new List<RA42_ZONE_MASTER_MST>();
+            var v = db.RA42_ZONE_MASTER_MST.Where(a => a.ACCESS_TYPE_CODE == ACCESS_TYPE && a.ACCESS_ROW_CODE == pass_code && a.DLT_STS != true).ToList();
+            if (v != null)
+            {
+                zone = v;
+            }
+
+            return zone;
+        }
+
+
+    }
+    public class RA42_FAMILY_PASS_DTLMetadata
+    {
+
+
+        public int FAMILY_CODE { get; set; }
+        public string SERVICE_NUMBER { get; set; }
+        public string HOST_RANK_A { get; set; }
+        public string HOST_RANK_E { get; set; }
+        public string HOST_NAME_A { get; set; }
+        public string HOST_NAME_E { get; set; }
+        public string PROFESSION_A { get; set; }
+        public string PROFESSION_E { get; set; }
+        public string UNIT_A { get; set; }
+        public string UNIT_E { get; set; }
+        public Nullable<int> STATION_CODE { get; set; }
+        public string PHONE_NUMBER { get; set; }
+        public string GSM { get; set; }
+        public string CIVIL_NUMBER { get; set; }
+        public string NAME_A { get; set; }
+        public string NAME_E { get; set; }
+        public string PERSONAL_IMAGE { get; set; }
+        [Required(ErrorMessage = "الجنسية مطلوبة")]
+        public Nullable<int> IDENTITY_CODE { get; set; }
+        [Required(ErrorMessage = "الجنس مطلوب")]
+        public Nullable<int> GENDER_ID { get; set; }
+        [Required(ErrorMessage = "صلة القرابة مطلوبة")]
+        public Nullable<int> RELATIVE_TYPE_CODE { get; set; }
+        [Required(ErrorMessage = "رقم المنزل - الشقة مطلوب")]
+        public string BUILDING_NUMBER { get; set; }
+        public string APPROVAL_SN { get; set; }
+        public string APPROVAL_RANK { get; set; }
+        public string APPROVAL_NAME { get; set; }
+        public Nullable<System.DateTime> APPROVAL_APPROVISION_DATE { get; set; }
+        public string AUTHO_SN { get; set; }
+        public string AUTHO_RANK { get; set; }
+        public string AUTHO_NAME { get; set; }
+        public Nullable<System.DateTime> AUTHO_APPROVISION_DATE { get; set; }
+        public string PERMIT_SN { get; set; }
+        public string PERMIT_RANK { get; set; }
+        public string PERMIT_NAME { get; set; }
+        public Nullable<System.DateTime> PERMIT_APPROVISION_DATE { get; set; }
+        public Nullable<int> WORKFLOW_RESPO_CODE { get; set; }
+        public Nullable<int> ACCESS_TYPE_CODE { get; set; }
+        [Required(ErrorMessage = "نوع التصريح مطلوب")]
+        public Nullable<int> PASS_TYPE_CODE { get; set; }
+        public string BARCODE { get; set; }
+        public Nullable<System.DateTime> DATE_FROM { get; set; }
+        public Nullable<System.DateTime> DATE_TO { get; set; }
+        public string PURPOSE_OF_PASS { get; set; }
+        public string REMARKS { get; set; }
+        public Nullable<bool> REJECTED { get; set; }
+        public Nullable<bool> STATUS { get; set; }
+        public Nullable<bool> DLT_STS { get; set; }
+        public string CRD_BY { get; set; }
+        public Nullable<System.DateTime> CRD_DT { get; set; }
+        public string UPD_BY { get; set; }
+
+
+    }
+}

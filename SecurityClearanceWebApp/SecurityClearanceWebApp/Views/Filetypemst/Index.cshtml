@@ -1,0 +1,684 @@
+﻿@using APP.Util
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_FILE_TYPE_MST>
+
+@{
+    ViewBag.Title = "Index";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+
+    }
+
+}
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @{
+            Html.RenderPartial("settings_nav_links");
+
+        }
+        <div class="col-md-10">
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 justify-content-center text-primary">
+                            <h4>
+                                <i class="@ViewBag.controllerIconClass"></i>&nbsp;
+                                @Resources.Settings.ResourceManager.GetString("file_type" + "_" + ViewBag.lang)
+                            </h4>
+                        </div>
+                        <div class="col-6 text-white @align">
+                            <a class="btn btn-success" href="#" onclick="AddNew(0)">
+                                <i class="fa fa-plus-circle"></i>
+                                &nbsp;
+                                @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered table-hover table-responsive @table text-center" style="display: table">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("File_type_name" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.SettingsE.ResourceManager.GetString("File_type_name" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Forces" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("card_for" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("file_note_type" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)
+                                </th>
+
+                                <th style="border-right: 1px solid #ccc;">
+                                    @Resources.Settings.ResourceManager.GetString("ACTIONS" + "_" + ViewBag.lang)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int rowNo = 0;}
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                @{rowNo++;}
+                                <td>@rowNo</td>
+
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FILE_TYPE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FILE_TYPE_E)
+                                </td>
+                                <td>
+                                    @foreach (var x in item.RA42_DOCUMENTS_ACCESS_MST.Where(a => a.DLT_STS != true))
+                                    {
+                                        if (Language.GetCurrentLang() == "en")
+                                        {
+                                            @Html.DisplayFor(model => x.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(model => x.RA42_ACCESS_TYPE_MST.ACCESS_TYPE)
+                                        }
+                                        string _underscor = "-";
+                                        @_underscor
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var x in item.RA42_FILE_FORCES_MST.Where(a => a.DLT_STS != true))
+                                    {
+                                        if (Language.GetCurrentLang() == "en")
+                                        {
+                                            @Html.DisplayFor(model => x.RA42_FORCES_MST.FORCE_NAME_E)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(model => x.RA42_FORCES_MST.FORCE_NAME_A)
+                                        }
+                                        string _underscor = "-";
+                                        @_underscor
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var x in item.RA42_FILE_CARD_MST.Where(a => a.DLT_STS != true))
+                                    {
+                                        if (Language.GetCurrentLang() == "en")
+                                        {
+                                            @Html.DisplayFor(model => x.RA42_CARD_FOR_MST.CARD_FOR_E)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(model => x.RA42_CARD_FOR_MST.CARD_FOR_A)
+                                        }
+                                        string _underscor = "-";
+                                        @_underscor
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RA42_FILE_NOTE_TYPE_MST.FILE_NOTE_TYPE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.REMARKS)
+                                </td>
+
+
+
+                                <td style="border-right: 1px solid #ccc;">
+                                    <div class="btn-group" dir="ltr">
+                                        <a class="btn btn-primary details btn-sm" href="#" onclick="Details(@item.FILE_TYPE_CODE)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a class="btn btn-warning btn-sm" href="#" onclick="EditRecord(@item.FILE_TYPE_CODE)">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-danger btn-sm text-white" href="#" onclick="DeleteRecord(@item.FILE_TYPE_CODE)">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Create A Popup Modal With Registration Form For Add Or Edit Student Record*@
+
+<div class="modal fade" id="MyModal" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="form">
+                    <fieldset id="SubmitForm">
+                        <input type="hidden" name="FILE_TYPE_CODE" id="FILE_TYPE_CODE" />
+                        <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("File_type_name" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="FILE_TYPE" id="FILE_TYPE" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Resources.SettingsE.ResourceManager.GetString("File_type_name" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="FILE_TYPE_E" id="FILE_TYPE_E" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)
+                                </div>
+                                <select class="form-control select2-selector1" name="ACCESS_TYPE_CODE[]" multiple style="width:100%;" id="ACCESS_TYPE_CODE">
+                                    @foreach (var ltfo in (MultiSelectList)ViewBag.ACCESS_TYPE_CODE)
+                                    {
+                                        <option value="@ltfo.Value">@ltfo.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Resources.Settings.ResourceManager.GetString("Forces" + "_" + ViewBag.lang)
+                                </div>
+                                <select class="form-control select2-selector2" name="FORCE_ID[]" multiple style="width:100%;" id="FORCE_ID">
+                                    @foreach (var ltfo in (MultiSelectList)ViewBag.FORCE_ID)
+                                    {
+                                        <option value="@ltfo.Value">@ltfo.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Resources.Settings.ResourceManager.GetString("card_for" + "_" + ViewBag.lang)
+                                </div>
+                                <select class="form-control select2-selector3" name="CARD_FOR_CODE[]" multiple style="width:100%;" id="CARD_FOR_CODE">
+                                    @foreach (var ltfo in (MultiSelectList)ViewBag.CARD_FOR_CODE)
+                                    {
+                                        <option value="@ltfo.Value">@ltfo.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @Resources.Settings.ResourceManager.GetString("file_note_type" + "_" + ViewBag.lang)
+                            <div class="form-group">
+
+                                <select name="FILE_NOTE_CODE" class="form-control" id="DropDwn1">
+                                    @if (ViewBag.FILE_NOTE_CODE != null)
+                                    {
+                                        foreach (var option in ViewBag.FILE_NOTE_CODE)
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
+
+                                    }
+                                </select>
+
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <textarea name="REMARKS" class="form-control" id="REMARKS"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <a href="#" class="btn btn-block text-center" id="SaveRecord"></a>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Create A PopUp Modal For DeleteConfirmation*@
+
+<div class="modal fade" id="DeleteConfirmation" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_dlt"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <h4>
+                    @Resources.Common.ResourceManager.GetString("delete_question" + "_" + ViewBag.lang)
+                </h4>
+
+
+
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("File_type_name" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="TYPE_A"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("File_type_name" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="TYPE_E"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="PA"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="RE"></h6>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success" data-dismiss="modal" id="r"> <i class="fa fa-thumbs-up"></i> @Resources.Common.ResourceManager.GetString("cancel" + "_" + ViewBag.lang)</a>
+                &thinsp;
+                <a href="#" class="btn btn-danger" onclick="ConfirmDelete()">
+                    <i class="fa fa-trash"></i>
+                    @Resources.Common.ResourceManager.GetString("delete_confirm" + "_" + ViewBag.lang)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Details" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_details"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+
+
+
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("File_type_name" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="TYPE_A2"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.SettingsE.ResourceManager.GetString("File_type_name" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="TYPE_E2"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="PA2"></h6>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="RE2"></h6>
+                    <hr />
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_BY" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="CRD_BY"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_DT" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="CRD_DT"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_BY" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="UPD_BY"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_DT" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="UPD_DT"></h6>
+                        <hr />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/select2.min.js"></script>
+    <link href="~/Content/select2.min.css" rel="stylesheet" type="text/css" />
+
+    <script>
+        $(document).ready(function () {
+
+            $(".select2-selector1").select2();
+            $(".select2-selector2").select2();
+            $(".select2-selector3").select2();
+        });
+        function AddNew(id) {
+            $("#form")[0].reset();
+            $("#FILE_TYPE_CODE").val(0);
+            $("#ACCESS_TYPE_CODE").val('').trigger('change');
+            $("#FORCE_ID").val('').trigger('change');
+            $("#CARD_FOR_CODE").val('').trigger('change');
+            $("#ModalTitle").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)").removeClass('btn-warning').addClass("btn-success");
+            $("#MyModal").modal();
+
+        }
+
+        //Show The Popup Modal For Edit Student Record
+
+        function EditRecord(Id) {
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle").html("<i class='fa fa-edit'></i> @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-save'></i> @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)").removeClass('btn-success').addClass("btn-warning");
+            $("#MyModal").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    $("#FILE_TYPE_CODE").val(obj.FILE_TYPE_CODE);
+                    $("#FILE_TYPE").val(obj.FILE_TYPE);
+                    $("#FILE_TYPE_E").val(obj.FILE_TYPE_E);
+                    $("#REMARKS").val(obj.REMARKS);
+                    $("#DropDwn1").val(obj.FILE_NOTE_CODE).trigger('change');
+
+
+                }
+            })
+
+            var url2 = "./GetSelectdAccess?Id=" + Id;
+            $.ajax({
+                type: "GET",
+                url: url2,
+                success: function (data2) {
+                    var values =[];
+                    console.log(data2);
+                    $("#ACCESS_TYPE_CODE").val('').trigger('change');
+                    for (var i = 0; i < data2.length; i++) {
+                        //this method to create new options
+                        //var option = new Option(data2[i].ACCESS_TYPE, data2[i].ACCESS_TYPE_CODE, true, true);
+                        //$("#ACCESS_TYPE_CODE2").append(option).trigger('change');
+                        //this method to get values
+                        values.push(data2[i].ACCESS_TYPE_CODE);
+                    }
+
+                    $("#ACCESS_TYPE_CODE").val(values).trigger('change');
+
+
+
+
+                }
+            })
+
+            var url3 = "./GetSelectdForces?Id=" + Id;
+            $.ajax({
+                type: "GET",
+                url: url3,
+                success: function (data3) {
+                    var values = [];
+                    console.log(data3);
+                    $("#FORCE_ID").val('').trigger('change');
+                    for (var i = 0; i < data3.length; i++) {
+                        //this method to create new options
+                        //var option = new Option(data2[i].ACCESS_TYPE, data2[i].ACCESS_TYPE_CODE, true, true);
+                        //$("#ACCESS_TYPE_CODE2").append(option).trigger('change');
+                        //this method to get values
+                        values.push(data3[i].FORCE_ID);
+                    }
+
+                    $("#FORCE_ID").val(values).trigger('change');
+
+
+
+
+                }
+            })
+
+            var url4 = "./GetSelectdCardsFor?Id=" + Id;
+            $.ajax({
+                type: "GET",
+                url: url4,
+                success: function (data4) {
+                    var values = [];
+                    console.log(data4);
+                    $("#CARD_FOR_CODE").val('').trigger('change');
+                    for (var i = 0; i < data4.length; i++) {
+                        //this method to create new options
+                        //var option = new Option(data2[i].ACCESS_TYPE, data2[i].ACCESS_TYPE_CODE, true, true);
+                        //$("#ACCESS_TYPE_CODE2").append(option).trigger('change');
+                        //this method to get values
+                        values.push(data4[i].CARD_FOR_CODE);
+                    }
+
+                    $("#CARD_FOR_CODE").val(values).trigger('change');
+
+
+
+
+                }
+            })
+        }
+
+        $("#SaveRecord").click(function () {
+            var data = $("#SubmitForm").serialize();
+            $.ajax({
+                type: "Post",
+                url: "./SaveDataInDatabase",
+                data: data,
+                success: function (result) {
+                    window.location.href = "./index";
+                    $("#MyModal").modal("hide");
+
+                },
+                error: function (result) {
+                    window.location.href = "./index";
+                    $("#MyModal").modal("hide");
+                }
+            })
+        })
+         //Show The Popup Modal For DeleteComfirmation
+        function Details(Id) {
+            $("#FILE_TYPE_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_details").html("<i class='fa fa-eye'></i> @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)");
+            $("#Details").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var type = obj.FILE_TYPE != null ? obj.FILE_TYPE : "";
+                    var typeE = obj.FILE_TYPE_E != null ? obj.FILE_TYPE_E : "";
+                    var remarks = obj.REMARKS != null ? obj.REMARKS : "";
+                    var crd_by = obj.CRD_BY != null ? obj.CRD_BY : "";
+                    var upd_by = obj.UPD_BY != null ? obj.UPD_BY : "";
+                    var crd_dt = obj.CRD_DT != null ? dtConvFromJSON(obj.CRD_DT) : "";
+                    var upd_dt = obj.UPD_DT != null ? dtConvFromJSON(obj.UPD_DT) : "";
+                    $("#ID2").val(obj.FILE_TYPE_CODE);
+                    $("#TYPE_A2").text(type);
+                    $("#TYPE_E2").text(typeE);
+                    $("#RE2").text(remarks);
+                    $("#CRD_BY").text(crd_by);
+                    $("#CRD_DT").text(crd_dt);
+                    $("#UPD_BY").text(upd_by);
+                    $("#UPD_DT").text(upd_dt);
+                }
+            })
+
+            var url1 = "./GetSelectdAccess?Id=" + Id;
+            $.ajax({
+                type: "GET",
+                url: url1,
+                success: function (data1) {
+                    var values =[];
+
+                    for (var i = 0; i < data1.length; i++) {
+
+                        values.push(data1[i].ACCESS_TYPE);
+                    }
+
+                    $("#PA2").text(values);
+
+
+
+
+                }
+            })
+
+        }
+        //Show The Popup Modal For DeleteComfirmation
+        function DeleteRecord(Id) {
+            $("#FILE_TYPE_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_dlt").html("<i class='fa fa-trash'></i> @Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)");
+            $("#DeleteConfirmation").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    $("#ID").val(obj.FILE_TYPE_CODE);
+                    $("#TYPE_A").text(obj.FILE_TYPE);
+                    $("#TYPE_E").text(obj.FILE_TYPE_E);
+                    $("#RE").text(obj.REMARKS);
+                }
+            })
+
+             var url3 = "./GetSelectdAccess?Id=" + Id;
+            $.ajax({
+                type: "GET",
+                url: url3,
+                success: function (data3) {
+                    var values =[];
+
+                    for (var i = 0; i < data3.length; i++) {
+
+                        values.push(data3[i].ACCESS_TYPE);
+                    }
+
+                    $("#PA").text(values);
+
+
+                }
+            })
+
+        }
+        function ConfirmDelete () {
+            var Id = $("#FILE_TYPE_CODE").val();
+            console.log(Id);
+            $.ajax({
+                type: "POST",
+                url: "./DltRecordById?Id=" + Id,
+                success: function (result) {
+                    $("#DeleteConfirmation").modal("hide");
+                    window.location.href = "./index";
+
+                }
+            })
+        }
+
+        function dtConvFromJSON(data) {
+            jsonDate = data;
+            debugger;
+            var d = new Date(parseInt(jsonDate.substr(6)));
+            var m, day;
+            m = d.getMonth() + 1;
+            if (m < 10)
+                m = '0' + m
+            if (d.getDate() < 10)
+                day = '0' + d.getDate()
+            else
+                day = d.getDate();
+            var formattedDate = d.getFullYear() + "/ " + m + "/ " + day;
+            var hours = (+d.getHours());
+            var minutes = (+d.getMinutes());
+            var formattedTime = hours + ":" + minutes + ":" + (+d.getSeconds());
+            formattedDate = formattedTime + " " + formattedDate;
+            return formattedDate;
+        }
+
+    </script>
+
+
+}
+
+

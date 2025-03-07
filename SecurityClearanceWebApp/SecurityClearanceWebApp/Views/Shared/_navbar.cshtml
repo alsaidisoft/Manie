@@ -1,0 +1,483 @@
+﻿@using System;
+@using System.Collections.Generic;
+@using System.Data;
+@using System.Data.Entity;
+@using System.IO;
+@using System.Linq;
+@using System.Net;
+@using System.Threading.Tasks;
+@using System.Web;
+@using System.Web.Mvc;
+@using System.Web.UI.WebControls;
+@using APP.Filters;
+@using APP.Util;
+@using portal.Controllers;
+@using SecurityClearanceWebApp.Models;
+@{
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    RA42_SECURITY_CLEARANCEEntities db = new RA42_SECURITY_CLEARANCEEntities();
+    string currentUser = (new UserInfo()).getSNO();
+
+
+    //get stations and forces for menue
+    ViewBag.STATIONS_LIST = Task.Run(async () => await db.RA42_STATIONS_MST.Where(a => a.DLT_STS != true).ToListAsync()).Result;
+    ViewBag.FORCES_LIST = Task.Run(async () => await db.RA42_FORCES_MST.Where(a => a.DLT_STS != true).OrderBy(a => a.FORCE_CODE).ToListAsync()).Result;
+
+    var total = 0;
+
+
+
+    if (ViewBag.AUTHO_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTAUTHO + ViewBag.COUNTAUTHOTOPRINT;
+    }
+    if (ViewBag.SECURITY_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTSECUR + ViewBag.COUNTSECURTOPRINT;
+    }
+    if (ViewBag.VECHILE_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTVECHIL + ViewBag.COUNTVECHILTOPRINT;
+    }
+    if (ViewBag.FAMILY_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTFAMILY + ViewBag.COUNTFAMILYTOPRINT;
+    }
+    if (ViewBag.CONTRACT_COMPANY_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTCONTRACT + ViewBag.COUNTCONTRACTTOPRINT;
+    }
+    if (ViewBag.TEMP_COMPANY_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTTEMPRORY + ViewBag.COUNTTEMPRORYTOPRINT;
+    }
+    if (ViewBag.EVENT_EXERCICE_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTEVENTEXERCISE + ViewBag.COUNTEVENTEXERCISETOPRINT;
+    }
+
+    if (ViewBag.TRAINEE_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTTRAINEE + ViewBag.COUNTTRAINEETOPRINT;
+    }
+
+    if (ViewBag.VISITOR_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTVISITOR + ViewBag.COUNTVISITORTOPRINT;
+    }
+
+
+    if (ViewBag.AIR_ACCESS == true)
+    {
+        total = total + ViewBag.COUNTAIR + ViewBag.COUNTAIRTOPRINT;
+    }
+
+
+    var app_nam = Resources.Common.ResourceManager.GetString("app_name" + "_" + ViewBag.lang);
+    //get announcments, end date should be grater than current date to show any announcment
+
+}
+
+
+<style>
+
+
+    .dropdown-menu li {
+                position: relative;
+            }
+
+    .dropdown-menu .dropdown-submenu {
+        display: none;
+        position: absolute;
+        right: 100%;
+        top: -7px;
+    }
+
+    .dropdown-menu .dropdown-submenu-left {
+        right: 100%;
+        left: auto;
+    }
+
+    .dropdown-menu > li:hover > .dropdown-submenu {
+    display: block;
+    width: 100% !important;
+    }
+</style>
+
+
+<nav dir="@if (ViewBag.lang == "ar"){<text>rtl</text>}" class="navbar main-navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
+
+    <a class="navbar-brand" href="http://mamrafohisnapp01/Hisn/ar/Home/Index">
+        <img src="~/Content/images/mod.png" title="mod" width="30" class="rounded bg-light p-1" />
+        @Resources.Common.ResourceManager.GetString("system_name" + "_" + ViewBag.lang)
+        @*<img src="~/Content/images/1.png" title="rao" width="20" />
+            <img src="~/Content/images/2.png" title="rafo" width="20" />
+            <img src="~/Content/images/3.png" title="rano" width="20" />
+            <img src="~/Content/images/4.png" title="modes" width="20" />*@
+
+    </a>
+
+    <ul class="nav navbar-nav @if (ViewBag.lang == "ar"){<text>ml-auto</text>}else{<text>mr-auto</text>}"></ul>
+    <ul class="nav navbar-nav @if(ViewBag.lang == "ar"){<text>mr-auto</text>} else {<text>ml-auto</text>}">
+        <li class="nav-item active">
+            <a href="#" class="nav-link" data-toggle="modal" data-target="#UserDetailsModal">
+                @if (ViewBag.state)
+                {
+                    var dash = " - ";
+                    <i class="fa fa-user" aria-hidden="true"></i>
+
+                    @ViewBag.RNK @dash @ViewBag.FULL_NAME
+                }
+                else
+                {
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    @currentUser
+                }
+
+
+            </a>
+
+
+        </li>
+        <li class="nav-item active">
+            @if (ViewBag.RESPO_ID != null)
+            {
+                <a href="~/ar/Workflowresponsiblemst/UserInfo/@ViewBag.RESPO_ID" class="nav-link">
+
+                    <i class="fa fa-cog"></i>
+
+                </a>
+            }
+        </li>
+    </ul>
+</nav>
+<div id="myProgress" class="fixed-top">
+    <div id="myBar"></div>
+</div>
+
+<nav dir="@if(ViewBag.lang == "ar"){<text>rtl</text>}" class="navbar secound-navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm" style="margin-top: 55px">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav @if(ViewBag.lang == "ar"){<text>ml-auto</text>} else {<text>mr-auto</text>}">
+            <li class="nav-item @if (ViewBag.controllerName == "Home") { <text> active border bg-primary rounded </text> } ">
+                <a class="nav-link @if (ViewBag.controllerName == "Home") { <text>text-white</text>}" href="@Url.Action("Index", "Home", null)">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    @Resources.Common.ResourceManager.GetString("home" + "_" + ViewBag.lang)
+                </a>
+            </li>
+
+            <li class="nav-item dropdown @if (ViewBag.AddPermit == "AddPermit") { <text> active border bg-primary rounded </text> } ">
+                <a class="nav-link @if (ViewBag.AddPermit == "AddPermit") { <text>text-white</text>} text-center dropdown-toggle" href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                    @Resources.Passes.ResourceManager.GetString("new_request" + "_" + ViewBag.lang)
+                </a>
+                <ul class="dropdown-menu @alignInverse" aria-labelledby="dropdownMenuButton">
+
+                    @foreach (var force in ViewBag.FORCES_LIST)
+                    {
+                        <li>
+                            @{var img = force.FORCE_CODE + ".png";
+                            }
+                            @if (Language.GetCurrentLang() == "en")
+                            {
+
+                                <a href="@Url.Content("~/en/Mypasses/Stations/" + force.FORCE_ID)" class="dropdown-item"><span class="text-center text-uppercase" style="font-family:Arial;"> <img src="~/Content/images/@img" title="@force.FORCE_NAME_E" width="20" /> @force.FORCE_NAME_E &raquo;</span></a>
+
+                            }
+                            else
+                            {
+
+
+                                <a href="@Url.Content("~/ar/Mypasses/Stations/" + force.FORCE_ID)" class="dropdown-item">
+                                    <span class="text-center">
+                                        <img src="~/Content/images/@img" title="@force.FORCE_NAME_A" width="20" />
+                                        @force.FORCE_NAME_A &raquo;
+                                    </span>
+                                </a>
+
+
+
+                            }
+                            <ul class="dropdown-menu dropdown-submenu @alignInverse">
+
+
+
+                                @foreach (var station in ViewBag.STATIONS_LIST)
+                                {
+                                    if (station.FORCE_ID == force.FORCE_ID)
+                                    {
+                                        if (Language.GetCurrentLang() == "en")
+                                        {
+                                            <li>
+                                                <a href="@Url.Content("~/en/Mypasses/Permits/" + station.STATION_CODE)" class="dropdown-item"><span class="text-center text-uppercase" style="font-family:Arial;"><i class="fa fa-university"></i> @station.STATION_NAME_E </span></a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a href="@Url.Content("~/ar/Mypasses/Permits/" + station.STATION_CODE)" class="dropdown-item"><span class="text-center"><i class="fa fa-university"></i> @station.STATION_NAME_A </span></a>
+                                            </li>
+                                        }
+                                    }
+                                }
+
+                            </ul>
+                        </li>
+                    }
+
+                </ul>
+            </li>
+
+            <li class="nav-item @if (ViewBag.controllerName == "Mypasses" && ViewBag.AddPermit != "AddPermit") { <text>active border bg-primary rounded </text> } ">
+                <a class="nav-link @if (ViewBag.controllerName == "Mypasses" && ViewBag.AddPermit != "AddPermit") { <text>text-white</text>} notification" href="@Url.Action("Index", "Mypasses", new {  tab = "employee" })">
+                    @if (ViewBag.MyPermitsTotal != 0)
+                    {
+                        <span class="badge3 numbersfont3">@ViewBag.MyPermitsTotal</span>
+
+                    }
+                    <i class="fa fa-universal-access" aria-hidden="true"></i>
+                    @Resources.Passes.ResourceManager.GetString("mypasses1" + "_" + ViewBag.lang)
+                </a>
+            </li>
+            @if ((ViewBag.WORKFLOW_ID_F > 1 && ViewBag.WORKFLOW_ID_F < 8) || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true || ViewBag.WORKFLOW_ID_F == 10)
+            {
+
+
+                <li class="nav-item @if (ViewBag.Managepasses == "Managepasses")
+                { <text>active border bg-primary rounded</text> } ">
+                    <a class="nav-link @if (ViewBag.Managepasses == "Managepasses")
+                    { <text>text-white</text>} notification" href="@Url.Action("Managepasses", "Mypasses", null)">
+                        @if (total != 0)
+                        {
+                            <span class="badge3 numbersfont3">@total</span>
+
+                        }
+                        <i class="fa fa-tasks" aria-hidden="true"></i>
+                        @Resources.Passes.ResourceManager.GetString("Manage_passes" + "_" + ViewBag.lang)
+                    </a>
+                </li>
+            }
+
+            @if (ViewBag.WORKFLOW_ID_F == 11 && ViewBag.FORCE_TYPE_CODE == 3)
+            {
+
+
+                <li class="nav-item @if (ViewBag.RnoTempPermits == "RnoTempPermits")
+                { <text>active border bg-primary rounded</text> } ">
+                    <a class="nav-link @if (ViewBag.RnoTempPermits == "RnoTempPermits")
+                    { <text>text-white</text>} notification" href="@Url.Action("RnoTempPermitsManage", "Permitsdtl")">
+                        @if (ViewBag.COUNTVISITOR_RNO != 0)
+                        {
+                            <span class="badge3 numbersfont3">@ViewBag.COUNTVISITOR_RNO</span>
+
+                        }
+                        <i class="fa fa-user-clock" aria-hidden="true"></i>
+                        @Resources.Passes.ResourceManager.GetString("manage_temp_permits" + "_" + ViewBag.lang)
+                    </a>
+                </li>
+            }
+
+            @if (ViewBag.WORKFLOW_ID_F == 9 || ViewBag.WORKFLOW_ID_F == 3 || ViewBag.DEVELOPER == true)
+            {
+                <li class="nav-item @if (ViewBag.ViolationPage == "Violations")
+            { <text>active border bg-primary rounded</text> } ">
+                    <a class="nav-link @if (ViewBag.ViolationPage == "Violations") { <text>text-white</text>}" href="@Url.Action("Violations", "Mypasses", null)">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        @Resources.Passes.ResourceManager.GetString("Violations" + "_" + ViewBag.lang)
+                    </a>
+                </li>
+            }
+
+            @if (ViewBag.RP == true || ViewBag.DEVELOPER == true || ViewBag.ADMIN == true)
+            {
+                <li class="nav-item @if (ViewBag.ReportPage == "Reports")
+            { <text>active border bg-primary rounded</text> } ">
+                    <a class="nav-link @if (ViewBag.ReportPage == "Reports") { <text>text-white</text>}" href="@Url.Action("ReportsPage", "Reportsmst", null)">
+                        <i class="fa fa-file-excel" aria-hidden="true"></i>
+                        @Resources.Common.ResourceManager.GetString("reports" + "_" + ViewBag.lang)
+                    </a>
+                </li>
+            }
+
+            @if ((ViewBag.WORKFLOW_ID_F == 3 && ViewBag.FORCE_TYPE_CODE == 2) || ViewBag.DEVELOPER == true)
+            {
+                <li class="nav-item @if (ViewBag.SearchPage == "SearchDelivered")
+            { <text>active border bg-primary rounded</text> } ">
+                    <a class="nav-link @if (ViewBag.SearchPage == "SearchDelivered") { <text>text-white</text>}" href="@Url.Action("DeliveredPermits", "Mypasses", null)">
+                        <i class="fa fa-search-dollar" aria-hidden="true"></i>
+                        @Resources.Passes.ResourceManager.GetString("delivered_permits" + "_" + ViewBag.lang)
+                    </a>
+                </li>
+            }
+
+            @if (ViewBag.WORKFLOW_ID_F == 3 || ViewBag.WORKFLOW_ID_F == 8 || ViewBag.WORKFLOW_ID_F == 4 || ViewBag.WORKFLOW_ID_F == 2 || ViewBag.WORKFLOW_ID_F == 11 || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+            {
+                <li class="nav-item @if (ViewBag.SearchPage == "Search")
+            { <text>active border bg-primary rounded</text> } ">
+                    <a class="nav-link @if (ViewBag.SearchPage == "Search") { <text>text-white</text>}" href="@Url.Action("NewSearch", "Mypasses", null)">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                        @Resources.Passes.ResourceManager.GetString("Search_pass" + "_" + ViewBag.lang)
+                    </a>
+                </li>
+            }
+
+            @if (ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+            {
+                <li class="nav-item @if (ViewBag.Dashboard == "Dashboard")
+            { <text>active border bg-primary rounded </text> } ">
+                    <a class="nav-link @if (ViewBag.Dashboard == "Dashboard") { <text>text-white</text>}" href="@Url.Action("Dashboard", "Mypasses" ,new { id = ViewBag.STATION_CODE_TYPE })">
+                        <i class="fa fa-chart-pie" aria-hidden="true"></i>
+                        @Resources.Passes.ResourceManager.GetString("dashboard" + "_" + ViewBag.lang)
+                    </a>
+                </li>
+            }
+
+            @if (ViewBag.STN == true || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+            {
+                <li class="nav-item @if (ViewBag.Settings == "Settings")
+            { <text>active border bg-primary rounded </text> } ">
+                    <a class="nav-link @if (ViewBag.Settings == "Settings") { <text>text-white</text>}" href="@Url.Action("Index", "Settings", null)">
+                        <i class="fa fa-cogs" aria-hidden="true"></i>
+                        @Resources.Common.ResourceManager.GetString("settings" + "_" + ViewBag.lang)
+                    </a>
+                </li>
+            }
+
+
+
+
+        </ul>
+        <ul class="nav navbar-nav @if(ViewBag.lang == "ar"){<text>mr-auto</text>} else {<text>ml-auto</text>}">
+            @if (ViewBag.WORKFLOW_ID_F == 3 && (ViewBag.STN != true && ViewBag.ADMIN != true && ViewBag.DEVELOPER != true))
+            {
+                <li class="nav-item  @if (ViewBag.Printer_Settings == "Printer_Settings")
+            { <text>active border bg-primary rounded</text> } ">
+                    <a class="nav-link @if (ViewBag.Printer_Settings == "Printer_Settings")
+                { <text>text-white</text>}" href="@Url.Action("PrinterSettings", "Home", null)">
+                        <i class="fa fa-video" aria-hidden="true"></i>
+                        @Resources.Settings.ResourceManager.GetString("printer_settings" + "_" + ViewBag.lang)
+                    </a>
+                </li>
+            }
+            <li class="nav-item  @if (ViewBag.UserManual == "UserManual") { <text>active border bg-primary rounded</text> } ">
+                <a class="nav-link @if (ViewBag.UserManual == "UserManual") { <text>text-white</text>}" href="@Url.Action("UserManual", "Home", null)">
+                    <i class="fa fa-video" aria-hidden="true"></i>
+                    @Resources.Common.ResourceManager.GetString("user_manual" + "_" + ViewBag.lang)
+                </a>
+            </li>
+            @*<li class="nav-item">
+                    <a class="nav-link" target="_blank" href="http://mamrafowebgov01/AppsFeedback?app-name=Hisn">
+                        <i class="fa fa-comment-alt" aria-hidden="true"></i>
+                        @Resources.Common.ResourceManager.GetString("feedback" + "_" + ViewBag.lang)
+                    </a>
+                </li>*@
+            <li class="nav-item">
+                <a href="@Language.GetUrl(Request.Url.AbsoluteUri)" class="nav-link">
+                    <i class="fa fa-language" aria-hidden="true"></i>
+                    @Language.GetResourceValue("Common", "invers_lang")
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+@{
+
+    var ANNOUNCEMENT = Task.Run(async () => await db.RA42_ANNOUNCEMENT_MST.Where(a => a.DLT_STS != true && a.END_DATE >= DateTime.Today).OrderByDescending(a => a.ANNOUNCE_CODE).ToListAsync()).Result;
+    if (ANNOUNCEMENT.Count > 0)
+    {
+    <nav dir="@if (ViewBag.lang == "ar")
+    {<text>rtl</text>}" class="navbar secound-navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm" style="margin-top: 105px; z-index:1 !important">
+
+        <div class="container-fluid" dir="@dir">
+            <div class="col-md-12 mb-2">
+                <div class="row">
+                    <div class="col-md-1 bg-danger text-center text-white p-1 @if (Language.GetCurrentLang() == "en")
+                    {<text>rounded-left</text> }
+                    else
+                    {<text>rounded-right</text>}"><i class="fa fa-bullhorn"></i> @Resources.Common.ResourceManager.GetString("Note" + "_" + ViewBag.lang)</div>
+                    <div class="col-md-11 alert-danger
+                     @if (Language.GetCurrentLang() == "en")
+                     {<text>rounded-right</text> }
+                     else
+                     {<text>rounded-left</text>} p-1">
+                        <div class="marquee col-md-12">
+                            @foreach (var item in ANNOUNCEMENT)
+                            {
+                                if (Language.GetCurrentLang() == "en")
+                                {
+                                    <span style="font-family: Arial !important;">
+                                        @item.ANNOUNCEMENT_E @if (item.URL != null)
+                                        {<a href="@item.URL" target="_blank" class="btn btn-primary text-white">@Resources.Settings.ResourceManager.GetString("url" + "_" + ViewBag.lang)</a>}
+                                    </span>
+
+                                }
+                                else
+                                {
+                                    <span>
+                                        @item.ANNOUNCEMENT_A @if (item.URL != null)
+                                        {<a href="@item.URL" target="_blank" class="btn btn-primary text-white">@Resources.Settings.ResourceManager.GetString("url" + "_" + ViewBag.lang)</a>}
+                                    </span>
+
+                                }
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    }
+
+    <style>
+        .body-content-section {
+            margin-top: 130px !important;
+        }
+
+        @if (Language.GetCurrentLang() == "en")
+            {
+                <text>
+                 @@keyframes marquee {
+            0% {
+            left: 100%;
+            }
+
+            100% {
+            left: -100%;
+            }
+        }
+        </text>
+            }
+            else
+            {
+                <text>
+                 @@keyframes marquee {
+            0% {
+            right: 50%;
+            }
+
+            100% {
+            right: -100%;
+            }
+        }
+        </text>
+            }
+    </style>
+}
+
+

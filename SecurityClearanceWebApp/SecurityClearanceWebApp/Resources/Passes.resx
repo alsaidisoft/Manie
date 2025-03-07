@@ -1,0 +1,2337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="access_type_autho_ar" xml:space="preserve">
+    <value>تصاريح التفويض الأمني</value>
+  </data>
+  <data name="access_type_autho_en" xml:space="preserve">
+    <value>Authoraization permits</value>
+  </data>
+  <data name="Actions_ar" xml:space="preserve">
+    <value>الإجراءات</value>
+  </data>
+  <data name="Actions_en" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Add_comment_ar" xml:space="preserve">
+    <value>أضف تعليق</value>
+  </data>
+  <data name="Add_comment_en" xml:space="preserve">
+    <value>Add comment</value>
+  </data>
+  <data name="Add_files_ar" xml:space="preserve">
+    <value>أضف وثائق</value>
+  </data>
+  <data name="Add_files_en" xml:space="preserve">
+    <value>Add ducuments</value>
+  </data>
+  <data name="Add_violation_ar" xml:space="preserve">
+    <value>أضف مخالفة</value>
+  </data>
+  <data name="Add_violation_en" xml:space="preserve">
+    <value>Add violation</value>
+  </data>
+  <data name="Add_zones_ar" xml:space="preserve">
+    <value>أضف مناطق وبوابات أمنية</value>
+  </data>
+  <data name="Add_zones_en" xml:space="preserve">
+    <value>Add gates and security zones</value>
+  </data>
+  <data name="All_ar" xml:space="preserve">
+    <value>الكل</value>
+  </data>
+  <data name="All_en" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Approve_ar" xml:space="preserve">
+    <value>مؤكد</value>
+  </data>
+  <data name="Approve_en" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="Area_confirm_delete_ar" xml:space="preserve">
+    <value>هل تريد حذف المنطقة حقا؟</value>
+  </data>
+  <data name="Area_confirm_delete_en" xml:space="preserve">
+    <value>Are you sure you want delete area?</value>
+  </data>
+  <data name="Authopasses_ar" xml:space="preserve">
+    <value>التصاريح الجديدة للمفوض الأمني</value>
+  </data>
+  <data name="Authopasses_en" xml:space="preserve">
+    <value>New Permits</value>
+  </data>
+  <data name="Autho_type_ar" xml:space="preserve">
+    <value>نوع التفويض</value>
+  </data>
+  <data name="Autho_type_en" xml:space="preserve">
+    <value>Autho type</value>
+  </data>
+  <data name="Barcode_ar" xml:space="preserve">
+    <value>الباركود</value>
+  </data>
+  <data name="Barcode_en" xml:space="preserve">
+    <value>Barcode</value>
+  </data>
+  <data name="Duration_ar" xml:space="preserve">
+    <value>مدة التصريح</value>
+  </data>
+  <data name="Duration_en" xml:space="preserve">
+    <value>Duration of permit </value>
+  </data>
+  <data name="Choosecreatetype_ar" xml:space="preserve">
+    <value>إنشاء تصريح خاص </value>
+  </data>
+  <data name="Choosecreatetype_en" xml:space="preserve">
+    <value>Create private permit</value>
+  </data>
+  <data name="Choose_car_again_ar" xml:space="preserve">
+    <value>اختر مركبة مرة أخرى</value>
+  </data>
+  <data name="Choose_car_again_en" xml:space="preserve">
+    <value>Choose car again</value>
+  </data>
+  <data name="Choose_subarea_again_ar" xml:space="preserve">
+    <value>اختر المنطقة الفرعية مرة أخرى</value>
+  </data>
+  <data name="Choose_subarea_again_en" xml:space="preserve">
+    <value>Choose sub area zone again</value>
+  </data>
+  <data name="Civil_number_ar" xml:space="preserve">
+    <value>الرقم المدني</value>
+  </data>
+  <data name="Civil_number_en" xml:space="preserve">
+    <value>Civil number</value>
+  </data>
+  <data name="Comments_ar" xml:space="preserve">
+    <value>التعليقات</value>
+  </data>
+  <data name="Comments_en" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="SecurityPass_ar" xml:space="preserve">
+    <value>التصريح الشخصي</value>
+  </data>
+  <data name="SecurityPass_en" xml:space="preserve">
+    <value>Security Permit </value>
+  </data>
+  <data name="CRD_BY_ar" xml:space="preserve">
+    <value>المنشئ</value>
+  </data>
+  <data name="CRD_BY_en" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="Crd_comment_date_ar" xml:space="preserve">
+    <value>تاريخ الإنشاء</value>
+  </data>
+  <data name="Crd_comment_date_en" xml:space="preserve">
+    <value>Created date</value>
+  </data>
+  <data name="CRD_DT_ar" xml:space="preserve">
+    <value>تاريخ الإنشاء</value>
+  </data>
+  <data name="CRD_DT_en" xml:space="preserve">
+    <value>Created date</value>
+  </data>
+  <data name="Create_ar" xml:space="preserve">
+    <value>إنشاء</value>
+  </data>
+  <data name="Create_en" xml:space="preserve">
+    <value>Create </value>
+  </data>
+  <data name="Create_Family_ar" xml:space="preserve">
+    <value>إنشاء تصريح مركبة خاص بعائلتي</value>
+  </data>
+  <data name="Create_Family_en" xml:space="preserve">
+    <value>Create vechile permit for my family</value>
+  </data>
+  <data name="Documents_ar" xml:space="preserve">
+    <value>الوثائق</value>
+  </data>
+  <data name="Documents_en" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="Error_delete_area_ar" xml:space="preserve">
+    <value>حدث خطأ أثناء حذف المنطقة !</value>
+  </data>
+  <data name="Error_delete_area_en" xml:space="preserve">
+    <value>Error occured while deleting area!</value>
+  </data>
+  <data name="Error_delete_file_ar" xml:space="preserve">
+    <value>حدثت مشكلة اثناء حذف الملف !</value>
+  </data>
+  <data name="Error_delete_file_en" xml:space="preserve">
+    <value>Error occured while deleting file !</value>
+  </data>
+  <data name="Error_delete_violation_ar" xml:space="preserve">
+    <value>حدث خطأ أثناء حذف المخالفة</value>
+  </data>
+  <data name="Error_delete_violation_en" xml:space="preserve">
+    <value>Error while deleting violation</value>
+  </data>
+  <data name="Falied_pass_ar" xml:space="preserve">
+    <value>صلاحية التصريح</value>
+  </data>
+  <data name="Falied_pass_en" xml:space="preserve">
+    <value>Permit Status</value>
+  </data>
+  <data name="File_confirm_delete_ar" xml:space="preserve">
+    <value>هل تريد حذف الملف حقا؟</value>
+  </data>
+  <data name="File_confirm_delete_en" xml:space="preserve">
+    <value>Are you sure you want delete this file?</value>
+  </data>
+  <data name="Gender_ar" xml:space="preserve">
+    <value>الجنس</value>
+  </data>
+  <data name="Gender_en" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="Gsm_ar" xml:space="preserve">
+    <value>رقم الهاتف النقال</value>
+  </data>
+  <data name="Gsm_en" xml:space="preserve">
+    <value>Gsm</value>
+  </data>
+  <data name="Identity_ar" xml:space="preserve">
+    <value>الهوية</value>
+  </data>
+  <data name="Identity_en" xml:space="preserve">
+    <value>Identity</value>
+  </data>
+  <data name="Mypasses_ar" xml:space="preserve">
+    <value>تصاريحي</value>
+  </data>
+  <data name="Mypasses_en" xml:space="preserve">
+    <value>My permits </value>
+  </data>
+  <data name="Name_a_ar" xml:space="preserve">
+    <value>الاسم باللغة العربية</value>
+  </data>
+  <data name="Name_a_en" xml:space="preserve">
+    <value>Name in arabic</value>
+  </data>
+  <data name="Name_e_ar" xml:space="preserve">
+    <value>الاسم باللغة الإنجليزية</value>
+  </data>
+  <data name="Name_e_en" xml:space="preserve">
+    <value>Name in english</value>
+  </data>
+  <data name="Newpasses_ar" xml:space="preserve">
+    <value>التصاريح الجديدة</value>
+  </data>
+  <data name="Newpasses_en" xml:space="preserve">
+    <value>New permits </value>
+  </data>
+  <data name="Not_allowed_morearea_ar" xml:space="preserve">
+    <value>لا يسمح بأكثر من 50 منطقة</value>
+  </data>
+  <data name="Not_allowed_morearea_en" xml:space="preserve">
+    <value>Not allowed more than 50 area</value>
+  </data>
+  <data name="Not_allowed_morefiles_ar" xml:space="preserve">
+    <value>لا يسمح برفع أكثر من 10 ملفات</value>
+  </data>
+  <data name="Not_allowed_morefiles_en" xml:space="preserve">
+    <value>Not allowed to upload more than 10 files</value>
+  </data>
+  <data name="Pass_owner_ar" xml:space="preserve">
+    <value>صاحب التصريح</value>
+  </data>
+  <data name="Pass_owner_en" xml:space="preserve">
+    <value>Permit owner</value>
+  </data>
+  <data name="Pass_responsible_ar" xml:space="preserve">
+    <value>صورة صاحب المعاملة</value>
+  </data>
+  <data name="Pass_responsible_en" xml:space="preserve">
+    <value>Responsible</value>
+  </data>
+  <data name="Pass_type_ar" xml:space="preserve">
+    <value>نوع التصريح</value>
+  </data>
+  <data name="Pass_type_en" xml:space="preserve">
+    <value>Permit type</value>
+  </data>
+  <data name="Personal_image_ar" xml:space="preserve">
+    <value>صورة شخصية</value>
+  </data>
+  <data name="Personal_image_en" xml:space="preserve">
+    <value>Personal image</value>
+  </data>
+  <data name="Phone_number_ar" xml:space="preserve">
+    <value>رقم هاتف المكتب</value>
+  </data>
+  <data name="Phone_number_en" xml:space="preserve">
+    <value>Office phone number</value>
+  </data>
+  <data name="Plate_char_ar" xml:space="preserve">
+    <value>رمز اللوحة</value>
+  </data>
+  <data name="Plate_char_en" xml:space="preserve">
+    <value>Plate char</value>
+  </data>
+  <data name="Plate_number_ar" xml:space="preserve">
+    <value>رقم اللوحة</value>
+  </data>
+  <data name="Plate_number_en" xml:space="preserve">
+    <value>Plate number</value>
+  </data>
+  <data name="Plate_type_ar" xml:space="preserve">
+    <value>نوع اللوحة</value>
+  </data>
+  <data name="Plate_type_en" xml:space="preserve">
+    <value>Plate type</value>
+  </data>
+  <data name="Print_ar" xml:space="preserve">
+    <value>طباعة</value>
+  </data>
+  <data name="Print_en" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="Proffision_a_ar" xml:space="preserve">
+    <value>المهنة باللغة العربية</value>
+  </data>
+  <data name="Proffision_a_en" xml:space="preserve">
+    <value>Profession in arabic</value>
+  </data>
+  <data name="Proffision_e_ar" xml:space="preserve">
+    <value>المهنة باللغة الإنجليزية</value>
+  </data>
+  <data name="Proffision_e_en" xml:space="preserve">
+    <value>Profession in english</value>
+  </data>
+  <data name="Progress_ar" xml:space="preserve">
+    <value>قيد المتابعة</value>
+  </data>
+  <data name="Progress_en" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="Property_expired_ar" xml:space="preserve">
+    <value>إلى</value>
+  </data>
+  <data name="Property_expired_en" xml:space="preserve">
+    <value>expired</value>
+  </data>
+  <data name="Property_issued_ar" xml:space="preserve">
+    <value>من</value>
+  </data>
+  <data name="Property_issued_en" xml:space="preserve">
+    <value> issued</value>
+  </data>
+  <data name="Rank_a_ar" xml:space="preserve">
+    <value>الرتبة باللغة العربية</value>
+  </data>
+  <data name="Rank_a_en" xml:space="preserve">
+    <value>Rank in arabic</value>
+  </data>
+  <data name="Rank_e_ar" xml:space="preserve">
+    <value>الرتبة باللغة الإنجليزية</value>
+  </data>
+  <data name="Rank_e_en" xml:space="preserve">
+    <value>Rank in english</value>
+  </data>
+  <data name="Rejected_ar" xml:space="preserve">
+    <value>رفض</value>
+  </data>
+  <data name="Rejected_en" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="Reject_ar" xml:space="preserve">
+    <value>مرفوض</value>
+  </data>
+  <data name="Reject_en" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="Remarks_ar" xml:space="preserve">
+    <value>ملاحظات</value>
+  </data>
+  <data name="Remarks_en" xml:space="preserve">
+    <value>Remarks</value>
+  </data>
+  <data name="Remove_ar" xml:space="preserve">
+    <value>إزالة</value>
+  </data>
+  <data name="Remove_en" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Responsible_ar" xml:space="preserve">
+    <value>رقم عسكري الكفيل</value>
+  </data>
+  <data name="Responsible_en" xml:space="preserve">
+    <value>Responsible service number</value>
+  </data>
+  <data name="Search_ar" xml:space="preserve">
+    <value>إنشاء تفويض لمنتسب</value>
+  </data>
+  <data name="Search_en" xml:space="preserve">
+    <value>Pass for employee</value>
+  </data>
+  <data name="Service_number_ar" xml:space="preserve">
+    <value>الرقم العسكري</value>
+  </data>
+  <data name="Service_number_en" xml:space="preserve">
+    <value>Service number</value>
+  </data>
+  <data name="Status_ar" xml:space="preserve">
+    <value>حالة المعاملة</value>
+  </data>
+  <data name="Status_en" xml:space="preserve">
+    <value>Transaction status</value>
+  </data>
+  <data name="Supercreate_ar" xml:space="preserve">
+    <value>إنشاء تفويض لشخص آخر</value>
+  </data>
+  <data name="Supercreate_en" xml:space="preserve">
+    <value>Create private permit for other</value>
+  </data>
+  <data name="Unit_a_ar" xml:space="preserve">
+    <value>القسم باللغة العربية</value>
+  </data>
+  <data name="Unit_a_en" xml:space="preserve">
+    <value>Section in arabic</value>
+  </data>
+  <data name="Unit_e_ar" xml:space="preserve">
+    <value>القسم باللغة الإنجليزية</value>
+  </data>
+  <data name="Unit_e_en" xml:space="preserve">
+    <value>Section in english</value>
+  </data>
+  <data name="UPD_BY_ar" xml:space="preserve">
+    <value>محدث البيانات</value>
+  </data>
+  <data name="UPD_BY_en" xml:space="preserve">
+    <value>Updated by</value>
+  </data>
+  <data name="UPD_DT_ar" xml:space="preserve">
+    <value>تاريخ التحديث</value>
+  </data>
+  <data name="UPD_DT_en" xml:space="preserve">
+    <value>Updated date</value>
+  </data>
+  <data name="Vechile_cat_ar" xml:space="preserve">
+    <value>نوع الوكالة</value>
+  </data>
+  <data name="Vechile_cat_en" xml:space="preserve">
+    <value>Vechile agency</value>
+  </data>
+  <data name="Vechile_color_ar" xml:space="preserve">
+    <value>لون المركبة</value>
+  </data>
+  <data name="Vechile_color_en" xml:space="preserve">
+    <value>Vehicle color</value>
+  </data>
+  <data name="Vechile_name_ar" xml:space="preserve">
+    <value>نوع المركبة</value>
+  </data>
+  <data name="Vechile_name_en" xml:space="preserve">
+    <value>Vehicle type</value>
+  </data>
+  <data name="Violations_ar" xml:space="preserve">
+    <value>المخالفات</value>
+  </data>
+  <data name="Violations_en" xml:space="preserve">
+    <value>Violations</value>
+  </data>
+  <data name="Violation_confirm_delete_ar" xml:space="preserve">
+    <value>هل تريد حذف المخالفة حقا؟</value>
+  </data>
+  <data name="Violation_confirm_delete_en" xml:space="preserve">
+    <value>Are you sure you want delete this violation?</value>
+  </data>
+  <data name="Violation_date_ar" xml:space="preserve">
+    <value>تاريخ المخالفة</value>
+  </data>
+  <data name="Violation_date_en" xml:space="preserve">
+    <value>Violation date</value>
+  </data>
+  <data name="Workflow_respo_ar" xml:space="preserve">
+    <value>المنسق الأمني</value>
+  </data>
+  <data name="Workflow_respo_en" xml:space="preserve">
+    <value>Wing Commander / Squadron or whoever acts on his behalf</value>
+  </data>
+  <data name="Zones_ar" xml:space="preserve">
+    <value>المناطق الأمنية</value>
+  </data>
+  <data name="Zones_en" xml:space="preserve">
+    <value>Zones</value>
+  </data>
+  <data name="Phone_Numbers_ar" xml:space="preserve">
+    <value>أرقام الهواتف</value>
+  </data>
+  <data name="Phone_Numbers_en" xml:space="preserve">
+    <value>Phone numbers</value>
+  </data>
+  <data name="Security_pass_Search_ar" xml:space="preserve">
+    <value>إنشاء تصريح شخصي لمنتسب</value>
+  </data>
+  <data name="Security_pass_Search_en" xml:space="preserve">
+    <value>Create security permit for employee</value>
+  </data>
+  <data name="Security_pass_Supercreate_ar" xml:space="preserve">
+    <value>إنشاء تصريح شخصي لشخص آخر</value>
+  </data>
+  <data name="Security_pass_Supercreate_en" xml:space="preserve">
+    <value>Create security permit for another</value>
+  </data>
+  <data name="access_type_security_ar" xml:space="preserve">
+    <value>التصاريح الشخصية والأمنية</value>
+  </data>
+  <data name="access_type_security_en" xml:space="preserve">
+    <value>Private  and security permits</value>
+  </data>
+  <data name="access_type_vechile_ar" xml:space="preserve">
+    <value>تصاريح المنتسبين والأجهزة الأخرى</value>
+  </data>
+  <data name="access_type_vechile_en" xml:space="preserve">
+    <value>Employee and others permit</value>
+  </data>
+  <data name="Autho_pass_create_ar" xml:space="preserve">
+    <value>إنشاء تفويض أمني خاص بي</value>
+  </data>
+  <data name="Autho_pass_create_en" xml:space="preserve">
+    <value>Create authoraization permit for myself</value>
+  </data>
+  <data name="Autho_pass_Search_ar" xml:space="preserve">
+    <value>إنشاء تفويض أمني لمنتسب</value>
+  </data>
+  <data name="Autho_pass_Search_en" xml:space="preserve">
+    <value>Create authoraization permit for employee</value>
+  </data>
+  <data name="Autho_pass_Supercreate_ar" xml:space="preserve">
+    <value>إنشاء تفويض أمني لشخص آخر</value>
+  </data>
+  <data name="Autho_pass_Supercreate_en" xml:space="preserve">
+    <value>Create authoraization permit for another</value>
+  </data>
+  <data name="Car_property_ar" xml:space="preserve">
+    <value>مدة التصريح</value>
+  </data>
+  <data name="Car_property_en" xml:space="preserve">
+    <value>Duration of permit</value>
+  </data>
+  <data name="Security_pass_create_ar" xml:space="preserve">
+    <value>إنشاء تصريح شخصي خاص بي</value>
+  </data>
+  <data name="Security_pass_create_en" xml:space="preserve">
+    <value>Create security permit for myself</value>
+  </data>
+  <data name="vechile_pass_create_ar" xml:space="preserve">
+    <value>إنشاء تصريح مركبة خاص بي</value>
+  </data>
+  <data name="vechile_pass_create_en" xml:space="preserve">
+    <value>Create vehicle permit for myself</value>
+  </data>
+  <data name="Vechile_pass_Search_ar" xml:space="preserve">
+    <value>إنشاء تصريح مركبة لمنتسب</value>
+  </data>
+  <data name="Vechile_pass_Search_en" xml:space="preserve">
+    <value>Create vehicle permit for employee</value>
+  </data>
+  <data name="Vechile_pass_Supercreate_ar" xml:space="preserve">
+    <value>إنشاء تصريح مركبة لعائلة شخص منتسب</value>
+  </data>
+  <data name="Vechile_pass_Supercreate_en" xml:space="preserve">
+    <value>Create vehicle permit for family for MOD employee</value>
+  </data>
+  <data name="Building_num_ar" xml:space="preserve">
+    <value>رقم المنزل أو الشقة</value>
+  </data>
+  <data name="Building_num_en" xml:space="preserve">
+    <value>Building number </value>
+  </data>
+  <data name="Create_family_pass_ar" xml:space="preserve">
+    <value>إنشاء تصريح عائلة بدون مركبة خاص بي</value>
+  </data>
+  <data name="Create_family_pass_en" xml:space="preserve">
+    <value>Create family permit for myself</value>
+  </data>
+  <data name="Family_pass_ar" xml:space="preserve">
+    <value>تصاريح العوائل والأبناء</value>
+  </data>
+  <data name="Family_pass_en" xml:space="preserve">
+    <value>Family and children permits</value>
+  </data>
+  <data name="Guest_details_ar" xml:space="preserve">
+    <value>بيانات الضيف</value>
+  </data>
+  <data name="Guest_details_en" xml:space="preserve">
+    <value>Guest details</value>
+  </data>
+  <data name="Guest_name_inar_ar" xml:space="preserve">
+    <value>اسم الضيف باللغة العربية</value>
+  </data>
+  <data name="Guest_name_inar_en" xml:space="preserve">
+    <value>Guest name in arabic</value>
+  </data>
+  <data name="Guest_name_inen_ar" xml:space="preserve">
+    <value>اسم الضيف باللغة الانجليزية</value>
+  </data>
+  <data name="Guest_name_inen_en" xml:space="preserve">
+    <value>Guest name in english</value>
+  </data>
+  <data name="Host_details_ar" xml:space="preserve">
+    <value>بيانات المضيف</value>
+  </data>
+  <data name="Host_details_en" xml:space="preserve">
+    <value>Host details</value>
+  </data>
+  <data name="Relative_type_ar" xml:space="preserve">
+    <value>صلة القرابة</value>
+  </data>
+  <data name="Relative_type_en" xml:space="preserve">
+    <value>Relative type</value>
+  </data>
+  <data name="Add_family_members_ar" xml:space="preserve">
+    <value>أضف فرد عائلة</value>
+  </data>
+  <data name="Add_family_members_en" xml:space="preserve">
+    <value>Add family member</value>
+  </data>
+  <data name="Barcod_ar" xml:space="preserve">
+    <value>الباركود</value>
+  </data>
+  <data name="Barcod_en" xml:space="preserve">
+    <value>Barcod</value>
+  </data>
+  <data name="Create_Special_Family_pass_ar" xml:space="preserve">
+    <value>إنشاء تصريح عائلة بدون مركبة لشخص منتسب</value>
+  </data>
+  <data name="Create_Special_Family_pass_en" xml:space="preserve">
+    <value>Create family permit for employee</value>
+  </data>
+  <data name="Error_delete_relative_ar" xml:space="preserve">
+    <value>حدث خطأ أثناء حذف فرد العائلة</value>
+  </data>
+  <data name="Error_delete_relative_en" xml:space="preserve">
+    <value>error occuring during deleting family member</value>
+  </data>
+  <data name="Family_member_ar" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="Family_member_en" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Relative_confirm_delete_ar" xml:space="preserve">
+    <value>هل تريد بالفعل حذف فرد العائلة؟</value>
+  </data>
+  <data name="Relative_confirm_delete_en" xml:space="preserve">
+    <value>Are you sure you want delete this family member?</value>
+  </data>
+  <data name="Not_set_respond_ar" xml:space="preserve">
+    <value>لم يقم مشرف النظام بوضع صلاحيات المشرفين لاستقبال الطلبات</value>
+  </data>
+  <data name="Not_set_respond_en" xml:space="preserve">
+    <value>Permissions not set to accept requests</value>
+  </data>
+  <data name="Relativs_ar" xml:space="preserve">
+    <value>العمال - الأقارب </value>
+  </data>
+  <data name="Relativs_en" xml:space="preserve">
+    <value>Others</value>
+  </data>
+  <data name="TemproryCompanyPass_ar" xml:space="preserve">
+    <value>تصاريح عمال الشركات</value>
+  </data>
+  <data name="TemproryCompanyPass_en" xml:space="preserve">
+    <value>Companies employees permits</value>
+  </data>
+  <data name="address_ar" xml:space="preserve">
+    <value>عنوان السكن</value>
+  </data>
+  <data name="address_en" xml:space="preserve">
+    <value>Living address</value>
+  </data>
+  <data name="add_employee_ar" xml:space="preserve">
+    <value>أضف عامل</value>
+  </data>
+  <data name="add_employee_en" xml:space="preserve">
+    <value>Add employee</value>
+  </data>
+  <data name="company_name_ar" xml:space="preserve">
+    <value>اسم الشركة</value>
+  </data>
+  <data name="company_name_en" xml:space="preserve">
+    <value>Company name</value>
+  </data>
+  <data name="company_temprory_pass_create_ar" xml:space="preserve">
+    <value>إنشاء تصريح شركة </value>
+  </data>
+  <data name="company_temprory_pass_create_en" xml:space="preserve">
+    <value>Create company permit</value>
+  </data>
+  <data name="Create_Special_Company_pass_ar" xml:space="preserve">
+    <value>إنشاء تصريح شركة مؤقتة خاص</value>
+  </data>
+  <data name="Create_Special_Company_pass_en" xml:space="preserve">
+    <value>Create special company permit </value>
+  </data>
+  <data name="PURPOSE_OF_PASS_ar" xml:space="preserve">
+    <value>الغرض من التصريح</value>
+  </data>
+  <data name="PURPOSE_OF_PASS_en" xml:space="preserve">
+    <value>Purpose of permit </value>
+  </data>
+  <data name="respo_unit_ar" xml:space="preserve">
+    <value>الجهة المسؤولة</value>
+  </data>
+  <data name="respo_unit_en" xml:space="preserve">
+    <value>Responsible unit</value>
+  </data>
+  <data name="worker_identity_card_ar" xml:space="preserve">
+    <value>رقم البطاقة الشخصية</value>
+  </data>
+  <data name="worker_identity_card_en" xml:space="preserve">
+    <value>Identity card number</value>
+  </data>
+  <data name="worker_id_card_ar" xml:space="preserve">
+    <value>رقم بطاقة العمل</value>
+  </data>
+  <data name="worker_id_card_en" xml:space="preserve">
+    <value>Work id number</value>
+  </data>
+  <data name="worker_id_card_expaired_ar" xml:space="preserve">
+    <value>تاريخ انتهاء البطاقة</value>
+  </data>
+  <data name="worker_id_card_expaired_en" xml:space="preserve">
+    <value>Crd expaired date </value>
+  </data>
+  <data name="worker_namea_ar" xml:space="preserve">
+    <value>اسم العامل باللغة العربية</value>
+  </data>
+  <data name="worker_namea_en" xml:space="preserve">
+    <value>Worker name in arabic</value>
+  </data>
+  <data name="worker_namee_ar" xml:space="preserve">
+    <value> اسم العامل باللغة الإنجليزية</value>
+  </data>
+  <data name="worker_namee_en" xml:space="preserve">
+    <value>Worker name in english</value>
+  </data>
+  <data name="work_place_ar" xml:space="preserve">
+    <value>مقر العمل</value>
+  </data>
+  <data name="work_place_en" xml:space="preserve">
+    <value>Work place</value>
+  </data>
+  <data name="Add_employee_note_ar" xml:space="preserve">
+    <value>ملاحظة: بإمكانك إضافة أكثر من عامل في حالة تشابه المناطق الأمنية التي سيعمل بها العمال وكذلك الملفات المرفقة كرسالة طلب الشركة، أما في حالة عدم تشابه المناطق الأمنية وملفات العقود الأخرى فيرجى إضافة تصريح منفصل لكل عامل</value>
+  </data>
+  <data name="Add_employee_note_en" xml:space="preserve">
+    <value>Note: You can add more than one employee in case if they are work in same zones and have same files</value>
+  </data>
+  <data name="back_ar" xml:space="preserve">
+    <value>رجوع </value>
+  </data>
+  <data name="back_en" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="employees_ar" xml:space="preserve">
+    <value>العمال</value>
+  </data>
+  <data name="employees_en" xml:space="preserve">
+    <value>Employees</value>
+  </data>
+  <data name="employee_confirm_delete_ar" xml:space="preserve">
+    <value>هل تريد بالفعل حذف العامل؟</value>
+  </data>
+  <data name="employee_confirm_delete_en" xml:space="preserve">
+    <value>Are you sure you want to delete employee?</value>
+  </data>
+  <data name="Employee_Num_ar" xml:space="preserve">
+    <value>عامل رقم: </value>
+  </data>
+  <data name="Employee_Num_en" xml:space="preserve">
+    <value>Employee No: </value>
+  </data>
+  <data name="employee_total_ar" xml:space="preserve">
+    <value>مجموع العمال</value>
+  </data>
+  <data name="employee_total_en" xml:space="preserve">
+    <value>Total employee</value>
+  </data>
+  <data name="Error_delete_employee_ar" xml:space="preserve">
+    <value>حدث خطأ أثناء حذف العامل</value>
+  </data>
+  <data name="Error_delete_employee_en" xml:space="preserve">
+    <value>Error occured during deleting employee</value>
+  </data>
+  <data name="requested_by_ar" xml:space="preserve">
+    <value>مقدم الطلب</value>
+  </data>
+  <data name="requested_by_en" xml:space="preserve">
+    <value>Requested by</value>
+  </data>
+  <data name="ContractedCompanyPass_ar" xml:space="preserve">
+    <value>تصاريح الشركات المتعاقدة</value>
+  </data>
+  <data name="ContractedCompanyPass_en" xml:space="preserve">
+    <value>Contracting companies permits</value>
+  </data>
+  <data name="company_type_ar" xml:space="preserve">
+    <value>نوع الشركة</value>
+  </data>
+  <data name="company_type_en" xml:space="preserve">
+    <value>Company type</value>
+  </data>
+  <data name="company_contracted_pass_create_ar" xml:space="preserve">
+    <value>إنشاء تصريح شركة متعاقدة</value>
+  </data>
+  <data name="company_contracted_pass_create_en" xml:space="preserve">
+    <value>Create contracted company permit</value>
+  </data>
+  <data name="Create_special_contracted_companies_pass_ar" xml:space="preserve">
+    <value>إنشاء تصريح شركات متعاقدة خاص</value>
+  </data>
+  <data name="Create_special_contracted_companies_pass_en" xml:space="preserve">
+    <value>Create special contracting companies private permit </value>
+  </data>
+  <data name="Events_Excersice_ar" xml:space="preserve">
+    <value>تصريح التمارين والمناسبات</value>
+  </data>
+  <data name="Events_Excersice_en" xml:space="preserve">
+    <value>Evenets Excersice permit </value>
+  </data>
+  <data name="Event_Exercise_Create_ar" xml:space="preserve">
+    <value>إنشاء تصريح مناسبات وتمارين خاص بي</value>
+  </data>
+  <data name="Event_Exercise_Create_en" xml:space="preserve">
+    <value>Create events and exercise permit </value>
+  </data>
+  <data name="Event_Exercise_pass_ar" xml:space="preserve">
+    <value>تصاريح التمارين والمناسبات</value>
+  </data>
+  <data name="Event_Exercise_pass_en" xml:space="preserve">
+    <value>Events and Exercise permits</value>
+  </data>
+  <data name="ev_or_ex_ar" xml:space="preserve">
+    <value>التمرين أو المناسبة</value>
+  </data>
+  <data name="ev_or_ex_en" xml:space="preserve">
+    <value>Event or Exercise</value>
+  </data>
+  <data name="Create_special_event_exercise_pass_ar" xml:space="preserve">
+    <value>إنشاء تصريح  تمرين أو مناسبة لشخص آخر</value>
+  </data>
+  <data name="Create_special_event_exercise_pass_en" xml:space="preserve">
+    <value>Create special event or exercise permit </value>
+  </data>
+  <data name="Ansab_note_ar" xml:space="preserve">
+    <value>ملاحظة: تصاريح الأنصب مخصصة فقط لمنتسبي القواعد الأخرى من غير القيادة للتقدم بطلب نوع معين من التصاريح لمعسكر الأنصب.</value>
+  </data>
+  <data name="Ansab_note_en" xml:space="preserve">
+    <value>Note: Ansab passes is customized for employees who are working in other stations not in HQ to get specific pass type.</value>
+  </data>
+  <data name="Ansab_passes_ar" xml:space="preserve">
+    <value>التصاريح الخاصة بمعسكر الأنصب</value>
+  </data>
+  <data name="Ansab_passes_en" xml:space="preserve">
+    <value>Ansab permits</value>
+  </data>
+  <data name="Browse_passes_ar" xml:space="preserve">
+    <value>تصفح التصاريح</value>
+  </data>
+  <data name="Browse_passes_en" xml:space="preserve">
+    <value>Browse permits</value>
+  </data>
+  <data name="EventExercise_pass_Search_ar" xml:space="preserve">
+    <value> إنشاء تصريح تمرين أو مناسبة لشخص منتسب</value>
+  </data>
+  <data name="EventExercise_pass_Search_en" xml:space="preserve">
+    <value>Create Event or Exercise permit for employee</value>
+  </data>
+  <data name="Visitor_name_ar" xml:space="preserve">
+    <value>اسم الزائر</value>
+  </data>
+  <data name="Visitor_name_en" xml:space="preserve">
+    <value>Visitor name</value>
+  </data>
+  <data name="Visitor_pass_ar" xml:space="preserve">
+    <value>تصاريح الزوار والعضويات الشرفية</value>
+  </data>
+  <data name="Visitor_pass_create_ar" xml:space="preserve">
+    <value>إنشاء تصريح زائر</value>
+  </data>
+  <data name="Visitor_pass_create_en" xml:space="preserve">
+    <value>Create visitor permit </value>
+  </data>
+  <data name="Visitor_pass_en" xml:space="preserve">
+    <value>Visitors and  honorary memberships permits</value>
+  </data>
+  <data name="pass_validaty_ar" xml:space="preserve">
+    <value>صلاحية التصريح</value>
+  </data>
+  <data name="pass_validaty_en" xml:space="preserve">
+    <value>Permit validation</value>
+  </data>
+  <data name="Browse_all_autho_passes_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح التفويض الأمني</value>
+  </data>
+  <data name="Browse_all_autho_passes_en" xml:space="preserve">
+    <value>Browse all authoraization permits</value>
+  </data>
+  <data name="Browse_all_contcompany_passes_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح الشركات المتعاقدة</value>
+  </data>
+  <data name="Browse_all_contcompany_passes_en" xml:space="preserve">
+    <value>Brows all contracting companies permits</value>
+  </data>
+  <data name="Browse_all_evex_passes_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح التمارين والمناسبات</value>
+  </data>
+  <data name="Browse_all_evex_passes_en" xml:space="preserve">
+    <value>Browse all excercise and event permits</value>
+  </data>
+  <data name="Browse_all_family_passes_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح العوائل</value>
+  </data>
+  <data name="Browse_all_family_passes_en" xml:space="preserve">
+    <value>Browse all family permits</value>
+  </data>
+  <data name="Browse_all_security_passes_ar" xml:space="preserve">
+    <value>تصفح جميع التصاريح الأمنية الشخصية</value>
+  </data>
+  <data name="Browse_all_security_passes_en" xml:space="preserve">
+    <value>Browse all personal security permits</value>
+  </data>
+  <data name="Browse_all_tempcompany_passes_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح الشركات </value>
+  </data>
+  <data name="Browse_all_tempcompany_passes_en" xml:space="preserve">
+    <value>Brows all companies permits</value>
+  </data>
+  <data name="Browse_all_vechile_passes_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح المركبات</value>
+  </data>
+  <data name="Browse_all_vechile_passes_en" xml:space="preserve">
+    <value>Browse all vechile permits</value>
+  </data>
+  <data name="Browse_all_visitor_passes_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح الزوار</value>
+  </data>
+  <data name="Browse_all_visitor_passes_en" xml:space="preserve">
+    <value>Browse all visitor permits</value>
+  </data>
+  <data name="all_passes_browse_ar" xml:space="preserve">
+    <value>جميع التصاريح</value>
+  </data>
+  <data name="all_passes_browse_en" xml:space="preserve">
+    <value>All permits</value>
+  </data>
+  <data name="Security_caves_ar" xml:space="preserve">
+    <value>المحاذير الأمنية</value>
+  </data>
+  <data name="Security_caves_en" xml:space="preserve">
+    <value>Security caveates</value>
+  </data>
+  <data name="Security_caves__arabic_ar" xml:space="preserve">
+    <value>المحاذير باللغة العربية</value>
+  </data>
+  <data name="Security_caves__arabic_en" xml:space="preserve">
+    <value>Caveates in arabic</value>
+  </data>
+  <data name="Security_caves__english_ar" xml:space="preserve">
+    <value>المحاذير باللغة الإنجليزية</value>
+  </data>
+  <data name="Security_caves__english_en" xml:space="preserve">
+    <value>Caveates in english</value>
+  </data>
+  <data name="autho_apss_all_browse_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح التفويض الأمني</value>
+  </data>
+  <data name="autho_apss_all_browse_en" xml:space="preserve">
+    <value>Browse all autho permits</value>
+  </data>
+  <data name="deleted_ar" xml:space="preserve">
+    <value>محذوف</value>
+  </data>
+  <data name="deleted_en" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="deleted_or_not_ar" xml:space="preserve">
+    <value>حالة الحذف</value>
+  </data>
+  <data name="deleted_or_not_en" xml:space="preserve">
+    <value>Deleted status</value>
+  </data>
+  <data name="notdeleted_ar" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="notdeleted_en" xml:space="preserve">
+    <value>Not deleted</value>
+  </data>
+  <data name="crad_print_ar" xml:space="preserve">
+    <value>طباعة البطاقة</value>
+  </data>
+  <data name="crad_print_en" xml:space="preserve">
+    <value>Print card</value>
+  </data>
+  <data name="UNIT_CODE_ar" xml:space="preserve">
+    <value>المعسكر - القاعدة</value>
+  </data>
+  <data name="UNIT_CODE_en" xml:space="preserve">
+    <value>Camp-Station</value>
+  </data>
+  <data name="plans_political_ar" xml:space="preserve">
+    <value>ركن 1/ سياسة وخطط</value>
+  </data>
+  <data name="plans_political_en" xml:space="preserve">
+    <value>Authorization</value>
+  </data>
+  <data name="your_request_now_ar" xml:space="preserve">
+    <value>الطلب الآن مع: </value>
+  </data>
+  <data name="your_request_now_en" xml:space="preserve">
+    <value>Your request is now with: </value>
+  </data>
+  <data name="access_type_ar" xml:space="preserve">
+    <value>نوع التصريح</value>
+  </data>
+  <data name="access_type_en" xml:space="preserve">
+    <value>Access type</value>
+  </data>
+  <data name="mypasses1_ar" xml:space="preserve">
+    <value>قائمة تصاريحي</value>
+  </data>
+  <data name="mypasses1_en" xml:space="preserve">
+    <value>My permits list</value>
+  </data>
+  <data name="Select_ar" xml:space="preserve">
+    <value>اختر نوع التصريح</value>
+  </data>
+  <data name="Select_en" xml:space="preserve">
+    <value>Select permit type</value>
+  </data>
+  <data name="Units_ar" xml:space="preserve">
+    <value>المعسكرات - القواعد</value>
+  </data>
+  <data name="Units_en" xml:space="preserve">
+    <value>Camps - Stations</value>
+  </data>
+  <data name="choose_sub_zone_again_ar" xml:space="preserve">
+    <value>اخنر المنطقة الفرعية مرة أخرى</value>
+  </data>
+  <data name="choose_sub_zone_again_en" xml:space="preserve">
+    <value>Choose sub zone again</value>
+  </data>
+  <data name="Confirm_read_ar" xml:space="preserve">
+    <value>لقد قرأت كافة الشروط والمحاذير الأمنية</value>
+  </data>
+  <data name="Confirm_read_en" xml:space="preserve">
+    <value>I have read all caveates and conditions</value>
+  </data>
+  <data name="document_type_ar" xml:space="preserve">
+    <value>نوع الوثيقة</value>
+  </data>
+  <data name="document_type_en" xml:space="preserve">
+    <value>Document type</value>
+  </data>
+  <data name="file_format_ar" xml:space="preserve">
+    <value>الرجاء اختيار صورة بصيغة : jpg,gif</value>
+  </data>
+  <data name="file_format_en" xml:space="preserve">
+    <value>Choose file format with these formats:  jpg,gif only</value>
+  </data>
+  <data name="main_zone_ar" xml:space="preserve">
+    <value>المناطق الأمنية الرئيسية</value>
+  </data>
+  <data name="main_zone_en" xml:space="preserve">
+    <value>Main zones</value>
+  </data>
+  <data name="not_allowed_m_50_ar" xml:space="preserve">
+    <value>لا يسمح بإضافة أكثر من خمسين منطقة </value>
+  </data>
+  <data name="not_allowed_m_50_en" xml:space="preserve">
+    <value>Not allowed to add more than 50 zones</value>
+  </data>
+  <data name="not_allowed_m_ten_ar" xml:space="preserve">
+    <value>لا يسمح برفع أكثر من عشرة ملفات</value>
+  </data>
+  <data name="not_allowed_m_ten_en" xml:space="preserve">
+    <value>Not allowed to upload more than ten files</value>
+  </data>
+  <data name="sub_zone_ar" xml:space="preserve">
+    <value>المناطق الأمنية الفرعية</value>
+  </data>
+  <data name="sub_zone_en" xml:space="preserve">
+    <value>Sub zones</value>
+  </data>
+  <data name="Not_allowed_50_person_ar" xml:space="preserve">
+    <value>لا يسمح بوضع أكثر من 15 شخص في المرة الواحدة</value>
+  </data>
+  <data name="Not_allowed_50_person_en" xml:space="preserve">
+    <value>Not allowed to set 15 person one time</value>
+  </data>
+  <data name="Gate_number_ar" xml:space="preserve">
+    <value>رقم البوابة</value>
+  </data>
+  <data name="Gate_number_en" xml:space="preserve">
+    <value>Gate number</value>
+  </data>
+  <data name="Manage_passes_ar" xml:space="preserve">
+    <value>إدارة التصاريح</value>
+  </data>
+  <data name="Manage_passes_en" xml:space="preserve">
+    <value>Manage permits </value>
+  </data>
+  <data name="respo_person_ar" xml:space="preserve">
+    <value>الكفيل</value>
+  </data>
+  <data name="respo_person_en" xml:space="preserve">
+    <value>Responsible</value>
+  </data>
+  <data name="Search_pass_ar" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="Search_pass_en" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Name_ar" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="Name_en" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="by_barcode_servicenumber_ar" xml:space="preserve">
+    <value>ابحث بواسطة الباركود، الرقم العسكري، رقم الهاتف النقال، الرقم المدني، رقم السيارة، الاسم </value>
+  </data>
+  <data name="by_barcode_servicenumber_en" xml:space="preserve">
+    <value>Search by barcode, service number, mobile number, civil numbr and name </value>
+  </data>
+  <data name="not_printed_ar" xml:space="preserve">
+    <value>غير مطبوع</value>
+  </data>
+  <data name="not_printed_en" xml:space="preserve">
+    <value>Not printed</value>
+  </data>
+  <data name="printed_ar" xml:space="preserve">
+    <value>مطبوع</value>
+  </data>
+  <data name="printed_en" xml:space="preserve">
+    <value>Printed</value>
+  </data>
+  <data name="required_fields_ar" xml:space="preserve">
+    <value>حقول أساسية</value>
+  </data>
+  <data name="required_fields_en" xml:space="preserve">
+    <value>Required fields</value>
+  </data>
+  <data name="Workflow_respo_hq_ar" xml:space="preserve">
+    <value>الركن المختص أو من ينوب عنه</value>
+  </data>
+  <data name="Workflow_respo_hq_en" xml:space="preserve">
+    <value>SO Specialist or whoever acts on his behalf</value>
+  </data>
+  <data name="companypermit_ar" xml:space="preserve">
+    <value>إنشاء تصريح مركبة لشخص يعمل لشركة</value>
+  </data>
+  <data name="companypermit_en" xml:space="preserve">
+    <value>Create vechile permit for some one work in company</value>
+  </data>
+  <data name="documents_not_complete_ar" xml:space="preserve">
+    <value>لم يقم منشئ الطلب برفع وثائق في هذا الطلب</value>
+  </data>
+  <data name="documents_not_complete_en" xml:space="preserve">
+    <value>There is no documents uploaded for this request</value>
+  </data>
+  <data name="documents_not_fit_ar" xml:space="preserve">
+    <value>الوثائق المتبقية</value>
+  </data>
+  <data name="documents_not_fit_en" xml:space="preserve">
+    <value>The remaining decuments</value>
+  </data>
+  <data name="old_passes_ar" xml:space="preserve">
+    <value>التصاريح السابقة</value>
+  </data>
+  <data name="old_passes_en" xml:space="preserve">
+    <value>Old passes</value>
+  </data>
+  <data name="zones_not_complete_ar" xml:space="preserve">
+    <value>لم يقم منشئ الطلب باختيار المناطق أو البوابات الأمنية</value>
+  </data>
+  <data name="zones_not_complete_en" xml:space="preserve">
+    <value>There is no zones or gates chosen</value>
+  </data>
+  <data name="printed_permits_ar" xml:space="preserve">
+    <value>التصاريح المطبوعة</value>
+  </data>
+  <data name="printed_permits_en" xml:space="preserve">
+    <value>Printed permits</value>
+  </data>
+  <data name="proffession_ar" xml:space="preserve">
+    <value>المهنة</value>
+  </data>
+  <data name="proffession_en" xml:space="preserve">
+    <value>Proffession</value>
+  </data>
+  <data name="rank_ar" xml:space="preserve">
+    <value>الرتبة</value>
+  </data>
+  <data name="rank_en" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="unit_ar" xml:space="preserve">
+    <value>القسم</value>
+  </data>
+  <data name="unit_en" xml:space="preserve">
+    <value>Section</value>
+  </data>
+  <data name="create_family_pass_for_org_ar" xml:space="preserve">
+    <value>إنشاء تصريح عائلة بدون مركبة لشخص آخر</value>
+  </data>
+  <data name="create_family_pass_for_org_en" xml:space="preserve">
+    <value>Create family permit for other </value>
+  </data>
+  <data name="member_num_ar" xml:space="preserve">
+    <value>فرد رقم: </value>
+  </data>
+  <data name="member_num_en" xml:space="preserve">
+    <value>Member num: </value>
+  </data>
+  <data name="Otherpermit_ar" xml:space="preserve">
+    <value>إنشاء تصريح شخصي لشخص آخر</value>
+  </data>
+  <data name="Otherpermit_en" xml:space="preserve">
+    <value>Create private permit for someone else</value>
+  </data>
+  <data name="security_manager_ar" xml:space="preserve">
+    <value>مدير الأمن والدفاع الأرضي</value>
+  </data>
+  <data name="security_manager_en" xml:space="preserve">
+    <value>Security guard and defense manager</value>
+  </data>
+  <data name="contract_employee_note_ar" xml:space="preserve">
+    <value>ملاحظة: بإمكانك إضافة أكثر من عامل في حالة تشابه ملفات العقود المرفقة كرسالة طلب الشركة أما في حالة عدم تشابه ملفات العقود ورسالة الطلب فيرجى إضافة تصريح منفصل لكل عامل</value>
+  </data>
+  <data name="contract_employee_note_en" xml:space="preserve">
+    <value>Note: You can add more than one employee in case if they  have same contracted files</value>
+  </data>
+  <data name="create_other_permit_ex_ar" xml:space="preserve">
+    <value>إنشاء تصريح تمرين ومناسبة لجهة </value>
+  </data>
+  <data name="create_other_permit_ex_en" xml:space="preserve">
+    <value>Create Event or Exercise permit for orgnization</value>
+  </data>
+  <data name="employees_count_non_ar" xml:space="preserve">
+    <value>لم يقم منشئ الطلب بإضافة عمال</value>
+  </data>
+  <data name="employees_count_non_en" xml:space="preserve">
+    <value>Request creator did not add employees</value>
+  </data>
+  <data name="car_details_ar" xml:space="preserve">
+    <value>تفاصيل المركبة</value>
+  </data>
+  <data name="car_details_en" xml:space="preserve">
+    <value>Car details</value>
+  </data>
+  <data name="personel_info_ar" xml:space="preserve">
+    <value>البيانات الشخصية</value>
+  </data>
+  <data name="personel_info_en" xml:space="preserve">
+    <value>Personel information</value>
+  </data>
+  <data name="dashboard_ar" xml:space="preserve">
+    <value>لوحة القيادة</value>
+  </data>
+  <data name="dashboard_en" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Phone_ar" xml:space="preserve">
+    <value>الهاتف</value>
+  </data>
+  <data name="Phone_en" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="sympol_ar" xml:space="preserve">
+    <value>رمز التعريف</value>
+  </data>
+  <data name="sympol_en" xml:space="preserve">
+    <value>Identification</value>
+  </data>
+  <data name="Companypermitgeneraluse_ar" xml:space="preserve">
+    <value>إنشاء تصريح مركبة للاستخدام العام</value>
+  </data>
+  <data name="Companypermitgeneraluse_en" xml:space="preserve">
+    <value>Create vechile permit for general use</value>
+  </data>
+  <data name="OtherpermitVechile_ar" xml:space="preserve">
+    <value>إنشاء تصريح مركبة لجهات حكومية وأمنية وجهات أخرى</value>
+  </data>
+  <data name="OtherpermitVechile_en" xml:space="preserve">
+    <value>Create vehicle permit for government and security and others</value>
+  </data>
+  <data name="type_ar" xml:space="preserve">
+    <value>النوع</value>
+  </data>
+  <data name="type_en" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="security_company_permit_ar" xml:space="preserve">
+    <value>إنشاء تصريح شخصي لعامل شركة</value>
+  </data>
+  <data name="security_company_permit_en" xml:space="preserve">
+    <value>Create security permit for company</value>
+  </data>
+  <data name="Applicant_ar" xml:space="preserve">
+    <value>منشئ الطلب</value>
+  </data>
+  <data name="Applicant_en" xml:space="preserve">
+    <value>Applicant</value>
+  </data>
+  <data name="Approval_ar" xml:space="preserve">
+    <value>المنسق الأمني</value>
+  </data>
+  <data name="Approval_en" xml:space="preserve">
+    <value>Security cordinator</value>
+  </data>
+  <data name="Authorized_ar" xml:space="preserve">
+    <value>ضابط الأمن</value>
+  </data>
+  <data name="Authorized_en" xml:space="preserve">
+    <value>Security officer</value>
+  </data>
+  <data name="Manager_ar" xml:space="preserve">
+    <value>المدير</value>
+  </data>
+  <data name="Manager_en" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="Permited_ar" xml:space="preserve">
+    <value>خلية التصاريح</value>
+  </data>
+  <data name="Permited_en" xml:space="preserve">
+    <value>Permit cell</value>
+  </data>
+  <data name="so1_engineering_ar" xml:space="preserve">
+    <value>ركن1/ هندسة</value>
+  </data>
+  <data name="so1_engineering_en" xml:space="preserve">
+    <value>SO1/ Engineering</value>
+  </data>
+  <data name="so1_policy_ar" xml:space="preserve">
+    <value>ركن1/ سياسة وخطط</value>
+  </data>
+  <data name="so1_policy_en" xml:space="preserve">
+    <value>SO1/ Plans &amp; Policy</value>
+  </data>
+  <data name="please_select_ar" xml:space="preserve">
+    <value>---اختر---</value>
+  </data>
+  <data name="please_select_en" xml:space="preserve">
+    <value>---choose---</value>
+  </data>
+  <data name="Browse_all_trainees_passes_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح المتدربين</value>
+  </data>
+  <data name="Browse_all_trainees_passes_en" xml:space="preserve">
+    <value>Browse all trainees permits</value>
+  </data>
+  <data name="Major_ar" xml:space="preserve">
+    <value>التخصص</value>
+  </data>
+  <data name="Major_en" xml:space="preserve">
+    <value>Major</value>
+  </data>
+  <data name="Trainees_pass_ar" xml:space="preserve">
+    <value>تصاريح المتدربين و إثبات الهوية</value>
+  </data>
+  <data name="Trainees_pass_en" xml:space="preserve">
+    <value>Trainees and prove identity permits</value>
+  </data>
+  <data name="Trainee_name_ar" xml:space="preserve">
+    <value>اسم المتدرب</value>
+  </data>
+  <data name="Trainee_name_en" xml:space="preserve">
+    <value>Trainee name</value>
+  </data>
+  <data name="Trainee_pass_ar" xml:space="preserve">
+    <value>تصريح متدرب</value>
+  </data>
+  <data name="Trainee_pass_create_ar" xml:space="preserve">
+    <value>إنشاء تصريح متدرب بدون مركبة</value>
+  </data>
+  <data name="Trainee_pass_create_en" xml:space="preserve">
+    <value>Create trainee permit</value>
+  </data>
+  <data name="Trainee_pass_en" xml:space="preserve">
+    <value>Trainee permit</value>
+  </data>
+  <data name="violation_desc_ar" xml:space="preserve">
+    <value>وصف المخالفة</value>
+  </data>
+  <data name="violation_desc_en" xml:space="preserve">
+    <value>Violation description</value>
+  </data>
+  <data name="expired_permit_ar" xml:space="preserve">
+    <value>تصريح منتهي، يرجى تعديل تاريخ انتهاء التصريح</value>
+  </data>
+  <data name="expired_permit_en" xml:space="preserve">
+    <value>Expired permit, edit expired date </value>
+  </data>
+  <data name="Receipt_ar" xml:space="preserve">
+    <value>إيصال الدفع</value>
+  </data>
+  <data name="Receipt_en" xml:space="preserve">
+    <value>Receipt</value>
+  </data>
+  <data name="trans_type_ar" xml:space="preserve">
+    <value>نوع المعاملة</value>
+  </data>
+  <data name="trans_type_en" xml:space="preserve">
+    <value>Transaction type</value>
+  </data>
+  <data name="choose_transaction_type_ar" xml:space="preserve">
+    <value>--اختر نوع المعاملة--</value>
+  </data>
+  <data name="choose_transaction_type_en" xml:space="preserve">
+    <value>--Choose transaction type--</value>
+  </data>
+  <data name="this_permit_printed_ar" xml:space="preserve">
+    <value>هذا التصريح مطبوع سابقا، يرجى تحديد نوع المعاملة مرة أخرى</value>
+  </data>
+  <data name="this_permit_printed_en" xml:space="preserve">
+    <value>This permit is printed, detrmine transaction type again</value>
+  </data>
+  <data name="create_for_many_workers_ar" xml:space="preserve">
+    <value>إنشاء تصريح شركة لمجموعة عمال بدون مركبة</value>
+  </data>
+  <data name="create_for_many_workers_en" xml:space="preserve">
+    <value>Create company permit for many workers without car</value>
+  </data>
+  <data name="create_for_one_worker_ar" xml:space="preserve">
+    <value>إنشاء تصريح شركة لعامل واحد بدون مركبة</value>
+  </data>
+  <data name="create_for_one_worker_en" xml:space="preserve">
+    <value>Create company permit for one worker withou car</value>
+  </data>
+  <data name="renew_ar" xml:space="preserve">
+    <value>تجديد</value>
+  </data>
+  <data name="renew_en" xml:space="preserve">
+    <value>Renew</value>
+  </data>
+  <data name="Renew_permit_ar" xml:space="preserve">
+    <value>طلب تجديد تصريح</value>
+  </data>
+  <data name="Renew_permit_en" xml:space="preserve">
+    <value>Request renew permit</value>
+  </data>
+  <data name="Violation_price_ar" xml:space="preserve">
+    <value>سعر المخالفة</value>
+  </data>
+  <data name="Violation_price_en" xml:space="preserve">
+    <value>Violation price</value>
+  </data>
+  <data name="Violation_type_ar" xml:space="preserve">
+    <value>نوع المخالفة</value>
+  </data>
+  <data name="Violation_type_en" xml:space="preserve">
+    <value>Violation type</value>
+  </data>
+  <data name="View_Violations_ar" xml:space="preserve">
+    <value>عرض المخالفات</value>
+  </data>
+  <data name="View_Violations_en" xml:space="preserve">
+    <value>View Violations</value>
+  </data>
+  <data name="printed_done_ar" xml:space="preserve">
+    <value>تمت طباعة التصريح</value>
+  </data>
+  <data name="printed_done_en" xml:space="preserve">
+    <value>Permit printed </value>
+  </data>
+  <data name="delete_violation_ar" xml:space="preserve">
+    <value>حذف مخالفة</value>
+  </data>
+  <data name="delete_violation_en" xml:space="preserve">
+    <value>Delete violation</value>
+  </data>
+  <data name="AirCrew_ar" xml:space="preserve">
+    <value>تصاريح أطقم الطيران</value>
+  </data>
+  <data name="AirCrew_en" xml:space="preserve">
+    <value>Air Crew permits</value>
+  </data>
+  <data name="blood_type_ar" xml:space="preserve">
+    <value>فصيلة الدم</value>
+  </data>
+  <data name="blood_type_en" xml:space="preserve">
+    <value>Blood type</value>
+  </data>
+  <data name="Browse_all_air_passes_ar" xml:space="preserve">
+    <value>تصفح جميع تصاريح أطقم الطيران</value>
+  </data>
+  <data name="Browse_all_air_passes_en" xml:space="preserve">
+    <value>Browse all air crew permits</value>
+  </data>
+  <data name="create_air_crew_ar" xml:space="preserve">
+    <value>إنشاء تصريح أطقم طيران خاص بي</value>
+  </data>
+  <data name="create_air_crew_en" xml:space="preserve">
+    <value>Create air crew permit for me</value>
+  </data>
+  <data name="joining_date_ar" xml:space="preserve">
+    <value>تاريخ الإنضمام للخدمة</value>
+  </data>
+  <data name="joining_date_en" xml:space="preserve">
+    <value>Joining date</value>
+  </data>
+  <data name="other_air_crew_ar" xml:space="preserve">
+    <value>إنشاء تصريح أطقم طيران لشخص آخر</value>
+  </data>
+  <data name="other_air_crew_en" xml:space="preserve">
+    <value>Create air crew permit for other person</value>
+  </data>
+  <data name="search_air_crew_ar" xml:space="preserve">
+    <value>إنشاء تصريح أطقم طيران لمنتسب</value>
+  </data>
+  <data name="search_air_crew_en" xml:space="preserve">
+    <value>Create air crew permit for employee</value>
+  </data>
+  <data name="new_request_ar" xml:space="preserve">
+    <value>تقديم طلب جديد</value>
+  </data>
+  <data name="new_request_en" xml:space="preserve">
+    <value>New request</value>
+  </data>
+  <data name="from_here_ar" xml:space="preserve">
+    <value>من هنا</value>
+  </data>
+  <data name="from_here_en" xml:space="preserve">
+    <value>click here</value>
+  </data>
+  <data name="for_family_members_ar" xml:space="preserve">
+    <value>ملاحظة: هذه الصفحة مخصصة لحفظ تصريح خاص بفرد من أفراد العائلة بمعاملة جديدة بنفس التفاصيل المطلوبة. </value>
+  </data>
+  <data name="for_family_members_en" xml:space="preserve">
+    <value>Note: this page to add new transaction for family member permit. </value>
+  </data>
+  <data name="new_trans_ar" xml:space="preserve">
+    <value>توجد معاملة منفصلة خاصة بالتصريح</value>
+  </data>
+  <data name="new_trans_en" xml:space="preserve">
+    <value>New transaction for permit</value>
+  </data>
+  <data name="hosted_ar" xml:space="preserve">
+    <value>اسم المستضيف</value>
+  </data>
+  <data name="hosted_en" xml:space="preserve">
+    <value>Hosting person</value>
+  </data>
+  <data name="Vechile_pass_otherfamily_ar" xml:space="preserve">
+    <value>إنشاء تصريح مركبة لعائلة شخص غير منتسب</value>
+  </data>
+  <data name="Vechile_pass_otherfamily_en" xml:space="preserve">
+    <value>Create vehicle permit for family non MOD employee</value>
+  </data>
+  <data name="create_staty_at_port_for_mod_ar" xml:space="preserve">
+    <value>إنشاء تصريح الوقوف بالمرسى للمنتسبين</value>
+  </data>
+  <data name="create_staty_at_port_for_mod_en" xml:space="preserve">
+    <value>Create stay at port permit</value>
+  </data>
+  <data name="create_staty_at_port_for_other_ar" xml:space="preserve">
+    <value>إنشاء تصريح الوقوف بالمرسى للآخرين من خارج وزارة الدفاع</value>
+  </data>
+  <data name="create_staty_at_port_for_other_en" xml:space="preserve">
+    <value>Create stay at port for others</value>
+  </data>
+  <data name="driver_permit_ar" xml:space="preserve">
+    <value>إنشاء تصريح سائقي كبار الضباط</value>
+  </data>
+  <data name="driver_permit_en" xml:space="preserve">
+    <value>Create permit for officer drivers</value>
+  </data>
+  <data name="exception_area_ar" xml:space="preserve">
+    <value>إنشاء تصريح منطقة أمنية إستثناء</value>
+  </data>
+  <data name="exception_area_en" xml:space="preserve">
+    <value>Create permit special area</value>
+  </data>
+  <data name="passport_number_ar" xml:space="preserve">
+    <value>رقم الجواز</value>
+  </data>
+  <data name="passport_number_en" xml:space="preserve">
+    <value>Passport number</value>
+  </data>
+  <data name="ProveIdentity_car_permit_ar" xml:space="preserve">
+    <value>إنشاء تصريح (سائق مركبة) لإثبات هوية</value>
+  </data>
+  <data name="ProveIdentity_car_permit_en" xml:space="preserve">
+    <value>Create car permit for prove identity </value>
+  </data>
+  <data name="ProveIdentity_private_permit_ar" xml:space="preserve">
+    <value>إنشاء تصريح لإثبات هوية بدون مركبة</value>
+  </data>
+  <data name="ProveIdentity_private_permit_en" xml:space="preserve">
+    <value>Create prove identity permit</value>
+  </data>
+  <data name="amount_ar" xml:space="preserve">
+    <value>السعر</value>
+  </data>
+  <data name="amount_en" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="arror_ar" xml:space="preserve">
+    <value>حدث خطأ ما!</value>
+  </data>
+  <data name="deleted_done_ar" xml:space="preserve">
+    <value>تم الحذف بنجاح</value>
+  </data>
+  <data name="deleted_done_en" xml:space="preserve">
+    <value>Deleted done!</value>
+  </data>
+  <data name="delivered_permits_ar" xml:space="preserve">
+    <value>تسليم التصاريح</value>
+  </data>
+  <data name="delivered_permits_en" xml:space="preserve">
+    <value>Deliver permits</value>
+  </data>
+  <data name="delivery_action_ar" xml:space="preserve">
+    <value>حالة التسليم</value>
+  </data>
+  <data name="delivery_action_en" xml:space="preserve">
+    <value>Delivery action</value>
+  </data>
+  <data name="delivery_ar" xml:space="preserve">
+    <value>تسليم</value>
+  </data>
+  <data name="delivery_en" xml:space="preserve">
+    <value>Delivery</value>
+  </data>
+  <data name="delivery_status_ar" xml:space="preserve">
+    <value>تم التسليم</value>
+  </data>
+  <data name="delivery_status_en" xml:space="preserve">
+    <value>Delivered</value>
+  </data>
+  <data name="error_en" xml:space="preserve">
+    <value>Error !</value>
+  </data>
+  <data name="for_cars_ar" xml:space="preserve">
+    <value>خاص بالمركبات (للمنتسبين والعوائل والشركات ومن خارج وزارة الدفاع)</value>
+  </data>
+  <data name="for_cars_en" xml:space="preserve">
+    <value>for employees, companies, families and others</value>
+  </data>
+  <data name="for_contract_ar" xml:space="preserve">
+    <value>للشركات المتعاقدة مع سلاح الجو السلطاني العماني فقط</value>
+  </data>
+  <data name="for_contract_en" xml:space="preserve">
+    <value>For contracted companies with RAFO only</value>
+  </data>
+  <data name="for_events_ar" xml:space="preserve">
+    <value>خاص بالتمارين والمناسبات</value>
+  </data>
+  <data name="for_events_en" xml:space="preserve">
+    <value>for events</value>
+  </data>
+  <data name="for_rafo_ar" xml:space="preserve">
+    <value>خاص بسلاح الجو السلطاني العماني</value>
+  </data>
+  <data name="for_rafo_en" xml:space="preserve">
+    <value>For rafo only</value>
+  </data>
+  <data name="for_visitor_ar" xml:space="preserve">
+    <value>للزوار والحلات المؤقتة</value>
+  </data>
+  <data name="for_visitor_en" xml:space="preserve">
+    <value>For visitor and temprory cases</value>
+  </data>
+  <data name="payment_report_ar" xml:space="preserve">
+    <value>تقرير التصاريح المدفوعة</value>
+  </data>
+  <data name="payment_report_en" xml:space="preserve">
+    <value>Payment permits report</value>
+  </data>
+  <data name="search_by_barcode_ar" xml:space="preserve">
+    <value>ابحث بواسطة الباركود</value>
+  </data>
+  <data name="search_by_barcode_en" xml:space="preserve">
+    <value>Search by barcode</value>
+  </data>
+  <data name="transaction_type_ar" xml:space="preserve">
+    <value>نوع المعاملة السابقة: </value>
+  </data>
+  <data name="transaction_type_en" xml:space="preserve">
+    <value>Transaction type: </value>
+  </data>
+  <data name="without_car_ar" xml:space="preserve">
+    <value>بدون مركبة</value>
+  </data>
+  <data name="without_car_en" xml:space="preserve">
+    <value>Withot car</value>
+  </data>
+  <data name="with_car_ar" xml:space="preserve">
+    <value>مع مركبة</value>
+  </data>
+  <data name="with_car_en" xml:space="preserve">
+    <value>Car</value>
+  </data>
+  <data name="are_you_sure_you_want_delete_member_ar" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد حذف أحد الأفراد؟</value>
+  </data>
+  <data name="are_you_sure_you_want_delete_member_en" xml:space="preserve">
+    <value>Are you sure you want to delete member?</value>
+  </data>
+  <data name="doc_ar" xml:space="preserve">
+    <value>الوثيقة</value>
+  </data>
+  <data name="doc_en" xml:space="preserve">
+    <value>Document</value>
+  </data>
+  <data name="host_section_ar" xml:space="preserve">
+    <value>المستضيف</value>
+  </data>
+  <data name="host_section_en" xml:space="preserve">
+    <value>Host section</value>
+  </data>
+  <data name="medical_ar" xml:space="preserve">
+    <value>تصريح زوار المركز الطبي</value>
+  </data>
+  <data name="medical_en" xml:space="preserve">
+    <value>Medical center visitors</value>
+  </data>
+  <data name="temp_visitor_ar" xml:space="preserve">
+    <value>زائر مؤقت</value>
+  </data>
+  <data name="temp_visitor_en" xml:space="preserve">
+    <value>Temparory visitor</value>
+  </data>
+  <data name="updated_successfully_ar" xml:space="preserve">
+    <value>تم تحديث المعاملة بنجاح!</value>
+  </data>
+  <data name="updated_successfully_en" xml:space="preserve">
+    <value>Updated done!</value>
+  </data>
+  <data name="visitor_company_temp_ar" xml:space="preserve">
+    <value>تصريح شركات مؤقت</value>
+  </data>
+  <data name="visitor_company_temp_en" xml:space="preserve">
+    <value>Temparory company visitor</value>
+  </data>
+  <data name="visitor_family_temp_ar" xml:space="preserve">
+    <value>تصريح عوائل مؤقت</value>
+  </data>
+  <data name="visitor_family_temp_en" xml:space="preserve">
+    <value>Temparory family visitor</value>
+  </data>
+  <data name="error_ar" xml:space="preserve">
+    <value>حدث خطأ ما!</value>
+  </data>
+  <data name="approved_by_officer_ar" xml:space="preserve">
+    <value>اعتماد ضابط القسم</value>
+  </data>
+  <data name="approved_by_officer_en" xml:space="preserve">
+    <value>Confirmed by officer section</value>
+  </data>
+  <data name="confirmed_ar" xml:space="preserve">
+    <value>معتمد</value>
+  </data>
+  <data name="confirmed_en" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="enter_time_ar" xml:space="preserve">
+    <value>تسجيل وقت الدخول</value>
+  </data>
+  <data name="enter_time_en" xml:space="preserve">
+    <value>Enter time</value>
+  </data>
+  <data name="enter_time_r_ar" xml:space="preserve">
+    <value>وقت الدخول</value>
+  </data>
+  <data name="enter_time_r_en" xml:space="preserve">
+    <value>Entered time</value>
+  </data>
+  <data name="exit_time_ar" xml:space="preserve">
+    <value>تسجيل وقت الخروج</value>
+  </data>
+  <data name="exit_time_en" xml:space="preserve">
+    <value>Exit time</value>
+  </data>
+  <data name="exit_time_r_ar" xml:space="preserve">
+    <value>وقت الخروج</value>
+  </data>
+  <data name="exit_time_r_en" xml:space="preserve">
+    <value>Exit time</value>
+  </data>
+  <data name="members_allowed_ar" xml:space="preserve">
+    <value>المصرح لهم</value>
+  </data>
+  <data name="members_allowed_en" xml:space="preserve">
+    <value>People allowed</value>
+  </data>
+  <data name="not_confirmed_ar" xml:space="preserve">
+    <value>غير معتمد</value>
+  </data>
+  <data name="not_confirmed_en" xml:space="preserve">
+    <value>Not approved</value>
+  </data>
+  <data name="vno_ar" xml:space="preserve">
+    <value>دخول متكرر</value>
+  </data>
+  <data name="vno_en" xml:space="preserve">
+    <value>Repeat entrance</value>
+  </data>
+  <data name="companies_temp_ar" xml:space="preserve">
+    <value>الشركات</value>
+  </data>
+  <data name="companies_temp_en" xml:space="preserve">
+    <value>Companies</value>
+  </data>
+  <data name="family_temp_ar" xml:space="preserve">
+    <value>العوائل</value>
+  </data>
+  <data name="family_temp_en" xml:space="preserve">
+    <value>Families</value>
+  </data>
+  <data name="manage_temp_permits_ar" xml:space="preserve">
+    <value>إدارة التصاريح المؤقتة</value>
+  </data>
+  <data name="manage_temp_permits_en" xml:space="preserve">
+    <value>Manage temprory permits</value>
+  </data>
+  <data name="medical_temp_ar" xml:space="preserve">
+    <value>المركز الطبي</value>
+  </data>
+  <data name="medical_temp_en" xml:space="preserve">
+    <value>Medical center</value>
+  </data>
+  <data name="visitor_temp_ar" xml:space="preserve">
+    <value>الزوار</value>
+  </data>
+  <data name="visitor_temp_en" xml:space="preserve">
+    <value>Visitors</value>
+  </data>
+  <data name="archive_ar" xml:space="preserve">
+    <value>تصفح أرشيف التصاريح المؤقتة</value>
+  </data>
+  <data name="archive_en" xml:space="preserve">
+    <value>Brwose archive</value>
+  </data>
+  <data name="are_you_sure_you_want_return_ar" xml:space="preserve">
+    <value>إسترجاع؟</value>
+  </data>
+  <data name="are_you_sure_you_want_return_en" xml:space="preserve">
+    <value>are you sure you want return ?</value>
+  </data>
+  <data name="returned_ar" xml:space="preserve">
+    <value>مسترجع</value>
+  </data>
+  <data name="returned_en" xml:space="preserve">
+    <value>Returned</value>
+  </data>
+  <data name="returned_status_ar" xml:space="preserve">
+    <value>تم إسترجاع التصريح بنجاح</value>
+  </data>
+  <data name="returned_status_en" xml:space="preserve">
+    <value>Permit returned!</value>
+  </data>
+  <data name="the_returned_ar" xml:space="preserve">
+    <value>الاسترجاع</value>
+  </data>
+  <data name="the_returned_en" xml:space="preserve">
+    <value>Returned</value>
+  </data>
+  <data name="allowed_ar" xml:space="preserve">
+    <value>مسموح له إصدار تصريح</value>
+  </data>
+  <data name="allowed_en" xml:space="preserve">
+    <value>Allow to hime get permit</value>
+  </data>
+  <data name="allow_get_permit_ar" xml:space="preserve">
+    <value>السماح بالحصول على تصريح؟</value>
+  </data>
+  <data name="allow_get_permit_en" xml:space="preserve">
+    <value>Allow get permit?</value>
+  </data>
+  <data name="for_rno_officers_ar" xml:space="preserve">
+    <value>إثبات ملكية مركبة - لضباط البحرية السلطانية فقط</value>
+  </data>
+  <data name="for_rno_officers_en" xml:space="preserve">
+    <value>Prove vechicle property - for RNO officers only</value>
+  </data>
+  <data name="prevented_by_violation_ar" xml:space="preserve">
+    <value>ممنوع من إصدار تصريح جديد له بسبب المخالفات السابقة!</value>
+  </data>
+  <data name="prevented_by_violation_en" xml:space="preserve">
+    <value>Prevented to get permit because of violations!</value>
+  </data>
+  <data name="prevent_get_permit_ar" xml:space="preserve">
+    <value>منع من إصدار تصريح</value>
+  </data>
+  <data name="prevent_get_permit_en" xml:space="preserve">
+    <value>Prevent get permit</value>
+  </data>
+  <data name="Traine_pass_with_car_ar" xml:space="preserve">
+    <value>إنشاء تصريح متدرب مع مركبة</value>
+  </data>
+  <data name="Traine_pass_with_car_en" xml:space="preserve">
+    <value>Create Trainee permit with car</value>
+  </data>
+  <data name="Violation_by_ar" xml:space="preserve">
+    <value>مخالفة بواسطة</value>
+  </data>
+  <data name="Violation_by_en" xml:space="preserve">
+    <value>Violation by</value>
+  </data>
+  <data name="for_car_emp_ar" xml:space="preserve">
+    <value>للمنتسبين والجهات الأخرى</value>
+  </data>
+  <data name="for_car_emp_en" xml:space="preserve">
+    <value>For employees and others</value>
+  </data>
+  <data name="for_fam_ar" xml:space="preserve">
+    <value>للعوائل بمركبة وبدون مركبة</value>
+  </data>
+  <data name="for_fam_en" xml:space="preserve">
+    <value>For families</value>
+  </data>
+  <data name="for_visitors_ar" xml:space="preserve">
+    <value>للزوار والحالات المؤقتة</value>
+  </data>
+  <data name="for_visitors_en" xml:space="preserve">
+    <value>For visitors </value>
+  </data>
+  <data name="new_enter_time_ar" xml:space="preserve">
+    <value>تسجيل وقت دخول جديد</value>
+  </data>
+  <data name="new_enter_time_en" xml:space="preserve">
+    <value>New enter time</value>
+  </data>
+  <data name="number_of_hosted_ar" xml:space="preserve">
+    <value>عدد المستضافين</value>
+  </data>
+  <data name="number_of_hosted_en" xml:space="preserve">
+    <value>Number of hosted</value>
+  </data>
+  <data name="visitor_from_mod_ar" xml:space="preserve">
+    <value>زائر منتسب مؤقت</value>
+  </data>
+  <data name="visitor_from_mod_en" xml:space="preserve">
+    <value>Temprary mod visitor</value>
+  </data>
+  <data name="host_phone_number_ar" xml:space="preserve">
+    <value>رقم هاتف المستضيف</value>
+  </data>
+  <data name="host_phone_number_en" xml:space="preserve">
+    <value>Host phone number</value>
+  </data>
+  <data name="sn_host_ar" xml:space="preserve">
+    <value>الرقم العسكري للمستضيف (ولي أمر متلقي العلاج)</value>
+  </data>
+  <data name="sn_host_en" xml:space="preserve">
+    <value>Host service number</value>
+  </data>
+  <data name="timings_ar" xml:space="preserve">
+    <value>أوقات الدخول والخروج للأيام السابقة: </value>
+  </data>
+  <data name="timings_en" xml:space="preserve">
+    <value>Timings for past dates: </value>
+  </data>
+  <data name="visitor_employer_ar" xml:space="preserve">
+    <value>جهة عمل الزائر</value>
+  </data>
+  <data name="visitor_employer_en" xml:space="preserve">
+    <value>Visitor employer</value>
+  </data>
+  <data name="no_time_exit_ar" xml:space="preserve">
+    <value>لم يتم تسجيل خروج هنا!</value>
+  </data>
+  <data name="no_time_exit_en" xml:space="preserve">
+    <value>No exit time here!</value>
+  </data>
+  <data name="more_than_two_permits_ar" xml:space="preserve">
+    <value>لا يسمح بالحصول على أكثر من تصريحين سارية المفعول في نفس الوقت، يرجى مراجعة قسم الأمن بالوحدة </value>
+  </data>
+  <data name="more_than_two_permits_en" xml:space="preserve">
+    <value>Not allowed to get more than two permits, ask security section of your unit</value>
+  </data>
+  <data name="sections_ar" xml:space="preserve">
+    <value>الأقسام</value>
+  </data>
+  <data name="sections_en" xml:space="preserve">
+    <value>Sections</value>
+  </data>
+  <data name="prove_identity_bus_driver_ar" xml:space="preserve">
+    <value>إنشاء تصريح (سائق حافلة مدرسية) لإثبات هوية</value>
+  </data>
+  <data name="prove_identity_bus_driver_en" xml:space="preserve">
+    <value>Create bus driver for prove identity permit</value>
+  </data>
+  <data name="prove_identity_for_admin_bus_ar" xml:space="preserve">
+    <value>إنشاء تصريح إثبات هوية بدون مركبة (لمشرفة حافلة مدرسية )</value>
+  </data>
+  <data name="prove_identity_for_admin_bus_en" xml:space="preserve">
+    <value>Create prove identity permit for bus admin</value>
+  </data>
+  <data name="prove_identity_for_worker_ar" xml:space="preserve">
+    <value>إنشاء تصريح إثبات هوية بدون مركبة (لعامل - عاملة منزل)</value>
+  </data>
+  <data name="prove_identity_for_worker_en" xml:space="preserve">
+    <value>Create prove identity permit for worker</value>
+  </data>
+  <data name="trainee_with_car_ar" xml:space="preserve">
+    <value>إنشاء تصريح متدرب مع مركبة </value>
+  </data>
+  <data name="trainee_with_car_en" xml:space="preserve">
+    <value>Create Trainee permit with car</value>
+  </data>
+  <data name="to_print_ar" xml:space="preserve">
+    <value>التصاريح الجاهزة للطباعة</value>
+  </data>
+  <data name="to_print_en" xml:space="preserve">
+    <value>To print</value>
+  </data>
+  <data name="search_by_car_ar" xml:space="preserve">
+    <value>بحث برقم المركبة</value>
+  </data>
+  <data name="search_by_car_en" xml:space="preserve">
+    <value>Search by car number</value>
+  </data>
+  <data name="not_delivered_ar" xml:space="preserve">
+    <value>لم يتم التسليم</value>
+  </data>
+  <data name="not_delivered_en" xml:space="preserve">
+    <value>Not delivered</value>
+  </data>
+  <data name="AllPermits_ar" xml:space="preserve">
+    <value>جميع التصاريح</value>
+  </data>
+  <data name="AllPermits_en" xml:space="preserve">
+    <value>All permits</value>
+  </data>
+  <data name="AuthoPermits_ar" xml:space="preserve">
+    <value>التصاريح الجديدة</value>
+  </data>
+  <data name="AuthoPermits_en" xml:space="preserve">
+    <value>New permits</value>
+  </data>
+  <data name="NewPermits_ar" xml:space="preserve">
+    <value>التصاريح الجديدة</value>
+  </data>
+  <data name="NewPermits_en" xml:space="preserve">
+    <value>New permits</value>
+  </data>
+  <data name="ToPrint_ar" xml:space="preserve">
+    <value>التصاريح الجاهزة للطباعة</value>
+  </data>
+  <data name="ToPrint_en" xml:space="preserve">
+    <value>Ready to print</value>
+  </data>
+  <data name="browse_all_permits_ar" xml:space="preserve">
+    <value>تصفح جميع التصاريح</value>
+  </data>
+  <data name="browse_all_permits_en" xml:space="preserve">
+    <value>Browse all permits</value>
+  </data>
+  <data name="not_returned_ar" xml:space="preserve">
+    <value>غير مسترجع</value>
+  </data>
+  <data name="not_returned_en" xml:space="preserve">
+    <value>Not returned</value>
+  </data>
+  <data name="status_returned_ar" xml:space="preserve">
+    <value>حالة الإسترجاع</value>
+  </data>
+  <data name="status_returned_en" xml:space="preserve">
+    <value>Returned status</value>
+  </data>
+  <data name="car_number_ar" xml:space="preserve">
+    <value>رقم ورمز المركبة</value>
+  </data>
+  <data name="car_number_en" xml:space="preserve">
+    <value>car number</value>
+  </data>
+  <data name="first_page_ar" xml:space="preserve">
+    <value>« الصفحة الأولى</value>
+  </data>
+  <data name="first_page_en" xml:space="preserve">
+    <value>First page</value>
+  </data>
+  <data name="Host_ServiceNumber_ar" xml:space="preserve">
+    <value>رقم عسكري المستضيف</value>
+  </data>
+  <data name="Host_ServiceNumber_en" xml:space="preserve">
+    <value>Host service number</value>
+  </data>
+  <data name="last_page_ar" xml:space="preserve">
+    <value>الصفحة الأخيرة »</value>
+  </data>
+  <data name="last_page_en" xml:space="preserve">
+    <value>Last page »</value>
+  </data>
+  <data name="next_page_ar" xml:space="preserve">
+    <value>التالي »</value>
+  </data>
+  <data name="next_page_en" xml:space="preserve">
+    <value>Next »</value>
+  </data>
+  <data name="Plate_char_number_ar" xml:space="preserve">
+    <value>رمز ورقم اللوحة (مثال: ب ب-556677)</value>
+  </data>
+  <data name="Plate_char_number_en" xml:space="preserve">
+    <value>Plate char and number</value>
+  </data>
+  <data name="previous_ar" xml:space="preserve">
+    <value>« السابق</value>
+  </data>
+  <data name="previous_en" xml:space="preserve">
+    <value>« Previous</value>
+  </data>
+  <data name="Service_number_data_enter_ar" xml:space="preserve">
+    <value>رقم عسكري مدخل البيانات</value>
+  </data>
+  <data name="Service_number_data_enter_en" xml:space="preserve">
+    <value>Service number of data entry</value>
+  </data>
+  <data name="total_ar" xml:space="preserve">
+    <value>المجموع: </value>
+  </data>
+  <data name="total_en" xml:space="preserve">
+    <value>Total: </value>
+  </data>
+  <data name="main_permits_type_ar" xml:space="preserve">
+    <value>نوع التصريح الرئيسي</value>
+  </data>
+  <data name="main_permits_type_en" xml:space="preserve">
+    <value>Main permit type</value>
+  </data>
+  <data name="for_employee_ar" xml:space="preserve">
+    <value>لمنتسب</value>
+  </data>
+  <data name="for_employee_en" xml:space="preserve">
+    <value>For employee</value>
+  </data>
+  <data name="for_me_ar" xml:space="preserve">
+    <value>خاص بي</value>
+  </data>
+  <data name="for_me_en" xml:space="preserve">
+    <value>For me</value>
+  </data>
+  <data name="for_other_ar" xml:space="preserve">
+    <value>لشخص آخر</value>
+  </data>
+  <data name="for_other_en" xml:space="preserve">
+    <value>For other person</value>
+  </data>
+  <data name="main_info_ar" xml:space="preserve">
+    <value>بيانات التصريح الرئيسية</value>
+  </data>
+  <data name="main_info_en" xml:space="preserve">
+    <value>Main info</value>
+  </data>
+  <data name="other_info_ar" xml:space="preserve">
+    <value>البيانات الرئيسية لصاحب التصريح</value>
+  </data>
+  <data name="other_info_en" xml:space="preserve">
+    <value>Main info</value>
+  </data>
+  <data name="forces_ar" xml:space="preserve">
+    <value>الوحدات والأسلحة الرئيسية</value>
+  </data>
+  <data name="forces_en" xml:space="preserve">
+    <value>Forces</value>
+  </data>
+  <data name="enter_search_keyword_ar" xml:space="preserve">
+    <value>أدخل مادة البحث</value>
+  </data>
+  <data name="enter_search_keyword_en" xml:space="preserve">
+    <value>Enter keyword</value>
+  </data>
+  <data name="documents_for_worker_ar" xml:space="preserve">
+    <value>وثائق خاصة بالعامل</value>
+  </data>
+  <data name="documents_for_worker_en" xml:space="preserve">
+    <value>Documents for worker</value>
+  </data>
+  <data name="first_worker_document_ar" xml:space="preserve">
+    <value>(ستظهر وثائق تصريح عامل بدون مركبة، عند اختيار تصريح مع مركبة ستظهر وثائق تصريح عامل مع مركبة)</value>
+  </data>
+  <data name="first_worker_document_en" xml:space="preserve">
+    <value>(documents for worker permit without car will appear first, if you click with with car will appear worker permit with car)</value>
+  </data>
+  <data name="main_docs_ar" xml:space="preserve">
+    <value>الوثائق الرئيسية</value>
+  </data>
+  <data name="main_docs_en" xml:space="preserve">
+    <value>Main documents</value>
+  </data>
+  <data name="multi_create_ar" xml:space="preserve">
+    <value>تصريح يسمح بإنشاء تصاريح متعددة لعمال الشركات مع وبدون مركبة</value>
+  </data>
+  <data name="multi_create_en" xml:space="preserve">
+    <value>Multi workers permits</value>
+  </data>
+  <data name="permit_create_ar" xml:space="preserve">
+    <value>تصريح</value>
+  </data>
+  <data name="permit_create_en" xml:space="preserve">
+    <value>permit</value>
+  </data>
+  <data name="he_has_permit_ar" xml:space="preserve">
+    <value>يوجد لديه تصريح سابق </value>
+  </data>
+  <data name="he_has_permit_en" xml:space="preserve">
+    <value>He has permit in </value>
+  </data>
+  <data name="members_ar" xml:space="preserve">
+    <value>المضافين</value>
+  </data>
+  <data name="members_en" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="no_result_ar" xml:space="preserve">
+    <value>لم يتم العثور على نتائج!</value>
+  </data>
+  <data name="no_result_en" xml:space="preserve">
+    <value>No results found!</value>
+  </data>
+  <data name="print_all_ar" xml:space="preserve">
+    <value>طباعة مجموعة</value>
+  </data>
+  <data name="print_all_en" xml:space="preserve">
+    <value>Print group</value>
+  </data>
+  <data name="you_dont_choose_ar" xml:space="preserve">
+    <value>لم تقم باختيار تصريح، الرجاء اختيار تصريح واحد على الأقل!</value>
+  </data>
+  <data name="you_dont_choose_en" xml:space="preserve">
+    <value>You don't choose any permit!</value>
+  </data>
+  <data name="list_of_want_to_print_ar" xml:space="preserve">
+    <value>القائمة المراد طباعتها</value>
+  </data>
+  <data name="list_of_want_to_print_en" xml:space="preserve">
+    <value>List of people</value>
+  </data>
+  <data name="violation_details_ar" xml:space="preserve">
+    <value>تفاصيل المخالفة</value>
+  </data>
+  <data name="violation_details_en" xml:space="preserve">
+    <value>violation details</value>
+  </data>
+  <data name="transaction_type_notify_ar" xml:space="preserve">
+    <value>يسمح هذا النوع من الطباعة بطباعة التصاريح ذات نفس المعاملة المالية فقط</value>
+  </data>
+  <data name="transaction_type_notify_en" xml:space="preserve">
+    <value>This print type allow for same transaction type</value>
+  </data>
+</root>

@@ -1,0 +1,2736 @@
+﻿@using APP.Util;
+@using portal.Controllers;
+@using Newtonsoft.Json;
+@using SecurityClearanceWebApp.Models;
+@model SecurityClearanceWebApp.Models.RA42_VISITOR_PASS_DTL
+
+@{
+    ViewBag.Title = "Edit";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+    var controller = "Mypasses";
+    var agree = Resources.Common.ResourceManager.GetString("error_agree" + "_" + ViewBag.lang);
+    var main_z = Resources.Passes.ResourceManager.GetString("main_zone" + "_" + ViewBag.lang);
+    var sub_z = Resources.Passes.ResourceManager.GetString("sub_zone" + "_" + ViewBag.lang);
+    var remove = Resources.Passes.ResourceManager.GetString("Remove" + "_" + ViewBag.lang);
+    var all = Resources.Passes.ResourceManager.GetString("All" + "_" + ViewBag.lang);
+    var choose_sub_z = Resources.Passes.ResourceManager.GetString("choose_sub_zone_again" + "_" + ViewBag.lang);
+    var no_file_ = Resources.Passes.ResourceManager.GetString("not_allowed_m_ten" + "_" + ViewBag.lang);
+    var no_zone_ = Resources.Passes.ResourceManager.GetString("not_allowed_m_50" + "_" + ViewBag.lang);
+    var no_file_format = Resources.Passes.ResourceManager.GetString("file_format" + "_" + ViewBag.lang);
+    var doc = Resources.Passes.ResourceManager.GetString("document_type" + "_" + ViewBag.lang);
+    var documents = Resources.Passes.ResourceManager.GetString("Documents" + "_" + ViewBag.lang);
+    var expired = Resources.Common.ResourceManager.GetString("expired" + "_" + ViewBag.lang);
+    var countinue = Resources.Common.ResourceManager.GetString("countinue" + "_" + ViewBag.lang);
+    var relative = Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang);
+    var identity = Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang);
+    var no_persons = Resources.Passes.ResourceManager.GetString("Not_allowed_50_person" + "_" + ViewBag.lang);
+    var gender = Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang);
+    string barcode = Guid.NewGuid().ToString().Substring(0, 5);
+    var returned = "-" + Resources.Passes.ResourceManager.GetString("returned" + "_" + ViewBag.lang);
+
+    string currentUser = (new UserInfo()).getSNO();
+    var cards = new List<string> {
+                        "11","12","13","14","16"};
+
+}
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @if ((ViewBag.RESPO_STATE > 1 && ViewBag.RESPO_STATE < 11) || ViewBag.ADMIN == true || ViewBag.DEVELOPER == true)
+        {
+            @Html.Partial("Index")
+        }
+        <div class="col-md-12">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="fa fa-edit"></i>
+                        @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 @align">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @{
+                        if (TempData["Success"] != null)
+                        {
+                            <p class="alert alert-success">@TempData["Success"]</p>
+                        }
+                        if (TempData["Erorr"] != null)
+                        {
+                            <p class="alert alert-danger">@TempData["Erorr"]</p>
+                        }
+                    }
+                    <h4 class="text-primary">@Resources.Passes.ResourceManager.GetString("Visitor_pass" + "_" + ViewBag.lang) -  @(Language.GetCurrentLang()=="en"?Model.RA42_CARD_FOR_MST.CARD_FOR_E: Model.RA42_CARD_FOR_MST.CARD_FOR_A)</h4>
+                    @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        if (Model.CRD_BY.ToUpper() != currentUser.ToUpper())
+                        {
+                            <div class="card">
+                                <div class="card-header">@Resources.Passes.ResourceManager.GetString("requested_by" + "_" + ViewBag.lang)</div>
+                                <div class="card-body">
+                                    <input type="hidden" value="@Model.CRD_BY" class="service-number-field" />
+                                </div>
+                            </div>
+                            <br />
+                        }
+
+
+                <div class="row">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.VISITOR_PASS_CODE)
+
+                    <div class="col-md-12">
+                        @if (ViewBag.RESPO_STATE > 1)
+                        {
+                            {
+                                RA42_SECURITY_CLEARANCEEntities db = new RA42_SECURITY_CLEARANCEEntities();
+
+
+
+                                var v = db.RA42_VISITOR_PASS_DTL.Where(a => a.ID_CARD_NUMBER == Model.ID_CARD_NUMBER && a.CRD_DT != Model.CRD_DT && a.DLT_STS != true && !cards.Contains(a.CARD_FOR_CODE.ToString())).ToList();
+                                if (v.Count > 0)
+                                {
+                                    var m = 1;
+                                    <div class="col-md-12 bg-light p-2 rounded">
+                                        <h4 class="text-primary">@Resources.Passes.ResourceManager.GetString("old_passes" + "_" + ViewBag.lang): </h4>
+                                        <hr />
+                                        @foreach (var item in v)
+                                        {
+
+                                            <p>
+                                                <span class="bg-dark text-white pr-1 pl-1 rounded">@m.</span><a href="@Url.Action("Details", ViewBag.controllerName, new { id = item.VISITOR_PASS_CODE })" class="btn btn-link" target="_blank">
+                                                    @Resources.Passes.ResourceManager.GetString("Status" + "_" + ViewBag.lang):  @if (item.REJECTED == true)
+                                                    {
+                                                        <span class="text-danger  p-1 m-1"><i class="fa fa-times-circle"></i> @Resources.Passes.ResourceManager.GetString("Reject" + "_" + ViewBag.lang)</span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.STATUS == true)
+                                                        {
+                                                            <span class="text-success  p-0 m-1"> <i class="fa fa-check-circle"></i> @Resources.Passes.ResourceManager.GetString("Approve" + "_" + ViewBag.lang)</span>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-warning  p-1 m-1"><i class="fa fa-spinner fa-spin"></i> @Resources.Passes.ResourceManager.GetString("Progress" + "_" + ViewBag.lang)</span>
+
+                                                        }
+
+                                                    }
+                                                    | @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang):
+                                                    @(Language.GetCurrentLang() == "en" ? Model.RA42_STATIONS_MST.STATION_NAME_E : Model.RA42_STATIONS_MST.STATION_NAME_A)
+                                                    | @Resources.Passes.ResourceManager.GetString("CRD_DT" + "_" + ViewBag.lang):
+                                                    @item.CRD_DT.Value.ToString("dd/MM/yyyy")
+                                                    |@if (item.DATE_TO > DateTime.Today && item.ISPRINTED == true)
+                                                    {<span class="text-blue details">
+                                                            <i class="fa fa-clock"></i> @countinue  @if (item.RETURNED == true)
+                                                            {@returned}
+                                                        </span>}
+                                                    else
+                                                    {<span class="text-danger">
+                                                            <i class="fa fa-clock"></i> @expired  @if (item.RETURNED == true)
+                                                            {@returned}
+                                                        </span>}
+
+                                                </a>
+                                            </p>
+                                            {
+                                                m = m + 1;
+                                            }
+                                            <hr />
+                                        }
+                                    </div>
+                                }
+
+                                <br />
+                            }
+                        }
+                        <div class="form-group">
+
+                            <div class="card ">
+                                <div class="card-header">@Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)</div>
+                                <div class="row p-4">
+                                    <div class="col-2 text-center bg-light p-2">
+                                        <div class="m-1">
+                                            <img src="~/Files/Profiles/@Model.PERSONAL_IMAGE" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" width="100" height="100" />
+                                            @if (Model.PERSONAL_IMAGE != null)
+                                            {
+                                                <span id="deletImage"><a href="" id="@Model.VISITOR_PASS_CODE" class="btn-sm btn-danger"><i class="fa fa-times-circle"></i> </a></span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <br />
+                    </div>
+
+                    @if (ViewBag.RESPO_STATE <= 1 && Model.ISOPENED == true)
+                    {
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("hosted" + "_" + ViewBag.lang)
+                                @if (Model.REJECTED == true)
+                                {
+                                    @Html.EditorFor(model => model.RESPONSIBLE, new { htmlAttributes = new { @class = "form-control" } })
+
+                                }
+                                else
+                                {
+                                    @Html.EditorFor(model => model.RESPONSIBLE, new { htmlAttributes = new { @class = "form-control", @ReadOnly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.RESPONSIBLE, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        if (Model.COMPANY_CODE != null)
+                        {
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)
+                                    @if (Model.REJECTED == true)
+                                    {
+                                        @Html.DropDownList("COMPANY_CODE", null, htmlAttributes: new { @class = "form-control", id = "COMPANYCODE", @Style = "width:100%" })
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownList("COMPANY_CODE", null, htmlAttributes: new { @class = "form-control", id = "COMPANYCODE", @Style = "width:100%", @ReadOnly = true })
+
+                                    }
+                                    @Html.ValidationMessageFor(model => model.COMPANY_CODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        }
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Visitor_name" + "_" + ViewBag.lang)
+                                @if (Model.REJECTED == true)
+                                {
+                                    @Html.EditorFor(model => model.VISITOR_NAME, new { htmlAttributes = new { @class = "form-control" } })
+
+                                }
+                                else
+                                {
+                                    @Html.EditorFor(model => model.VISITOR_NAME, new { htmlAttributes = new { @class = "form-control", @ReadOnly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.VISITOR_NAME, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)
+                                        <input type="file" name="PERSONAL_IMAGE" accept="image/*" class="form-control" onchange="showpreview(this);" />
+                                        @Html.ValidationMessageFor(model => model.PERSONAL_IMAGE, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-1 p-2">
+                                    <img src="~/Content/images/adminpic.png" style="display: none;" width="50" height="50" id="imagePreview" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("worker_identity_card" + "_" + ViewBag.lang)
+                                @if (Model.REJECTED == true)
+                                {
+                                    @Html.EditorFor(model => model.ID_CARD_NUMBER, new { htmlAttributes = new { @class = "form-control" } })
+
+                                }
+                                else
+                                {
+                                    @Html.EditorFor(model => model.ID_CARD_NUMBER, new { htmlAttributes = new { @class = "form-control", @ReadOnly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.ID_CARD_NUMBER, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Gsm" + "_" + ViewBag.lang)
+                                @if (Model.REJECTED == true)
+                                {
+                                    @Html.EditorFor(model => model.GSM, new { htmlAttributes = new { @class = "form-control" } })
+
+                                }
+                                else
+                                {
+                                    @Html.EditorFor(model => model.GSM, new { htmlAttributes = new { @class = "form-control", @ReadOnly = true } })
+
+                                }
+                                @Html.ValidationMessageFor(model => model.GSM, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang)
+                                @if (Model.REJECTED == true)
+                                {
+                                    @Html.DropDownList("IDENTITY_CODE", null, htmlAttributes: new { @class = "form-control", id = "IDENTITY", @Style = "width:100%" })
+
+                                }
+                                else
+                                {
+                                    @Html.DropDownList("IDENTITY_CODE", null, htmlAttributes: new { @class = "form-control", id = "IDENTITY", @Style = "width:100%", @ReadOnly = true })
+
+                                }
+                                @Html.ValidationMessageFor(model => model.IDENTITY_CODE, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang)
+                                @if (Model.REJECTED == true)
+                                {
+                                    @Html.DropDownList("GENDER_ID", null, htmlAttributes: new { @class = "form-control", id = "GENDER", @Style = "width:100%" })
+
+                                }
+                                else
+                                {
+                                    @Html.DropDownList("GENDER_ID", null, htmlAttributes: new { @class = "form-control", id = "GENDER", @Style = "width:100%", @ReadOnly = true })
+                                }
+                                @Html.ValidationMessageFor(model => model.GENDER_ID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        if (Model.RELATIVE_TYPE_CODE != null)
+                        {
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang)
+
+                                    @Html.DropDownList("RELATIVE_TYPE_CODE", null, htmlAttributes: new { @class = "form-control", id = "RELATIVE", @Style = "width:100%" })
+                                    @Html.ValidationMessageFor(model => model.RELATIVE_TYPE_CODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        if (Model.NUMBER_OF_HOSTED != null)
+                        {
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("number_of_hosted" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.EditorFor(model => model.NUMBER_OF_HOSTED, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.NUMBER_OF_HOSTED, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 14)
+                        {
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("visitor_employer" + "_" + ViewBag.lang)
+                                    @Html.EditorFor(model => model.VISITOR_EMPLOYER, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.VISITOR_EMPLOYER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        if (Model.CARD_FOR_CODE == 11)
+                        {
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("sn_host" + "_" + ViewBag.lang)
+                                    @Html.EditorFor(model => model.SN_FOR_THE_GUARDIAN, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.SN_FOR_THE_GUARDIAN, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        if (Model.CARD_FOR_CODE == 14 || Model.CARD_FOR_CODE == 13)
+                        {
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Building_num" + "_" + ViewBag.lang)
+                                    @Html.EditorFor(model => model.HOME_NUMBER, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.HOME_NUMBER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        if (Model.CARD_FOR_CODE == 14 || Model.CARD_FOR_CODE == 13)
+                        {
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("host_phone_number" + "_" + ViewBag.lang)
+                                    @Html.EditorFor(model => model.PHONE_NUMBER, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PHONE_NUMBER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    @Resources.Passes.ResourceManager.GetString("Duration" + "_" + ViewBag.lang)
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang)
+                                            @if (Model.REJECTED == true)
+                                            {
+                                                @Html.EditorFor(model => model.DATE_FROM, new { htmlAttributes = new { @class = "form-control", @Style = "width:100%;direction: ltr;", onkeydown = "javascript: return false;" } })
+
+                                            }
+                                            else
+                                            {
+                                                @Html.EditorFor(model => model.DATE_FROM, new { htmlAttributes = new { @class = "form-control", @Style = "width:100%;direction: ltr;", @ReadOnly = true, onkeydown = "javascript: return false;" } })
+
+                                            }
+                                            @Html.ValidationMessageFor(model => model.DATE_FROM, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)
+
+                                            @if (Model.REJECTED == true)
+                                            {
+                                                @Html.EditorFor(model => model.DATE_TO, new { htmlAttributes = new { @class = "form-control", @Style = "width:100%;direction: ltr;", onkeydown = "javascript: return false;" } })
+
+                                            }
+                                            else
+                                            {
+                                                @Html.EditorFor(model => model.DATE_TO, new { htmlAttributes = new { @class = "form-control", @Style = "width:100%;direction: ltr;", @ReadOnly = true, onkeydown = "javascript: return false;" } })
+
+                                            }
+                                            @Html.ValidationMessageFor(model => model.DATE_TO, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        var display = "none";
+                        var val = "no";
+
+                        bool checkOption = false;
+
+
+                        if (Model.VECHILE_CODE != null)
+                        {
+                            <div>
+                                @{
+                                    val = "yes";
+                                    display = "block";
+                                    checkOption = true;
+                                }
+                            </div>
+                        }
+                        if (Model.CARD_FOR_CODE != 3)
+                        {
+                            <div class="col-md-12">
+                                <hr />
+                                <h5 id="confirm_car" class="text-danger"><input type="checkbox" checked="@checkOption" name="with_car" id="yes_car" /> @Resources.Passes.ResourceManager.GetString("with_car" + "_" + ViewBag.lang)</h5>
+                                <input type="hidden" value="@val" name="is_with_car" id="is_with_car" />
+                            </div>
+                            <div id="car_option" style="display:@display">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Vechile_cat" + "_" + ViewBag.lang)
+
+                                                @if (ViewBag.VECHILE_CODE != null)
+                                                {
+                                                    // True, the list is not empty
+
+
+
+                                                    <select id="catigory" class="form-control" name="VECHILE_CODE" style="width:100%;">
+
+                                                        @if (Model != null && Model.VECHILE_CODE != null)
+                                                        {
+                                                            <option selected value="@Model.VECHILE_CODE">@Html.DisplayFor(model => model.RA42_VECHILE_CATIGORY_MST.VECHILE_CAT)</option>
+                                                            foreach (var cat in ViewBag.VECHILE_CODE)
+                                                            {
+                                                                <option value="@cat.Value">@cat.Text</option>
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            foreach (var cat in ViewBag.VECHILE_CODE)
+                                                            {
+                                                                <option value="@cat.Value">@cat.Text</option>
+
+                                                            }
+                                                        }
+                                                    </select>
+
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Vechile_name" + "_" + ViewBag.lang)
+
+                                                <select id="car" class="form-control" name="VECHILE_NAME_CODE">
+                                                    @if (Model != null && Model.VECHILE_NAME_CODE != null)
+                                                    {
+                                                        <option value="@Model.VECHILE_NAME_CODE">@Html.DisplayFor(model => model.RA42_VECHILE_NAME_MST.VECHILE_NAME)</option>
+                                                    }
+                                                    else
+                                                    {
+
+                                                    }
+                                                </select>
+                                                @Html.ValidationMessageFor(model => model.VECHILE_NAME_CODE,
+                                                      "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Plate_type" + "_" + ViewBag.lang)
+
+                                                @Html.DropDownList("PLATE_CODE", null, htmlAttributes: new { @class = "form-control", id = "PLATECODE", @Style = "width:100%" })
+                                                @Html.ValidationMessageFor(model => model.PLATE_CODE, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Plate_number" + "_" + ViewBag.lang)
+
+                                                @Html.EditorFor(model => model.PLATE_NUMBER, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.PLATE_NUMBER, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Plate_char" + "_" + ViewBag.lang)
+
+                                                @Html.DropDownList("PLATE_CHAR_CODE", null, htmlAttributes: new { @class = "form-control", id = "PLATECHARCODE", @Style = "width:100%" })
+                                                @Html.ValidationMessageFor(model => model.PLATE_CHAR_CODE, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Vechile_color" + "_" + ViewBag.lang)
+
+                                                @Html.DropDownList("VECHILE_COLOR_CODE", null, htmlAttributes: new { @class = "form-control", id = "CARCOLOR", @Style = "width:100%" })
+                                                @Html.ValidationMessageFor(model => model.VECHILE_COLOR_CODE, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <input type="hidden" value="@val" name="is_with_car" id="is_with_car" />
+                        }
+                        <div class="col-12"><hr /></div>
+                        <br />
+
+
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                                @if (Model.REJECTED == true)
+                                {
+                                    @Html.TextAreaFor(model => model.PURPOSE_OF_PASS, new { @class = "form-control" })
+
+                                }
+                                else
+                                {
+                                    @Html.TextAreaFor(model => model.PURPOSE_OF_PASS, new { @class = "form-control", @ReadOnly = true })
+
+                                }
+                                @Html.ValidationMessageFor(model => model.PURPOSE_OF_PASS, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                @if (Model.REJECTED == true)
+                                {
+                                    @Html.TextAreaFor(model => model.REMARKS, new { @class = "form-control" })
+
+                                }
+                                else
+                                {
+                                    @Html.TextAreaFor(model => model.REMARKS, new { @class = "form-control", @ReadOnly = true })
+
+                                }
+                                @Html.ValidationMessageFor(model => model.REMARKS, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-12"><hr /></div>
+                        <br />
+                        if (Model.REJECTED == true)
+                        {
+                            <div class="col-12"><hr /></div>
+                            <br />
+
+
+                            <div class="col-md-6">
+
+                                <div class="col-md-12">
+                                    <h5 class="alert alert-primary text-center">
+                                        <i class="fa fa-arrows-alt p-1"></i>  @main_z
+                                    </h5>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="dvContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="col-md-12">
+                                    <h5 class="alert-secondary alert text-center">
+                                        <i class="fa fa-file-pdf p-1"></i> @documents
+                                    </h5>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="fContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        }
+                        <div class="col-lg-6">
+                            @foreach (var listZones in ViewBag.GetZones)
+                            {
+                                <div class="col-md-12">
+                                    <div class="btn btn-outline-dark  mt-1 btn-block">
+                                        <i class="fa fa-arrows-alt p-1"></i> @(Language.GetCurrentLang() == "en" ? listZones.RA42_ZONE_AREA_MST.ZONE_NAME_E + "-" + @Model.getZoneName(listZones.ZONE_SUB_CODE) : listZones.RA42_ZONE_AREA_MST.ZONE_NAME + "-" + @Model.getZoneName(listZones.ZONE_SUB_CODE)) @if (Model.REJECTED == true)
+                                        {
+                                            <span id="deletzone"><a href="" id="@listZones.ZONE_MASTER_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span>}
+                                        else
+                                        { }
+
+                                        <span style="display:none" id="zz_@listZones.ZONE_CODE">@listZones.ZONE_CODE</span>
+
+
+                                    </div>
+                                </div>
+                            }
+
+                            @if (ViewBag.GetZones.Count == 0)
+                            {
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger"><i class="fa fa-exclamation"></i> @Resources.Passes.ResourceManager.GetString("zones_not_complete" + "_" + ViewBag.lang)</div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="col-lg-6">
+                            @{
+                                int[] a = new int[100];
+                                int x = 0;
+                            }
+                            @if (ViewBag.GetFiles.Count != 0)
+                            {
+                                foreach (var listFiles in ViewBag.GetFiles)
+                                {
+                                    if (listFiles.FILE_TYPE != null)
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(listFiles.FILE_TYPE_TEXT))
+                                        {
+                                            bool check = DateTime.TryParse(listFiles.FILE_TYPE_TEXT, out DateTime dateTime);
+                                            if (check == true)
+                                            {
+                                                var exp = countinue;
+                                                var div = "alert-success";
+                                                DateTime d = Convert.ToDateTime(listFiles.FILE_TYPE_TEXT);
+                                                if (d < DateTime.Now)
+                                                {
+                                                    exp = expired;
+                                                    div = "alert-danger";
+                                                }
+                                                <div class="col-md-12">
+                                                    <div class="btn btn-outline-dark mt-1 btn-block">
+                                                        <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E: @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <span class="@div p-1 rounded">@exp | @listFiles.FILE_TYPE_TEXT </span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+                                                        @if (Model.REJECTED == true)
+                                                        {<span id="deletfile"><a href="" id="@listFiles.FILE_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span>}
+                                                        else
+                                                        { }
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-12">
+                                                    <div class="btn btn-outline-dark mt-1 btn-block">
+                                                        <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E: @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) | <span class="text-primary alert-light  rounded">@listFiles.FILE_TYPE_TEXT</span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+                                                        @if (Model.REJECTED == true)
+                                                        {<span id="deletfile"><a href="" id="@listFiles.FILE_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span>}
+                                                        else
+                                                        { }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-12">
+                                                <div class="btn btn-outline-dark mt-1 btn-block">
+                                                    <i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E: @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary details btn-sm mr-1" download><i class="fa fa-download"></i></a>
+                                                    @if (Model.REJECTED == true)
+                                                    {<span id="deletfile"><a href="" id="@listFiles.FILE_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span>}
+                                                    else
+                                                    { }
+                                                </div>
+                                            </div>
+                                        }
+
+                                        {
+                                            a[x] = listFiles.FILE_TYPE;
+                                            x++;
+                                        }
+                                        <span style="display:none" id="ff_@listFiles.FILE_TYPE">@listFiles.FILE_TYPE</span>
+
+
+                                    }
+                                }
+
+                                if (ViewBag.PASS_FILES != ViewBag.GetFiles.Count)
+                                {
+                                    <div class="col-md-12 p-4">
+                                        <h5>
+                                            <i class="fa fa-file-alt"></i>
+                                            @Resources.Passes.ResourceManager.GetString("documents_not_fit" + "_" + ViewBag.lang)
+                                        </h5>
+                                    </div>
+
+
+                                    foreach (var fileType in ViewBag.PASS_FILES_2)
+                                    {
+
+
+
+                                        var json = JsonConvert.SerializeObject(fileType, Formatting.Indented);
+                                        var json2 = @"[" + json + "]";
+                                        var data = JsonConvert.DeserializeObject<List<dynamic>>(json2);
+                                        int k = Convert.ToInt32(data[0].FILE_TYPE_CODE);
+                                        if (!a.ToList().Contains(k))
+                                        {
+
+
+                                            <div class="col-md-12">
+                                                <div class="btn btn-outline-danger mt-1 btn-block"><i class="fa fa-exclamation-triangle p-1"></i> @(Language.GetCurrentLang() == "en" ? data[0].FILE_TYPE_E : data[0].FILE_TYPE)</div>
+                                            </div>
+
+
+
+                                        }
+
+                                    }
+                                }
+                            }
+                            @if (ViewBag.GetFiles.Count == 0)
+                            {
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger"><i class="fa fa-exclamation"></i> @Resources.Passes.ResourceManager.GetString("documents_not_complete" + "_" + ViewBag.lang)</div>
+                                </div>
+                            }
+                        </div>
+                        if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 12 || Model.CARD_FOR_CODE == 13 || Model.CARD_FOR_CODE == 14)
+                        {
+
+                            <div class="col-md-12">
+                                <br />
+                                <div class="col-md-12">
+                                    @if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 13 || Model.CARD_FOR_CODE == 14)
+                                    {
+                                        <button onclick="AddMembers()" class="btn btn-primary details btn-block text-center" type="button">
+                                            <i class="fa fa-plus-circle"></i> @Resources.Passes.ResourceManager.GetString("Add_family_members" + "_" + ViewBag.lang)
+                                        </button>
+                                    }
+                                    @if (Model.CARD_FOR_CODE == 12)
+                                    {
+                                        <button onclick="AddEmployee()" class="btn btn-primary details btn-block text-center" type="button">
+                                            <i class="fa fa-plus-circle"></i> @Resources.Passes.ResourceManager.GetString("add_employee" + "_" + ViewBag.lang)
+                                        </button>
+                                    }
+                                </div>
+
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="mContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                @foreach (var listrelatives in ViewBag.GetRelativs)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="btn btn-outline-dark mt-1 btn-block">
+                                            <i class="fa fa-user p-1"></i> @listrelatives.FULL_NAME @if (!string.IsNullOrWhiteSpace(listrelatives.PERSONAL_IMAGE))
+                                            {<img src="@Url.Content("~/Files/Profiles/" + @listrelatives.PERSONAL_IMAGE)" width="50" height="50" />} - @listrelatives.REMARKS
+                                            <a href="#" class="float-left btn-info btn-sm mr-1" onclick="RelativeData(@listrelatives.MEMBER_CODE)"><i class="fa fa-question-circle"></i></a>
+                                            @if (Model.REJECTED == true)
+                                            {
+                                                <a href="@Url.Action("EditRelative", ViewBag.controllerName, new { id = listrelatives.MEMBER_CODE })" target="_blank" class="float-left btn-warning btn-sm mr-1"><i class="fa fa-edit"></i></a>
+                                                <span id="deleteRelative"><a href="" id="@listrelatives.MEMBER_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        <div class="col-12"><hr /></div>
+
+                    }
+                    else
+                    {
+                        if (ViewBag.RESPO_STATE > 1 || Model.ISOPENED != true)
+                        {
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("respo_unit" + "_" + ViewBag.lang)
+
+                                    @Html.EditorFor(model => model.RESPONSIBLE, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.RESPONSIBLE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            if (Model.COMPANY_CODE != null)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                        @Html.DropDownList("COMPANY_CODE", null, htmlAttributes: new { @class = "form-control", id = "COMPANYCODE", @Style = "width:100%" })
+                                        @Html.ValidationMessageFor(model => model.COMPANY_CODE, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Visitor_name" + "_" + ViewBag.lang)
+
+                                    @Html.EditorFor(model => model.VISITOR_NAME, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.VISITOR_NAME, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)
+                                            <input type="file" name="PERSONAL_IMAGE" accept="image/*" class="form-control" onchange="showpreview(this);" />
+                                            @Html.ValidationMessageFor(model => model.PERSONAL_IMAGE, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 p-2">
+                                        <img src="~/Content/images/adminpic.png" style="display: none;" width="50" height="50" id="imagePreview" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("worker_identity_card" + "_" + ViewBag.lang)
+
+                                    @Html.EditorFor(model => model.ID_CARD_NUMBER, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ID_CARD_NUMBER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Gsm" + "_" + ViewBag.lang)
+
+                                    @Html.EditorFor(model => model.GSM, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.GSM, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang)
+
+                                    @Html.DropDownList("IDENTITY_CODE", null, htmlAttributes: new { @class = "form-control", id = "IDENTITY", @Style = "width:100%" })
+                                    @Html.ValidationMessageFor(model => model.IDENTITY_CODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang)
+                                    @Html.DropDownList("GENDER_ID", null, htmlAttributes: new { @class = "form-control", id = "GENDER", @Style = "width:100%" })
+                                    @Html.ValidationMessageFor(model => model.GENDER_ID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            if (Model.RELATIVE_TYPE_CODE != null)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang)
+
+                                        @Html.DropDownList("RELATIVE_TYPE_CODE", null, htmlAttributes: new { @class = "form-control", id = "RELATIVE", @Style = "width:100%" })
+                                        @Html.ValidationMessageFor(model => model.RELATIVE_TYPE_CODE, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+                            if (Model.NUMBER_OF_HOSTED != null)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("number_of_hosted" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                        @Html.EditorFor(model => model.NUMBER_OF_HOSTED, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.NUMBER_OF_HOSTED, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+                            if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 14)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("visitor_employer" + "_" + ViewBag.lang)
+                                        @Html.EditorFor(model => model.VISITOR_EMPLOYER, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.VISITOR_EMPLOYER, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+                            if (Model.CARD_FOR_CODE == 11)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("sn_host" + "_" + ViewBag.lang)
+                                        @Html.EditorFor(model => model.SN_FOR_THE_GUARDIAN, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.SN_FOR_THE_GUARDIAN, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+                            if (Model.CARD_FOR_CODE == 14 || Model.CARD_FOR_CODE == 13)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("Building_num" + "_" + ViewBag.lang)
+                                        @Html.EditorFor(model => model.HOME_NUMBER, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.HOME_NUMBER, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+                            if (Model.CARD_FOR_CODE == 14 || Model.CARD_FOR_CODE == 13)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Resources.Passes.ResourceManager.GetString("host_phone_number" + "_" + ViewBag.lang)
+                                        @Html.EditorFor(model => model.PHONE_NUMBER, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PHONE_NUMBER, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        @Resources.Passes.ResourceManager.GetString("Duration" + "_" + ViewBag.lang)
+                                    </div>
+                                    <div class="row p-2">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang)
+
+                                                @Html.EditorFor(model => model.DATE_FROM, new { htmlAttributes = new { @class = "form-control", @Style = "width:100%;direction: ltr;", onkeydown = "javascript: return false;", @autocomplete = "off" } })
+                                                @Html.ValidationMessageFor(model => model.DATE_FROM, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)
+
+                                                @Html.EditorFor(model => model.DATE_TO, new { htmlAttributes = new { @class = "form-control", @Style = "width:100%;direction: ltr;", onkeydown = "javascript: return false;", @autocomplete = "off" } })
+                                                @Html.ValidationMessageFor(model => model.DATE_TO, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            if (Model.CARD_FOR_CODE == 3)
+                            {
+                                if ((Model.ISOPENED != true && ViewBag.RESPO_STATE <= 1) || ViewBag.DEVELOPER == true)
+                                {
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+
+                                            @Resources.Passes.ResourceManager.GetString("Workflow_respo" + "_" + ViewBag.lang)
+
+
+                                            @Html.DropDownList("WORKFLOW_RESPO_CODE", null, htmlAttributes: new { @class = "form-control", id = "WORKFLOWRESPOCODE", @Style = "width:100%" })
+                                            @Html.ValidationMessageFor(model => model.WORKFLOW_RESPO_CODE, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            var display = "none";
+                            var val = "no";
+
+                            bool checkOption = false;
+
+
+                            if (Model.VECHILE_CODE != null)
+                            {
+                                <div>
+                                    @{
+                                        val = "yes";
+                                        display = "block";
+                                        checkOption = true;
+                                    }
+                                </div>
+                            }
+                            if (Model.CARD_FOR_CODE != 3)
+                            {
+                                <div class="col-md-12">
+                                    <hr />
+                                    <h5 id="confirm_car" class="text-danger"><input type="checkbox" checked="@checkOption" name="with_car" id="yes_car" /> @Resources.Passes.ResourceManager.GetString("with_car" + "_" + ViewBag.lang)</h5>
+                                    <input type="hidden" value="@val" name="is_with_car" id="is_with_car" />
+                                </div>
+                                <div id="car_option" style="display:@display">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Vechile_cat" + "_" + ViewBag.lang)
+
+                                                    <select id="catigory" class="form-control" name="VECHILE_CODE" style="width:100%;">
+
+                                                        @if (Model != null && Model.VECHILE_CODE != null)
+                                                        {
+                                                            <option selected value="@Model.VECHILE_CODE">@Html.DisplayFor(model => model.RA42_VECHILE_CATIGORY_MST.VECHILE_CAT)</option>
+                                                            foreach (var cat in ViewBag.VECHILE_CODE)
+                                                            {
+                                                                <option value="@cat.Value">@cat.Text</option>
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            foreach (var cat in ViewBag.VECHILE_CODE)
+                                                            {
+                                                                <option value="@cat.Value">@cat.Text</option>
+
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Vechile_name" + "_" + ViewBag.lang)
+
+                                                    <select id="car" class="form-control" name="VECHILE_NAME_CODE">
+                                                        @if (Model != null && Model.VECHILE_NAME_CODE != null)
+                                                        {
+                                                            <option value="@Model.VECHILE_NAME_CODE">@Html.DisplayFor(model => model.RA42_VECHILE_NAME_MST.VECHILE_NAME)</option>
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                    </select>
+                                                    @Html.ValidationMessageFor(model => model.VECHILE_NAME_CODE,
+                                                          "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Plate_type" + "_" + ViewBag.lang)
+
+                                                    @Html.DropDownList("PLATE_CODE", null, htmlAttributes: new { @class = "form-control", id = "PLATECODE", @Style = "width:100%" })
+                                                    @Html.ValidationMessageFor(model => model.PLATE_CODE, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Plate_number" + "_" + ViewBag.lang)
+
+                                                    @Html.EditorFor(model => model.PLATE_NUMBER, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.PLATE_NUMBER, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Plate_char" + "_" + ViewBag.lang)
+
+                                                    @Html.DropDownList("PLATE_CHAR_CODE", null, htmlAttributes: new { @class = "form-control", id = "PLATECHARCODE", @Style = "width:100%" })
+                                                    @Html.ValidationMessageFor(model => model.PLATE_CHAR_CODE, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Resources.Passes.ResourceManager.GetString("Vechile_color" + "_" + ViewBag.lang)
+
+                                                    @Html.DropDownList("VECHILE_COLOR_CODE", null, htmlAttributes: new { @class = "form-control", id = "CARCOLOR", @Style = "width:100%" })
+                                                    @Html.ValidationMessageFor(model => model.VECHILE_COLOR_CODE, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="hidden" value="@val" name="is_with_car" id="is_with_car" />
+                            }
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)
+                                    @Html.TextAreaFor(model => model.PURPOSE_OF_PASS, new { @class = "form-control", @ReadOnly = true })
+                                    @Html.ValidationMessageFor(model => model.PURPOSE_OF_PASS, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                    @Html.TextAreaFor(model => model.REMARKS, new { @class = "form-control", @ReadOnly = true })
+                                    @Html.ValidationMessageFor(model => model.REMARKS, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-12"><hr /></div>
+                            <br />
+                            <div class="col-md-6">
+
+                                <div class="col-md-12">
+                                    <h5 class="alert alert-primary text-center">
+                                        <i class="fa fa-arrows-alt p-1"></i>  @main_z
+                                    </h5>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="dvContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="col-md-12">
+                                    <h5 class="alert-secondary alert text-center">
+                                        <i class="fa fa-file-pdf p-1"></i> @documents
+                                    </h5>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="fContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+
+                                @foreach (var listZones in ViewBag.GetZones)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="btn btn-outline-dark  mt-1 btn-block"><i class="fa fa-arrows-alt p-1"></i> @(Language.GetCurrentLang() == "en" ? listZones.RA42_ZONE_AREA_MST.ZONE_NAME_E + " - " + Model.getZoneName(listZones.ZONE_SUB_CODE) : listZones.RA42_ZONE_AREA_MST.ZONE_NAME + " - " + Model.getZoneName(listZones.ZONE_SUB_CODE)) <span id="deletzone"><a href="" id="@listZones.ZONE_MASTER_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span></div>
+                                    </div>
+                                    <span style="display:none" id="zz_@listZones.ZONE_CODE">@listZones.ZONE_CODE</span>
+
+                                }
+                                @if (ViewBag.GetZones.Count == 0)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="alert alert-danger"><i class="fa fa-exclamation"></i> @Resources.Passes.ResourceManager.GetString("zones_not_complete" + "_" + ViewBag.lang)</div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="col-lg-6">
+                                @{
+                                    int[] a = new int[100];
+                                    int x = 0;
+                                }
+                                @if (ViewBag.GetFiles.Count != 0)
+                                {
+                                    foreach (var listFiles in ViewBag.GetFiles)
+                                    {
+                                        if (listFiles.FILE_TYPE != null)
+                                        {
+                                            if (!string.IsNullOrWhiteSpace(listFiles.FILE_TYPE_TEXT))
+                                            {
+                                                bool check = DateTime.TryParse(listFiles.FILE_TYPE_TEXT, out DateTime dateTime);
+                                                if (check == true)
+                                                {
+                                                    var exp = countinue;
+                                                    var div = "alert-success";
+                                                    DateTime d = Convert.ToDateTime(listFiles.FILE_TYPE_TEXT);
+                                                    if (d < DateTime.Now)
+                                                    {
+                                                        exp = expired;
+                                                        div = "alert-danger";
+                                                    }
+                                                    <div class="col-md-12">
+                                                        <div class="btn btn-outline-dark mt-1 btn-block"><i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E: @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <span class="@div p-1 rounded">@exp | @listFiles.FILE_TYPE_TEXT </span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary btn-sm mr-1" download><i class="fa fa-download"></i></a> <span id="deletfile"><a href="" id="@listFiles.FILE_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span></div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-md-12">
+                                                        <div class="btn btn-outline-dark mt-1 btn-block"><i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E: @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) | <span class="text-primary alert-light  rounded">@listFiles.FILE_TYPE_TEXT</span> <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary btn-sm mr-1" download><i class="fa fa-download"></i></a> <span id="deletfile"><a href="" id="@listFiles.FILE_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span></div>
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-12">
+                                                    <div class="btn btn-outline-dark mt-1 btn-block"><i class="fa fa-file-pdf p-1"></i> @(Language.GetCurrentLang() == "en" ? @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE_E: @listFiles.RA42_FILE_TYPE_MST.FILE_TYPE) <a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-warning btn-sm mr-1" target="_blank"><i class="fa fa-external-link-alt"></i></a><a href="~/Files/Documents/@listFiles.FILE_NAME" class="float-left btn-primary btn-sm mr-1" download><i class="fa fa-download"></i></a> <span id="deletfile"><a href="" id="@listFiles.FILE_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span></div>
+                                                </div>
+                                            }
+
+
+
+                                            {
+                                                a[x] = listFiles.FILE_TYPE;
+                                                x++;
+                                            }
+                                            <span style="display:none" id="ff_@listFiles.FILE_TYPE">@listFiles.FILE_TYPE</span>
+
+                                        }
+                                    }
+
+                                    if (ViewBag.PASS_FILES != ViewBag.GetFiles.Count)
+                                    {
+                                        <div class="col-md-12 p-4">
+                                            <h5>
+                                                <i class="fa fa-file-alt"></i>
+                                                @Resources.Passes.ResourceManager.GetString("documents_not_fit" + "_" + ViewBag.lang)
+                                            </h5>
+                                        </div>
+
+
+                                        foreach (var fileType in ViewBag.PASS_FILES_2)
+                                        {
+
+
+
+                                            var json = JsonConvert.SerializeObject(fileType, Formatting.Indented);
+                                            var json2 = @"[" + json + "]";
+                                            var data = JsonConvert.DeserializeObject<List<dynamic>>(json2);
+                                            int k = Convert.ToInt32(data[0].FILE_TYPE_CODE);
+                                            if (!a.ToList().Contains(k))
+                                            {
+
+
+                                                <div class="col-md-12">
+                                                    <div class="btn btn-outline-danger mt-1 btn-block"><i class="fa fa-exclamation-triangle p-1"></i> @(Language.GetCurrentLang() == "en" ? data[0].FILE_TYPE_E : data[0].FILE_TYPE)</div>
+                                                </div>
+
+
+
+                                            }
+
+                                        }
+                                    }
+                                }
+                                @if (ViewBag.GetFiles.Count == 0)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="alert alert-danger"><i class="fa fa-exclamation"></i> @Resources.Passes.ResourceManager.GetString("documents_not_complete" + "_" + ViewBag.lang)</div>
+                                    </div>
+                                }
+
+                            </div>
+                            if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 12 || Model.CARD_FOR_CODE == 13 || Model.CARD_FOR_CODE == 14)
+                            {
+
+                                <div class="col-md-12">
+                                    <br />
+                                    <div class="col-md-12">
+                                        @if (Model.CARD_FOR_CODE == 11 || Model.CARD_FOR_CODE == 13 || Model.CARD_FOR_CODE == 14)
+                                        {
+                                            <button onclick="AddMembers()" class="btn btn-primary details btn-block text-center" type="button">
+                                                <i class="fa fa-plus-circle"></i> @Resources.Passes.ResourceManager.GetString("Add_family_members" + "_" + ViewBag.lang)
+                                            </button>
+                                        }
+                                        @if (Model.CARD_FOR_CODE == 12)
+                                        {
+                                            <button onclick="AddEmployee()" class="btn btn-primary details btn-block text-center" type="button">
+                                                <i class="fa fa-plus-circle"></i> @Resources.Passes.ResourceManager.GetString("add_employee" + "_" + ViewBag.lang)
+                                            </button>
+                                        }
+                                    </div>
+
+                                    <br />
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div id="mContainer"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    @foreach (var listrelatives in ViewBag.GetRelativs)
+                                    {
+                                        <div class="col-md-12">
+                                            <div class="btn btn-outline-dark mt-1 btn-block">
+                                                <i class="fa fa-user p-1"></i> @listrelatives.FULL_NAME @if (!string.IsNullOrWhiteSpace(listrelatives.PERSONAL_IMAGE))
+                                                {<img src="@Url.Content("~/Files/Profiles/" + @listrelatives.PERSONAL_IMAGE)" width="50" height="50" />} - @listrelatives.REMARKS
+                                                <a href="#" class="float-left btn-info btn-sm mr-1" onclick="RelativeData(@listrelatives.MEMBER_CODE)"><i class="fa fa-question-circle"></i></a>
+                                                <a href="@Url.Action("EditRelative", ViewBag.controllerName, new { id = listrelatives.MEMBER_CODE })" target="_blank" class="float-left btn-warning btn-sm mr-1"><i class="fa fa-edit"></i></a>
+                                                <span id="deleteRelative"><a href="" id="@listrelatives.MEMBER_CODE" class="float-left btn-danger btn-sm"><i class="fa fa-trash"></i></a></span>
+
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            <div class="col-12"><hr /></div>
+                        }
+
+
+
+                        if (ViewBag.RESPO_STATE == 4)
+                        {
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Barcod" + "_" + ViewBag.lang)
+                                    @if (Model.BARCODE != null)
+                                    {
+                                        <input class="form-control text-box single-line"
+                                               value="@Model.BARCODE"
+                                               name="BARCODE" type="hidden" readonly />
+                                        <br />
+                                    }
+                                    else
+                                    {
+                                        <input class="form-control text-box single-line"
+                                               value="@barcode"
+                                               name="BARCODE" type="hidden" readonly />
+                                        <br />
+                                    }
+                                    <img id="barcode3" />
+                                    @Html.ValidationMessageFor(model => model.BARCODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        }
+
+                        if (ViewBag.RESPO_STATE == 11 && Model.CARD_FOR_CODE != 12)
+                        {
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Barcod" + "_" + ViewBag.lang)
+                                    @if (Model.BARCODE != null)
+                                    {
+                                        <input class="form-control text-box single-line"
+                                               value="@Model.BARCODE"
+                                               name="BARCODE" type="hidden" readonly />
+                                        <br />
+                                    }
+                                    else
+                                    {
+                                        <input class="form-control text-box single-line"
+                                               value="@barcode"
+                                               name="BARCODE" type="hidden" readonly />
+                                        <br />
+                                    }
+                                    <img id="barcode3" />
+                                    @Html.ValidationMessageFor(model => model.BARCODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        }
+                    }
+                    <div class="col-md-12">
+
+                        <h4>
+                            @Resources.Passes.ResourceManager.GetString("Comments" + "_" + ViewBag.lang)
+                        </h4>
+
+                        <div class="form-group">
+                            <label class="control-label">
+                                @Resources.Passes.ResourceManager.GetString("Add_comment" + "_" + ViewBag.lang)
+                            </label>
+                            <textarea name="COMMENT" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    @if (ViewBag.COMMENTS != null)
+                    {
+
+                        foreach (var comment in ViewBag.COMMENTS)
+                        {
+                            <div class="col-md-12">
+                                <div class="form-group">
+
+                                    <div class="card-body" style="background: #c8d0d1; border-radius:5px;">
+                                        <p class="bg-white p-1 rounded">
+                                            @{
+
+                                                string name = Resources.Passes.ResourceManager.GetString("Autho_type" + "_" + ViewBag.lang) + ": " + (new UserInfo()).WorkFlowType(comment.CRD_BY) + " - " + (new UserInfo()).FULL_NAME(comment.CRD_BY);
+
+                                                @name
+
+                                            }
+                                            - @Resources.Passes.ResourceManager.GetString("Crd_comment_date" + "_" + ViewBag.lang) - @comment.CRD_DT
+
+                                        </p>
+                                        <br />
+                                        @comment.COMMENT
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <div class="col-md-12">
+
+                        <div class="form-group @align">
+                            @if (ViewBag.STATUS == true)
+                            {
+
+                                if (ViewBag.RESPO_STATE != 0)
+                                {
+                                    if (ViewBag.RESPO_STATE != 1)
+                                    {
+                                        <button type="submit" value="Approve" class="btn btn-success" name="approvebtn">
+                                            <i class="fa fa-check-circle"></i>
+                                            @Resources.Common.ResourceManager.GetString("approve" + "_" + ViewBag.lang)
+                                        </button>
+                                    }
+                                }
+                            }
+
+                            else
+                            {
+                                if (ViewBag.RESPO_STATE == 2 || ViewBag.RESPO_STATE == 3 || ViewBag.RESPO_STATE == 4 || ViewBag.RESPO_STATE == 11)
+                                {
+
+                                    <button type="submit" value="Reject" class="btn btn-danger" name="rejectbtn">
+                                        <i class="fa fa-minus-circle"></i>
+                                        @Resources.Common.ResourceManager.GetString("reject" + "_" + ViewBag.lang)
+
+                                    </button>
+
+                                    <button type="submit" value="Approve" class="btn btn-success" name="approvebtn">
+                                        <i class="fa fa-check-circle"></i>
+                                        @Resources.Common.ResourceManager.GetString("approve" + "_" + ViewBag.lang)
+                                    </button>
+                                }
+
+                                if (ViewBag.RESPO_STATE <= 1)
+                                {
+                                    if (Model.REJECTED == true)
+                                    {
+                                        <button type="submit" value="Approve" class="btn btn-success" name="approvebtn">
+                                            <i class="fa fa-check-circle"></i>
+                                            @Resources.Common.ResourceManager.GetString("approve" + "_" + ViewBag.lang)
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        if (Model.ISOPENED != true)
+                                        {
+                                            <button type="submit" value="Approve" class="btn btn-success" name="approvebtn">
+                                                <i class="fa fa-check-circle"></i>
+                                                @Resources.Common.ResourceManager.GetString("approve" + "_" + ViewBag.lang)
+                                            </button>
+                                        }
+                                    }
+
+
+                                }
+
+
+                            }
+                        </div>
+
+
+                    </div>
+                </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="modal fade" id="Relative" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_details"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="details-info-title">@Resources.Passes.ResourceManager.GetString("Name_a" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="NAME"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="details-info-title">@Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="TYPE"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="details-info-title">@Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="GEN"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="details-info-title">@Resources.Passes.ResourceManager.GetString("Civil_number" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="CIVIL_ID"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="details-info-title">@Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="IDEN"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="details-info-title">@Resources.Common.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="REM"></h6>
+                        <hr />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <link href="~/Content/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/select2.min.js"></script>
+    <link href="~/Content/Kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/Kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="~/Scripts/Kendo/js/kendo.all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+        showProgressBar($(".service-number-field"));
+        showServiceInfo($(".service-number-field"));
+
+        AddZones();
+        AddFiles();
+
+        $(function () {
+            var dateToday = new Date();
+            var yrRange = dateToday.getFullYear() + ":" + (dateToday.getFullYear() + 1);
+            $("#DATE_FROM").datepicker({
+                //minDate: 0,
+                dateFormat: "dd/mm/yy",
+                yearRange: yrRange,
+                changeMonth: true,
+                numberOfMonths: 1,
+                changeYear: true,
+                onClose: function (selectedDate, inst) {
+                    var minDate = new Date(Date.parse(selectedDate));
+                    //minDate.setDate(maxDate.getDate() + 1);
+                    $("#DATE_TO").datepicker("option", "minDate", selectedDate);
+                }
+            });
+
+            $("#DATE_TO").datepicker({
+                minDate: "+1D",
+                dateFormat: "dd/mm/yy",
+                yearRange: yrRange,
+                changeMonth: true,
+                numberOfMonths: 1,
+                changeYear: true,
+                onClose: function (selectedDate, inst) {
+                    var maxDate = new Date(Date.parse(selectedDate));
+                     //maxDate.setDate(maxDate.getDate() - 1);
+                        //$("#DATE_FROM").datepicker("option", "maxDate", maxDate);
+                }
+            });
+        });
+
+        $("#IDENTITY").kendoComboBox({
+            filter: "contains",
+            change: function (e) {
+                var widget = e.sender;
+
+                if (widget.value() && widget.select() === -1) {
+                    //custom has been selected
+                    widget.value(""); //reset widget
+                    //widget.trigger("change");
+                }
+            }
+        });
+
+        $("#PLATECHARCODE").kendoComboBox({
+            filter: "contains",
+            change: function (e) {
+                var widget = e.sender;
+
+                if (widget.value() && widget.select() === -1) {
+                    //custom has been selected
+                    widget.value(""); //reset widget
+                    //widget.trigger("change");
+                }
+            }
+        });
+        $("#CARCOLOR").kendoComboBox({
+            filter: "contains",
+            change: function (e) {
+                var widget = e.sender;
+
+                if (widget.value() && widget.select() === -1) {
+                    //custom has been selected
+                    widget.value(""); //reset widget
+                    //widget.trigger("change");
+                }
+            }
+        });
+        $("#catigory").kendoComboBox({
+            filter: "contains",
+            change: function (e) {
+                var widget = e.sender;
+
+                if (widget.value() && widget.select() === -1) {
+                    //custom has been selected
+                    widget.value(""); //reset widget
+                    //widget.trigger("change");
+                }
+            }
+        });
+        $("#GENDER").kendoComboBox({
+            filter: "contains",
+            change: function (e) {
+                var widget = e.sender;
+
+                if (widget.value() && widget.select() === -1) {
+                    //custom has been selected
+                    widget.value(""); //reset widget
+                    //widget.trigger("change");
+                }
+            }
+        });
+        $("#PLATECODE").kendoComboBox({
+            filter: "contains",
+            change: function (e) {
+                var widget = e.sender;
+
+                if (widget.value() && widget.select() === -1) {
+                    //custom has been selected
+                    widget.value(""); //reset widget
+                    //widget.trigger("change");
+                }
+            }
+        });
+        $("#COMPANYCODE").kendoComboBox({
+            filter: "contains",
+            change: function (e) {
+                var widget = e.sender;
+
+                if (widget.value() && widget.select() === -1) {
+                    //custom has been selected
+                    widget.value(""); //reset widget
+                    //widget.trigger("change");
+                }
+            }
+        });
+        $("#RELATIVE").kendoComboBox({
+            filter: "contains",
+            change: function (e) {
+                var widget = e.sender;
+
+                if (widget.value() && widget.select() === -1) {
+                    //custom has been selected
+                    widget.value(""); //reset widget
+                    //widget.trigger("change");
+                }
+            }
+        });
+
+        $("#yes_car").change(function () {
+            var div = document.getElementById("car_option");
+            if (this.checked) {
+                div.style.display = 'block';
+                document.getElementById("is_with_car").value = "yes";
+            }
+            else {
+                div.style.display = 'none';
+                document.getElementById("is_with_car").value = "no";
+
+            }
+
+        });
+
+
+    });
+
+        function RelativeData(Id) {
+            $("#MEMBER_CODE").val(Id);
+            var url = "../GetObjectById?Id=" + Id;
+            console.log(Id);
+            $("#ModalTitle_details").html("<i class='fa fa-eye'></i> @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)");
+            $("#Relative").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var name = obj.FULL_NAME != null ? obj.FULL_NAME : "";
+                    var type = obj.RELATIVE_TYPE != null ? obj.RELATIVE_TYPE : "";
+                    var identity = obj.IDENTITY != null ? obj.IDENTITY : "";
+                    var gen = obj.GENDER != null ? obj.GENDER : "";
+                    var civil = obj.CIVIL_NUMBER != null ? obj.CIVIL_NUMBER : "";
+                    var remarks = obj.REMARKS != null ? obj.REMARKS : "";
+                    $("#NAME").text(name);
+                    $("#TYPE").text(type);
+                    $("#IDEN").text(identity);
+                    $("#GEN").text(gen);
+                    $("#CIVIL_ID").text(civil);
+                    $("#REM").text(remarks);
+
+
+                }
+            })
+
+        }
+
+        $('#deleteRelative a').click(function (e) {
+            e.preventDefault();
+
+            var id = $(this).attr("Id");
+
+            var MSG = confirm("@Resources.Passes.ResourceManager.GetString("are_you_sure_you_want_delete_member" + "_" + ViewBag.lang)");
+
+            if (MSG) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteRelative")',
+                    data: { id: id },
+                    dataType: "json",
+                    success: function () {
+                        setTimeout(function () { location.reload(); }, 1);
+                    },
+                    error: function () {
+                        alert("@Resources.Passes.ResourceManager.GetString("error" + "_" + ViewBag.lang)");
+                    }
+                });
+            }
+            })
+          $('#deletImage a').click(function (e) {
+            e.preventDefault();
+
+            var id = $(this).attr("Id");
+
+            var MSG = confirm("@Resources.Passes.ResourceManager.GetString("File_confirm_delete" + "_" + ViewBag.lang)");
+
+            if (MSG) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteImage")',
+                    data: { id: id },
+                    dataType: "json",
+                    success: function () {
+                        setTimeout(function () { location.reload(); }, 1);
+                    },
+                    error: function () {
+                        alert("@Resources.Passes.ResourceManager.GetString("Error_delete_file" + "_" + ViewBag.lang)");
+                    }
+                });
+            }
+            })
+            $('#deletfile a').click(function (e) {
+                e.preventDefault();
+
+                var id = $(this).attr("Id");
+
+                var MSG = confirm("@Resources.Passes.ResourceManager.GetString("File_confirm_delete" + "_" + ViewBag.lang)");
+
+                if (MSG) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("DeleteFile")',
+                        data: { id: id },
+                        dataType: "json",
+                        success: function () {
+                            setTimeout(function () { location.reload(); }, 1);
+                        },
+                        error: function () {
+                            alert("@Resources.Passes.ResourceManager.GetString("Error_delete_file" + "_" + ViewBag.lang)");
+                        }
+                    });
+                }
+            })
+
+            $('#deletzone a').click(function (e) {
+                e.preventDefault();
+
+                var id = $(this).attr("Id");
+
+                var MSG = confirm("@Resources.Passes.ResourceManager.GetString("Area_confirm_delete" + "_" + ViewBag.lang)");
+
+                if (MSG) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("DeleteZone")',
+                        data: { id: id },
+                        dataType: "json",
+                        success: function () {
+                            setTimeout(function () { location.reload(); }, 1);
+                        },
+                        error: function () {
+                            alert("@Resources.Passes.ResourceManager.GetString("Error_delete_area" + "_" + ViewBag.lang)");
+                        }
+                    });
+                }
+            })
+
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+   
+         $.ajax({
+    type: 'GET',
+    url: '@Url.Action("GetCars")',
+
+    dataType: 'json',
+
+        data: { catigory: $("#catigory").val() },
+
+
+    success: function (states) {
+
+
+    $.each(states, function (i, state) {
+        //$("#car").append('<option value="' + state['VECHILE_NAME_CODE'] + '">"' + state['VECHILE_NAME'] + '"</option>');
+        $("#car").append('<option value="' + state['VECHILE_NAME_CODE'] + '">' +
+            state['VECHILE_NAME'] + '</option>');
+
+    });
+    },
+    error: function (ex) {
+        consol.log(ex);
+    }
+    });
+    $("#catigory").change(function () {
+    $("#car").empty();
+    $.ajax({
+    type: 'GET',
+    url: '@Url.Action("GetCars")',
+
+    dataType: 'json',
+
+        data: { catigory: $("#catigory").val() },
+
+
+    success: function (states) {
+
+
+    $.each(states, function (i, state) {
+        //$("#car").append('<option value="' + state['VECHILE_NAME_CODE'] + '">"' + state['VECHILE_NAME'] + '"</option>');
+        $("#car").append('<option value="' + state['VECHILE_NAME_CODE'] + '">' +
+            state['VECHILE_NAME'] + '</option>');
+
+    });
+    },
+    error: function (ex) {
+        consol.log(ex);
+    }
+    });
+    return false;
+    })
+
+        });
+
+
+        
+
+
+
+
+
+    </script>
+
+    <script>
+
+       function showpreview(input) {
+
+            if (input.files && input.files[0]) {
+
+                var val = $(input).val().toLowerCase(),
+                    regex = new RegExp("(.*?)\.(gif|jpg|jpeg|JPEG|GIF|JPG)$");
+
+                if (!(regex.test(val))) {
+                    $(input).val('');
+                    $('#imagePreview').css('display', 'none');
+
+                    alert('@no_file_format');
+
+                }
+                else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imagePreview').css('display', 'inline');
+                        $('#imagePreview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        }
+        function AddZones() {
+
+
+                var zones = JSON.parse('@Html.Raw(Json.Encode(ViewBag.ZONE_CODE))');
+
+                var dvContainer = document.getElementById("dvContainer");
+                var div = document.createElement("DIV");
+                div.className = "bg-light rounded";
+                //Add data
+                for (var i = 0; i < zones.length; i++) {
+                    var z_id = "#zz_" + zones[i].Value;
+                    var zz = $(z_id).text();
+                    console.log(zz);
+                    if (zz != zones[i].Value) {
+                    var ddlZones = document.createElement("INPUT");
+                    ddlZones.type = "checkbox"
+                    ddlZones.name = "ZONE[]"
+                    ddlZones.className = "m-2";
+                    ddlZones.id = "zone" + i;
+                    ddlZones.value = zones[i].Value;
+
+                    var Sub_ddlZones = document.createElement("INPUT");
+                    Sub_ddlZones.type = "text"
+                    Sub_ddlZones.name = "SUB_ZONE[]"
+                    Sub_ddlZones.value = 0;
+                    Sub_ddlZones.hidden = true;
+
+                    var label = document.createElement("label");
+                    //Set zone Name in Text part.
+                    label.htmlFor = "zone" + i;
+                    label.appendChild(document.createTextNode(zones[i].Text));
+                    //Set value in Value part.
+                    //Add to DIV.
+
+                    var br2 = document.createElement("br");
+
+                    div.appendChild(ddlZones);
+                    div.appendChild(label);
+                    div.appendChild(Sub_ddlZones);
+                    div.appendChild(br2);
+                    dvContainer.appendChild(div);
+                }
+
+                }
+
+
+            }
+
+
+
+        function AddFiles() {
+            //Build an array containing Customer records.
+
+
+                var file_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.FILE_TYPES))');
+
+
+
+                //Reference the container DIV.
+                var fContainer = document.getElementById("fContainer")
+                //Add  to DIV.
+                var div = document.createElement("DIV");
+                div.className = "bg-light p-2 rounded";
+                div.id = "file_div";
+
+
+
+
+                //Add the Options to the DropDownList.
+                for (var i = 0; i < file_types.length; i++) {
+                    //Create  element.
+                    var f_id = "#ff_" + file_types[i].Value;
+                    var ff = $(f_id).text();
+                    console.log(ff);
+                    if (ff != file_types[i].Value) {
+                        var val = file_types[i].Text.split(/-(.*)/)[1];
+                        console.log(val);
+                        var val2 = file_types[i].Text.replace(/\-.*/g, "$'");
+
+
+
+                        var files = document.createElement("INPUT");
+                        files.name = "files";
+                        files.type = "file";
+                        files.id = "file_" + file_types[i].Value + "_" + val;
+                        files.className = "form-control m-1";
+                        files.onchange = function () { setFileType(this.id); };
+
+
+                        var label = document.createElement("label");
+                        //Set file Name in Text part.
+                        label.htmlFor = "file_types_text" + i;
+                        label.appendChild(document.createTextNode(val2));
+
+                        var div_after = document.createElement("DIV");
+                        div_after.id = "lbl" + file_types[i].Value;
+                        var br2 = document.createElement("br");
+
+                        //div.appendChild(file_types_codes);
+                        div.appendChild(label);
+                        div.appendChild(files);
+                        div.appendChild(div_after);
+                        div.appendChild(br2);
+                        fContainer.appendChild(div);
+                    }
+
+                }
+
+
+        }
+
+        function setFileType(id) {
+            console.log(id);
+            var file_id = id.split('_')[1];
+            console.log(file_id);
+            var val = id.split('_')[2];
+            console.log(val);
+
+            var file_types_codes = document.createElement("INPUT");
+            file_types_codes.type = "text";
+            file_types_codes.name = "FILE_TYPES[]";
+            file_types_codes.value = file_id;
+            file_types_codes.hidden = true;
+            var fContainer = document.getElementById("fContainer");
+            fContainer.appendChild(file_types_codes);
+
+
+            var file_types_text = document.createElement("INPUT");
+            file_types_text.type = "text";
+            file_types_text.name = "FILE_TYPES_TEXT[]";
+            file_types_text.autocomplete = "off";
+            file_types_text.placeholder = "@Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)";
+            file_types_text.className = "col-md-12 form-control mr-1";
+
+
+                    if (val == 1) {
+                        file_types_text.placeholder = "@Resources.Passes.ResourceManager.GetString("worker_id_card_expaired" + "_" + ViewBag.lang)";
+                        file_types_text.className = "col-md-12 form-control mr-1 datepicker_recurring_start";
+                        var dateToday = new Date();
+                        var yrRange = dateToday.getFullYear() + ":" + (dateToday.getFullYear() + 8);
+
+                        $('body').on('focus', ".datepicker_recurring_start", function () {
+                            $(this).datepicker(
+                                {
+                                dateFormat: "dd/mm/yy",
+                                yearRange: yrRange,
+                                changeMonth: true,
+                                numberOfMonths: 1,
+                                changeYear: true,
+                            }
+                            );
+                        });
+
+            }
+            var z = "lbl" + file_id;
+            var file_div = document.getElementById(z);
+            file_div.appendChild(file_types_text);
+
+
+        }
+
+
+
+    </script>
+    <script type="text/javascript">
+
+
+                            var w = 0;
+                            function AddMembers() {
+                                //Build an array containing Customer records.
+                                w++;
+                                if (w < 16) {
+                                    var relative_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.RELATIVE_TYPE_CODE))');
+                                    var identity_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.IDENTITY_CODE))');
+                                    var gender_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.GENDER_ID))');
+                                    //Create a DropDownList element.
+                                    var members = document.createElement("INPUT");
+                                    var civil_number = document.createElement("INPUT");
+                                    var passport_number = document.createElement("INPUT");
+                                    var mobile_number = document.createElement("INPUT");
+                                    var remarks = document.createElement("INPUT");
+                                    var image = document.createElement("IMG");
+                                    var imagediv = document.createElement("DIV");
+                                    var img = document.createElement("INPUT");
+                                    var lbl5 = document.createElement("LABEL");
+                                    lbl5.innerText = "@Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)";
+                                    lbl5.className = "ml-2";
+
+                                    image.id = "imagePreviewrelative_" + w;
+                                    image.width = "100";
+                                    imagediv.className = "col-md-12 m-1";
+
+
+                                    img.name = "RELATIVE_IMAGE";
+                                    img.type = "file";
+                                    img.id = w;
+                                    img.className = "form-control m-1";
+                                    img.onchange = function () { showRelativepreview(this); };
+                                    //img.required = true;
+
+                                    members.name = "FULL_NAME[]";
+                                    members.type = "text";
+                                    members.id = "member" + w;
+                                    members.placeholder = "@Resources.Passes.ResourceManager.GetString("Family_member" + "_" + ViewBag.lang)";
+                                    members.className = "form-control m-1";
+                                    members.required = true;
+
+                                    var lll = document.createElement("label");
+                                    var re = document.createElement("label");
+                                    var gn = document.createElement("label");
+                                    var iden = document.createElement("label");
+                                    lll.innerText = "@Resources.Passes.ResourceManager.GetString("member_num" + "_" + ViewBag.lang)" + w;
+                                    lll.className = "text-white font-weight-bold bg-dark p-2 rounded";
+
+                                    civil_number.name = "CIVIL_NUM[]";
+                                    civil_number.type = "text";
+                                    civil_number.id = "civil" + w;
+                                    civil_number.placeholder = "@Resources.Passes.ResourceManager.GetString("Civil_number" + "_" + ViewBag.lang)";
+                                    civil_number.className = "form-control m-1";
+                                    civil_number.required = true;
+
+                                    passport_number.name = "PASSPORT_NUMBER[]";
+                                    passport_number.type = "text";
+                                    passport_number.id = "passport" + w;
+                                    passport_number.placeholder = "@Resources.Passes.ResourceManager.GetString("passport_number" + "_" + ViewBag.lang)";
+                                    passport_number.className = "form-control m-1";
+                                    passport_number.required = true;
+
+                                    mobile_number.name = "PHONE_NUMBER_M[]";
+                                    mobile_number.type = "text";
+                                    mobile_number.id = "phone_num_m" + w;
+                                    mobile_number.placeholder = "@Resources.Passes.ResourceManager.GetString("Phone" + "_" + ViewBag.lang)";
+                                    mobile_number.className = "form-control m-1";
+                                    mobile_number.required = true;
+
+                                    remarks.name = "REMARKS_LIST[]";
+                                    remarks.type = "text";
+                                    remarks.id = "remarks" + w;
+                                    remarks.placeholder = "@Resources.Common.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)";
+                                    remarks.className = "form-control m-1";
+
+
+                                    var mContainer = document.getElementById("mContainer")
+                                    //Add the DropDownList to DIV.
+                                    var div = document.createElement("DIV");
+                                    var br = document.createElement("br");
+                                    div.appendChild(lll);
+                                    div.appendChild(br);
+                                    //re.setAttribute("for", civil_number);
+                                    re.innerHTML = "@relative:";
+                                    div.appendChild(re);
+
+                                    var relative = document.createElement("INPUT");
+                                    relative.type = "number";
+                                    relative.name = "RELATIVE_TYPES[]";
+                                    relative.id = "R_" + w;
+                                    relative.hidden = true;
+                                    mContainer.appendChild(relative);
+                                    for (var i = 0; i < relative_types.length; i++) {
+                                        var relative_types_codes = document.createElement("INPUT");
+                                        relative_types_codes.type = "radio";
+                                        relative_types_codes.name = "R_T"+w;
+                                        relative_types_codes.className = "m-2";
+                                        relative_types_codes.id = "relativetypes_" + relative_types[i].Value + "_" + w;
+                                        relative_types_codes.value = relative_types[i].Value;
+                                        if (relative_types[i].Value == 1) {
+                                            relative_types_codes.checked = true;
+                                            var id = "relativetypes_" + relative_types[i].Value + "_" + w;
+                                            setRelativeType(id);
+                                            }
+                                            relative_types_codes.onchange = function () { setRelativeType(this.id); };
+
+                                            var label = document.createElement("label");
+                                            //Set zone Name in Text part.
+                                            label.htmlFor = "relativetypes_" + relative_types[i].Value + "_" + w;
+                                            label.appendChild(document.createTextNode(relative_types[i].Text));
+                                            //Set value in Value part.
+                                            //Add to DIV.
+
+                                            div.appendChild(relative_types_codes);
+                                            div.appendChild(label);
+                                            dvContainer.appendChild(div);
+
+
+                                        }
+
+                                        var gender_t = document.createElement("INPUT");
+                                        gender_t.type = "number";
+                                        gender_t.name = "GENDER_TYPES[]";
+                                        gender_t.id = "G_" + w;
+                                        gender_t.hidden = true;
+                                        mContainer.appendChild(gender_t);
+
+                                        var br3 = document.createElement("br");
+                                        div.appendChild(br3);
+                                        gn.innerHTML = "@gender:";
+                                        div.appendChild(gn);
+                                        for (var i = 0; i < gender_types.length; i++) {
+                                            var gender_types_codes = document.createElement("INPUT");
+                                            gender_types_codes.type = "radio";
+                                            gender_types_codes.name = "G_T"+w;
+                                            gender_types_codes.className = "m-2";
+                                            gender_types_codes.id = "gendertypes_" + gender_types[i].Value + "_" + w;
+                                            gender_types_codes.value = gender_types[i].Value;
+                                            if (gender_types[i].Value == 1) {
+                                                gender_types_codes.checked = true;
+                                                var id = "gendertypes_" + gender_types[i].Value + "_" + w;
+                                                setGenderType(id);
+                                                }
+                                                gender_types_codes.onchange = function () { setGenderType(this.id); };
+
+                                                var label = document.createElement("label");
+                                                //Set zone Name in Text part.
+                                                label.htmlFor = "gendertypes_" + gender_types[i].Value + "_" + w;
+                                                label.appendChild(document.createTextNode(gender_types[i].Text));
+                                                //Set value in Value part.
+                                                //Add to DIV.
+
+
+                                                div.appendChild(gender_types_codes);
+                                                div.appendChild(label);
+                                                dvContainer.appendChild(div);
+
+
+                                            }
+
+
+
+                                             var identity_types_codes = document.createElement("SELECT");
+                                            identity_types_codes.name = "IDENTITY_TYPES[]";
+                                            identity_types_codes.id = "identity_types" + w;
+                                            identity_types_codes.className = "form-control m-1";
+
+                                            var l2 = document.createElement("label");
+                                            l2.setAttribute("for", identity_types);
+                                            l2.innerHTML = "@identity:";
+                                            //Add the Options to the DropDownList.
+                                            for (var i = 0; i < identity_types.length; i++) {
+                                                var option = document.createElement("OPTION");
+
+                                                //Set Customer Name in Text part.
+                                                option.innerHTML = identity_types[i].Text;
+
+                                                //Set CustomerId in Value part.
+                                                option.value = identity_types[i].Value;
+
+                                                //Add the Option element to DropDownList.
+                                                identity_types_codes.options.add(option);
+
+                                            }
+
+
+
+                                                //Add the DropDownList to DIV.
+                                                div.className = " bg-light p-2 mb-2 rounded";
+                                                var br2 = document.createElement("br");
+                                                div.appendChild(br2);
+                                                div.appendChild(l2)
+                                                div.appendChild(identity_types_codes)
+                                                div.appendChild(members);
+                                                //div.appendChild(l5);
+                                    div.appendChild(civil_number);
+                                    div.appendChild(passport_number);
+                                    div.appendChild(mobile_number);
+                                                div.appendChild(lbl5);
+                                                div.appendChild(img);
+                                                div.appendChild(image);
+                                                div.appendChild(imagediv);
+                                                div.appendChild(remarks);
+
+                                                //Create a Remove Button.
+                                                var btnRemove = document.createElement("INPUT");
+                                                btnRemove.value = "@remove";
+                                                btnRemove.type = "button";
+                                                btnRemove.className = "btn btn-danger btn-sm m-1";
+                                                btnRemove.onclick = function () {
+                                                    mContainer.removeChild(this.parentNode);
+                                                    relative_types_codes.remove(this.parentNode);
+                                                    identity_types_codes.remove(this.parentNode);
+                                                    gender_types_codes.remove(this.parentNode);
+                                                    civil_number.remove(this.parentNode);
+                                                    passport_number.remove(this.parentNode);
+                                                    mobile_number.remove(this.parentNode);
+                                                    members.remove(this.parentNode);
+                                                    remarks.remove(this.parentNode);
+                                                    img.remove(this.parentNode);
+                                                    lbl5.remove(this.parentNode);
+
+
+                                                };
+                                                $("#identity_types" + w).kendoComboBox({
+                                                    filter: "contains"
+                                                });
+
+                                                //Add the Remove Buttton to DIV.
+                                                div.appendChild(btnRemove);
+
+                                                mContainer.appendChild(div);
+
+                                            } else {
+                                                alert('@no_persons')
+                                            }
+                                        };
+
+                                        function setRelativeType(id) {
+                                            console.log(id);
+                                            var relative_id = id.split('_')[1];
+                                            console.log(relative_id);
+                                            var w_id = id.split('_')[2];
+                                            console.log(w_id);
+                                            var rid = "R_" + w_id;
+                                            console.log(rid)
+                                            document.getElementById(rid).value = relative_id;
+                                        }
+
+                                        function setGenderType(id) {
+                                            console.log(id);
+                                            var gender_id = id.split('_')[1];
+                                            console.log(gender_id);
+                                            var w_id = id.split('_')[2];
+                                            console.log(w_id);
+                                            var rid = "G_" + w_id;
+                                            console.log(rid)
+                                            document.getElementById(rid).value = gender_id;
+
+        }
+
+
+          function showRelativepreview(input) {
+
+          console.log(input.id);
+          var id = "#imagePreviewrelative_" + input.id;
+            if (input.files && input.files[0]) {
+
+                var val = $(input).val().toLowerCase(),
+                    regex = new RegExp("(.*?)\.(gif|jpg|jpeg|JPEG|GIF|JPG)$");
+
+                if (!(regex.test(val))) {
+
+                        $(input).val('');
+                    $(id).css('display', 'none');
+
+
+                        alert('@no_file_format');
+
+
+                }
+                else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+
+                            $(id).css('display', 'inline');
+                        $(id).attr('src', e.target.result);
+
+
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        }
+
+
+    </script>
+
+    <script type="text/javascript">
+
+
+                            var w = 0;
+                            function AddEmployee() {
+                                //Build an array containing Customer records.
+                                w++;
+                                if (w < 16) {
+                                    var relative_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.RELATIVE_TYPE_CODE))');
+                                    var identity_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.IDENTITY_CODE))');
+                                    var gender_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.GENDER_ID))');
+                                    //Create a DropDownList element.
+                                    var members = document.createElement("INPUT");
+                                    var civil_number = document.createElement("INPUT");
+                                    var passport_number = document.createElement("INPUT");
+                                    var mobile_number = document.createElement("INPUT");
+                                    var remarks = document.createElement("INPUT");
+                                    var image = document.createElement("IMG");
+                                    var imagediv = document.createElement("DIV");
+                                    var img = document.createElement("INPUT");
+                                    var lbl5 = document.createElement("LABEL");
+                                    lbl5.innerText = "@Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)";
+                                    lbl5.className = "ml-2";
+
+                                    image.id = "imagePreviewrelative_" + w;
+                                    image.width = "100";
+                                    imagediv.className = "col-md-12 m-1";
+
+
+                                    img.name = "RELATIVE_IMAGE";
+                                    img.type = "file";
+                                    img.id = w;
+                                    img.className = "form-control m-1";
+                                    img.onchange = function () { showRelativepreview(this); };
+                                    //img.required = true;
+
+                                    members.name = "FULL_NAME[]";
+                                    members.type = "text";
+                                    members.id = "member" + w;
+                                    members.placeholder = "@Resources.Passes.ResourceManager.GetString("Family_member" + "_" + ViewBag.lang)";
+                                    members.className = "form-control m-1";
+                                    members.required = true;
+
+                                    var lll = document.createElement("label");
+                                    var re = document.createElement("label");
+                                    var gn = document.createElement("label");
+                                    var iden = document.createElement("label");
+                                    lll.innerText = "@Resources.Passes.ResourceManager.GetString("member_num" + "_" + ViewBag.lang)" + w;
+                                    lll.className = "text-white font-weight-bold bg-dark p-2 rounded";
+
+                                    civil_number.name = "CIVIL_NUM[]";
+                                    civil_number.type = "text";
+                                    civil_number.id = "civil" + w;
+                                    civil_number.placeholder = "@Resources.Passes.ResourceManager.GetString("Civil_number" + "_" + ViewBag.lang)";
+                                    civil_number.className = "form-control m-1";
+                                    civil_number.required = true;
+
+                                    passport_number.name = "PASSPORT_NUMBER[]";
+                                    passport_number.type = "text";
+                                    passport_number.id = "passport" + w;
+                                    passport_number.placeholder = "@Resources.Passes.ResourceManager.GetString("passport_number" + "_" + ViewBag.lang)";
+                                    passport_number.className = "form-control m-1";
+                                    passport_number.required = true;
+
+                                    mobile_number.name = "PHONE_NUMBER_M[]";
+                                    mobile_number.type = "text";
+                                    mobile_number.id = "phone_num_m" + w;
+                                    mobile_number.placeholder = "@Resources.Passes.ResourceManager.GetString("Phone" + "_" + ViewBag.lang)";
+                                    mobile_number.className = "form-control m-1";
+                                    mobile_number.required = true;
+
+                                    remarks.name = "REMARKS_LIST[]";
+                                    remarks.type = "text";
+                                    remarks.id = "remarks" + w;
+                                    remarks.placeholder = "@Resources.Common.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)";
+                                    remarks.className = "form-control m-1";
+
+
+                                    var mContainer = document.getElementById("mContainer")
+                                    //Add the DropDownList to DIV.
+                                    var div = document.createElement("DIV");
+                                    var br = document.createElement("br");
+                                    div.appendChild(lll);
+                                    div.appendChild(br);
+                                    //re.setAttribute("for", civil_number);
+                                    re.innerHTML = "";
+                                    div.appendChild(re);
+
+                                    var relative = document.createElement("INPUT");
+                                    relative.type = "number";
+                                    relative.name = "RELATIVE_TYPES[]";
+                                    relative.id = "R_" + w;
+                                    relative.hidden = true;
+                                    relative.value = 9;
+                                    mContainer.appendChild(relative);
+                                    //for (var i = 0; i < relative_types.length; i++) {
+                                    //    var relative_types_codes = document.createElement("INPUT");
+                                    //    relative_types_codes.type = "radio";
+                                    //    relative_types_codes.name = "R_T"+w;
+                                    //    relative_types_codes.className = "m-2";
+                                    //    relative_types_codes.id = "relativetypes_" + relative_types[i].Value + "_" + w;
+                                    //    relative_types_codes.value = relative_types[i].Value;
+                                    //    if (relative_types[i].Value == 1) {
+                                    //        relative_types_codes.checked = true;
+                                    //        var id = "relativetypes_" + relative_types[i].Value + "_" + w;
+                                    //        setRelativeType(id);
+                                    //        }
+                                    //        relative_types_codes.onchange = function () { setRelativeType(this.id); };
+
+                                    //        var label = document.createElement("label");
+                                    //        //Set zone Name in Text part.
+                                    //        label.htmlFor = "relativetypes_" + relative_types[i].Value + "_" + w;
+                                    //        label.appendChild(document.createTextNode(relative_types[i].Text));
+                                    //        //Set value in Value part.
+                                    //        //Add to DIV.
+
+                                    //        div.appendChild(relative_types_codes);
+                                    //        div.appendChild(label);
+                                    //        dvContainer.appendChild(div);
+
+
+                                    //    }
+
+                                        var gender_t = document.createElement("INPUT");
+                                        gender_t.type = "number";
+                                        gender_t.name = "GENDER_TYPES[]";
+                                        gender_t.id = "G_" + w;
+                                        gender_t.hidden = true;
+                                        mContainer.appendChild(gender_t);
+
+                                        var br3 = document.createElement("br");
+                                        div.appendChild(br3);
+                                        gn.innerHTML = "@gender:";
+                                        div.appendChild(gn);
+                                        for (var i = 0; i < gender_types.length; i++) {
+                                            var gender_types_codes = document.createElement("INPUT");
+                                            gender_types_codes.type = "radio";
+                                            gender_types_codes.name = "G_T"+w;
+                                            gender_types_codes.className = "m-2";
+                                            gender_types_codes.id = "gendertypes_" + gender_types[i].Value + "_" + w;
+                                            gender_types_codes.value = gender_types[i].Value;
+                                            if (gender_types[i].Value == 1) {
+                                                gender_types_codes.checked = true;
+                                                var id = "gendertypes_" + gender_types[i].Value + "_" + w;
+                                                setEmpGenderType(id);
+                                                }
+                                            gender_types_codes.onchange = function () { setEmpGenderType(this.id); };
+
+                                                var label = document.createElement("label");
+                                                //Set zone Name in Text part.
+                                                label.htmlFor = "gendertypes_" + gender_types[i].Value + "_" + w;
+                                                label.appendChild(document.createTextNode(gender_types[i].Text));
+                                                //Set value in Value part.
+                                                //Add to DIV.
+
+
+                                                div.appendChild(gender_types_codes);
+                                                div.appendChild(label);
+                                                dvContainer.appendChild(div);
+
+
+                                            }
+
+
+
+                                             var identity_types_codes = document.createElement("SELECT");
+                                            identity_types_codes.name = "IDENTITY_TYPES[]";
+                                            identity_types_codes.id = "identity_types" + w;
+                                            identity_types_codes.className = "form-control m-1";
+
+                                            var l2 = document.createElement("label");
+                                            l2.setAttribute("for", identity_types);
+                                            l2.innerHTML = "@identity:";
+                                            //Add the Options to the DropDownList.
+                                            for (var i = 0; i < identity_types.length; i++) {
+                                                var option = document.createElement("OPTION");
+
+                                                //Set Customer Name in Text part.
+                                                option.innerHTML = identity_types[i].Text;
+
+                                                //Set CustomerId in Value part.
+                                                option.value = identity_types[i].Value;
+
+                                                //Add the Option element to DropDownList.
+                                                identity_types_codes.options.add(option);
+
+                                            }
+
+
+
+                                                //Add the DropDownList to DIV.
+                                                div.className = " bg-light p-2 mb-2 rounded";
+                                                var br2 = document.createElement("br");
+                                                div.appendChild(br2);
+                                                div.appendChild(l2)
+                                                div.appendChild(identity_types_codes)
+                                                div.appendChild(members);
+                                                //div.appendChild(l5);
+                                                div.appendChild(civil_number);
+                                                div.appendChild(passport_number);
+                                                div.appendChild(mobile_number);
+                                                div.appendChild(lbl5);
+                                                div.appendChild(img);
+                                                div.appendChild(image);
+                                                div.appendChild(imagediv);
+                                                div.appendChild(remarks);
+
+                                                //Create a Remove Button.
+                                                var btnRemove = document.createElement("INPUT");
+                                                btnRemove.value = "@remove";
+                                                btnRemove.type = "button";
+                                                btnRemove.className = "btn btn-danger btn-sm m-1";
+                                                btnRemove.onclick = function () {
+                                                    mContainer.removeChild(this.parentNode);
+                                                    relative_types_codes.remove(this.parentNode);
+                                                    identity_types_codes.remove(this.parentNode);
+                                                    gender_types_codes.remove(this.parentNode);
+                                                    civil_number.remove(this.parentNode);
+                                                    passport_number.remove(this.parentNode);
+                                                    mobile_number.remove(this.parentNode);
+                                                    members.remove(this.parentNode);
+                                                    remarks.remove(this.parentNode);
+                                                    img.remove(this.parentNode);
+                                                    lbl5.remove(this.parentNode);
+
+
+                                                };
+                                                $("#identity_types" + w).kendoComboBox({
+                                                    filter: "contains"
+                                                });
+
+                                                //Add the Remove Buttton to DIV.
+                                                div.appendChild(btnRemove);
+
+                                                mContainer.appendChild(div);
+
+                                            } else {
+                                                alert('@no_persons')
+                                            }
+                                        };
+
+                                        //function setRelativeType(id) {
+                                        //    console.log(id);
+                                        //    var relative_id = id.split('_')[1];
+                                        //    console.log(relative_id);
+                                        //    var w_id = id.split('_')[2];
+                                        //    console.log(w_id);
+                                        //    var rid = "R_" + w_id;
+                                        //    console.log(rid)
+                                        //    document.getElementById(rid).value = relative_id;
+                                        //}
+
+                                        function setEmpGenderType(id) {
+                                            console.log(id);
+                                            var gender_id = id.split('_')[1];
+                                            console.log(gender_id);
+                                            var w_id = id.split('_')[2];
+                                            console.log(w_id);
+                                            var rid = "G_" + w_id;
+                                            console.log(rid)
+                                            document.getElementById(rid).value = gender_id;
+
+        }
+
+
+          function showRelativepreview(input) {
+
+          console.log(input.id);
+          var id = "#imagePreviewrelative_" + input.id;
+            if (input.files && input.files[0]) {
+
+                var val = $(input).val().toLowerCase(),
+                    regex = new RegExp("(.*?)\.(gif|jpg|jpeg|JPEG|GIF|JPG)$");
+
+                if (!(regex.test(val))) {
+
+                        $(input).val('');
+                    $(id).css('display', 'none');
+
+
+                        alert('@no_file_format');
+
+
+                }
+                else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+
+                            $(id).css('display', 'inline');
+                        $(id).attr('src', e.target.result);
+
+
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        }
+
+
+    </script>
+
+    <script src="@Url.Content("~/Scripts/JsBarcode.all.js")"></script>
+    <script>
+        JsBarcode("#barcode3", "@barcode", {
+            format: "code39",
+            displayValue: false,
+            fontSize: 20,
+            height: 20,
+            width:1
+
+        });
+    </script>
+
+
+}
+

@@ -1,0 +1,8 @@
+﻿@font-face {
+    font-family: Khalid;
+    src: url(khalid.ttf) format('truetype'), url(Khalid-Art-bold.eot) format('embedded-opentype');
+}
+
+body{
+    font-family: Khalid;
+}

@@ -1,0 +1,281 @@
+﻿@using APP.Util
+@model SecurityClearanceWebApp.Models.RA42_WORKFLOW_RESPONSIBLE_MST
+
+@{
+    ViewBag.Title = "Details";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+}
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row justify-content-center align-self-center">
+        <div class="col-md-12">
+            
+            <div class="card shadow-sm">
+                
+                        <h1 class="card-header text-primary">
+                            <i class="fa fa-user"></i>
+                            @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)
+                        </h1>
+                        
+                    
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-2">
+
+                            @{
+                                var image = "http://mamrafowebgov01/images/" + Model.SERVICE_NUMBER + ".gif";
+                            }
+
+                            <img src="@image" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.jpg")'" alt="user image" width="100" height="100">
+
+
+
+
+                        </div>
+                        <div class="col-md-2">
+                            <h6 class="details-info-title">
+                                @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang)
+                            </h6>
+                            <h6 class="details-info-content text-primary">@ViewBag.STATION_NAME </h6>
+
+                        </div>
+
+
+
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">
+                                @Resources.Settings.ResourceManager.GetString("Namepost" + "_" + ViewBag.lang)
+                            </h6>
+                            @{
+                                var dash = " - ";
+                            }
+                            <h6 class="details-info-content text-primary">
+                                @if (Language.GetCurrentLang() == "en")
+                                {
+                                    @Model.RANK_E @dash @Model.RESPONSEPLE_NAME_E
+                                }
+                                else
+                                {
+                                    @Model.RANK @dash @Model.RESPONSEPLE_NAME
+                                }
+
+                            </h6>
+
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <h6 class="details-info-title">
+                                @Resources.Settings.ResourceManager.GetString("Pervilage" + "_" + ViewBag.lang)
+                            </h6>
+                            <h6 class="details-info-content text-primary">
+                                @if (Language.GetCurrentLang() == "en")
+                                {
+                                    @Model.RA42_WORKFLOW_MST.STEP_NAME_E
+                                }
+                                else
+                                {
+                                    @Model.RA42_WORKFLOW_MST.STEP_NAME
+                                }
+                            </h6>
+
+
+                        </div>
+                        <div class="col-md-12"><hr /></div>
+                        <div class="col-md-12">
+                            <h6 class="details-info-title">
+                                @Resources.Settings.ResourceManager.GetString("Passestypes" + "_" + ViewBag.lang)
+                            </h6>
+                            @{
+                                int c = 1;
+                            }
+                            <h6 class="details-info-content text-primary">
+                                @foreach (var item in Model.RA42_ACCESS_SELECT_MST.Where(a => a.DLT_STS != true))
+                                {
+                                    <b>@c-</b> @(Language.GetCurrentLang() == "en" ? item.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E : item.RA42_ACCESS_TYPE_MST.ACCESS_TYPE )
+                                    c++;
+                                    <br />
+                                }
+                            </h6>
+                            <hr />
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    @Resources.Settings.ResourceManager.GetString("Pervilleges" + "_" + ViewBag.lang)
+                                </div>
+                                <div class="row p-4">
+                                    <div class="col-md-3">
+                                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Ad" + "_" + ViewBag.lang)</h6>
+                                        <h6 class="details-info-content">
+                                            @if (Model.AD == true)
+                                            {<i class="fa fa-check-circle text-success"></i>}
+                                            else
+                                            { <i class="fa fa-times-circle text-danger"></i>}
+                                        </h6>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("View" + "_" + ViewBag.lang)</h6>
+                                        <h6 class="details-info-content">
+                                            @if (Model.VW == true)
+                                            {<i class="fa fa-check-circle text-success"></i>}
+                                            else
+                                            { <i class="fa fa-times-circle text-danger"></i>}
+                                        </h6>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Up" + "_" + ViewBag.lang)</h6>
+                                        <h6 class="details-info-content">
+                                            @if (Model.UP == true)
+                                            {<i class="fa fa-check-circle text-success"></i>}
+                                            else
+                                            { <i class="fa fa-times-circle text-danger"></i>}
+                                        </h6>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Delete" + "_" + ViewBag.lang)</h6>
+                                        <h6 class="details-info-content">
+                                            @if (Model.DL == true)
+                                            {<i class="fa fa-check-circle text-success"></i>}
+                                            else
+                                            { <i class="fa fa-times-circle text-danger"></i>}
+                                        </h6>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Rp" + "_" + ViewBag.lang)</h6>
+                                        <h6 class="details-info-content">
+                                            @if (Model.RP == true)
+                                            {<i class="fa fa-check-circle text-success"></i>}
+                                            else
+                                            { <i class="fa fa-times-circle text-danger"></i>}
+                                        </h6>
+                                        <hr />
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Settings_pr" + "_" + ViewBag.lang)</h6>
+                                        <h6 class="details-info-content">
+                                            @if (Model.SETTINGS == true)
+                                            {<i class="fa fa-check-circle text-success"></i>}
+                                            else
+                                            { <i class="fa fa-times-circle text-danger"></i>}
+                                        </h6>
+                                        <hr />
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Developer" + "_" + ViewBag.lang)</h6>
+                                        <h6 class="details-info-content">
+                                            @if (Model.DEVELOPER == true)
+                                            {<i class="fa fa-check-circle text-success"></i>}
+                                            else
+                                            { <i class="fa fa-times-circle text-danger"></i>}
+                                        </h6>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("All_permissions" + "_" + ViewBag.lang)</h6>
+                                        <h6 class="details-info-content">
+                                            @if (Model.ADMIN == true)
+                                            {<i class="fa fa-check-circle text-success"></i>}
+                                            else
+                                            { <i class="fa fa-times-circle text-danger"></i>}
+
+                                        </h6>
+                                        <hr />
+                                    </div>
+
+
+                                </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    @*@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formdrawing" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.WORKFLOW_RESPO_CODE)
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="control-lable">
+                                            <div data-tool="marker">
+                                                @Resources.Settings.ResourceManager.GetString("Signature" + "_" + ViewBag.lang)
+                                            </div> 
+                                        </div>
+                                        <br />
+                                        <canvas id="colors_sketch" width="400" height="200" style="border: 1px solid #ccc;"></canvas>
+                                        <img src="~/Files/Signatures/@Model.SIGNATURE"/>
+                                        <br />
+                                        <br />
+                                    </div>
+
+                                    <input type="hidden" id="ImageVal" runate="server" name="ImageVal" />
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-warning" id="btnSave" runate="server">
+                                            <i class="fa fa-save"></i>
+                                            @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)
+                                        </button>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            }*@
+                        </div>
+                    </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+@section Scripts {
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/sketch.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#colors_sketch').sketch();
+            $(".tools a").eq(0).attr("style", "color:#000");
+            $(".tools a").click(function () {
+                $(".tools a").removeAttr("style");
+                $(this).attr("style", "color:#000");
+            });
+            //$("#btnSave").bind("click", function () {
+            //    var base64 = $('#colors_sketch')[0].toDataURL();
+            //    $('[Id*=ImageVal]').val(base64);
+            //});
+
+            $("#btnSave").click(function () {
+                var form = $("#formdrawing");
+                var image = document.getElementById("colors_sketch").toDataURL("image/png");
+                image = image.replace('data:image/png;base64,', '');
+                $("#ImageVal").val(image);
+                form.submit();
+            });
+
+            
+        });
+    </script>
+}
+
+

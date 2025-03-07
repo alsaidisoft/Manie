@@ -1,0 +1,133 @@
+﻿@using SecurityClearanceWebApp.Util;
+
+
+@{
+    ViewBag.Title = "Index";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+    }
+
+    var listByServiceNumber = (ViewBag.ByServiceNumber != null) ? (List<ClearanceSearchResult>)ViewBag.ByServiceNumber : new List<ClearanceSearchResult>();
+    var listByResponsible = (ViewBag.ByResponsible != null) ? (List<ClearanceSearchResult>)ViewBag.ByResponsible : new List<ClearanceSearchResult>();
+
+}
+
+<style>
+    th, td {
+        text-align: center !important;
+    }
+
+    .buttons-colvis, .buttons-print, .buttons-excel {
+        display: none !important;
+    }
+</style>
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+        <h1 class="card-header  text-primary"><i class="fa fa-universal-access"></i> @Resources.Passes.ResourceManager.GetString("mypasses1" + "_" + ViewBag.lang)</h1>
+
+
+
+        <div class="card-body">
+            @{
+                int rowNo = 0;
+                var servicenum = ViewBag.SERVICE_NUMBER;
+            }
+            <div class="col-md-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link notification" id="employee-tab" href="@Url.Action("Index", "Mypasses", new { tab = "employee" })" aria-controls="employee" aria-selected="false">
+                            @Resources.Common.ResourceManager.GetString("my_permits" + "_" + ViewBag.lang)
+                            @if (ViewBag.MyPermits != 0)
+                            {
+                                <span class="badge3 numbersfont3">@ViewBag.MyPermits</span>
+
+                            }
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link notification" id="others-tab" href="@Url.Action("Index", "Mypasses", new {  tab = "others" })" aria-controls="others" aria-selected="false">
+                            @Resources.Common.ResourceManager.GetString("other_permits" + "_" + ViewBag.lang)
+                            @if (ViewBag.OtherTotal != 0)
+                            {
+                                <span class="badge3 numbersfont3">@ViewBag.OtherTotal</span>
+
+                            }
+                        </a>
+                    </li>
+
+
+
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade" id="employee" role="tabpanel" aria-labelledby="employee-tab">
+                        <div class="col-md-12 p-3 bg-light">
+                            @Html.Partial("_ClearanceByListTable", listByServiceNumber)
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="others" role="tabpanel" aria-labelledby="others-tab">
+                        <div class="col-md-12 p-3 bg-light">
+                            @Html.Partial("_ClearanceByListTable", listByResponsible)
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<br />
+
+
+@section Scripts{
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var activeTab = urlParams.get('tab');
+
+        if (activeTab) {
+            var tabElement = document.querySelector('#myTab a[href*="' + activeTab + '"]');
+            if (tabElement) {
+                var tabPanes = document.querySelectorAll('.tab-pane');
+                tabPanes.forEach(function (tabPane) {
+                    tabPane.classList.remove('show', 'active');
+                });
+
+                var navLinks = document.querySelectorAll('#myTab .nav-link');
+                navLinks.forEach(function (navLink) {
+                    navLink.classList.remove('active');
+                });
+
+                tabElement.classList.add('active');
+                var tabContentElement = document.querySelector('#' + activeTab);
+                if (tabContentElement) {
+                    tabContentElement.classList.add('show', 'active');
+                }
+            }
+        } else {
+            // Default active tab if none is specified
+            var defaultTabElement = document.querySelector('#myTab .nav-link');
+            if (defaultTabElement) {
+                var defaultTabContentElement = document.querySelector(defaultTabElement.getAttribute('href'));
+                if (defaultTabContentElement) {
+                    defaultTabElement.classList.add('active');
+                    defaultTabContentElement.classList.add('show', 'active');
+                }
+            }
+        }
+    });
+    </script>
+}

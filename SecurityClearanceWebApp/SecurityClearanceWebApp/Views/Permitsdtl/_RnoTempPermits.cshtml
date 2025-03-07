@@ -1,0 +1,438 @@
+﻿@using System.Threading.Tasks;
+@using APP.Filters;
+@using APP.Util;
+@using portal.Controllers;
+@model SecurityClearanceWebApp.Models.RA42_PERMITS_DTL
+
+@{
+    ViewBag.Title = "Create";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var agree = Resources.Common.ResourceManager.GetString("error_agree" + "_" + ViewBag.lang);
+    var main_z = Resources.Passes.ResourceManager.GetString("main_zone" + "_" + ViewBag.lang);
+    var sub_z = Resources.Passes.ResourceManager.GetString("sub_zone" + "_" + ViewBag.lang);
+    var remove = Resources.Passes.ResourceManager.GetString("Remove" + "_" + ViewBag.lang);
+    var all = Resources.Passes.ResourceManager.GetString("All" + "_" + ViewBag.lang);
+    var choose_sub_z = Resources.Passes.ResourceManager.GetString("choose_sub_zone_again" + "_" + ViewBag.lang);
+    var no_file_ = Resources.Passes.ResourceManager.GetString("not_allowed_m_ten" + "_" + ViewBag.lang);
+    var no_zone_ = Resources.Passes.ResourceManager.GetString("not_allowed_m_50" + "_" + ViewBag.lang);
+    var no_file_format = Resources.Passes.ResourceManager.GetString("file_format" + "_" + ViewBag.lang);
+    var doc = Resources.Passes.ResourceManager.GetString("document_type" + "_" + ViewBag.lang);
+    var choose_car_again = Resources.Passes.ResourceManager.GetString("Choose_car_again" + "_" + ViewBag.lang);
+    var required = Resources.Common.ResourceManager.GetString("required" + "_" + ViewBag.lang);
+    var documents = Resources.Passes.ResourceManager.GetString("Documents" + "_" + ViewBag.lang);
+    var relative = Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang);
+    var identity = Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang);
+    var no_persons = Resources.Passes.ResourceManager.GetString("Not_allowed_50_person" + "_" + ViewBag.lang);
+    var gender = Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang);
+
+    string barcode = Guid.NewGuid().ToString().Substring(0, 5);
+
+    string type = Request.QueryString["type"];
+    string permit = Request.QueryString["permit"];
+    string station = Request.QueryString["station"];
+
+    List<string> employees = new List<string> { "7","8","9","15","16","21","23","27","30",
+        "35","36","37","42","43","44"};
+
+    List<string> others = new List<string> { "17","18","19","20","22","26","28","31","32",
+        "33","34","38","39","40","41","45","50","51"};
+
+    List<string> nonEmployeeFamilies = new List<string> { "50", "51" };
+    List<string> EmployeeFamilies = new List<string> { "30", "23" };
+    List<string> RnoVistors = new List<string> { "11", "12", "13", "14", "16" };
+    List<string> With_Without_car = new List<string> { "8", "39", "40", "41" };
+    List<string> noZones = new List<string> { "1", "10" };
+
+    string currentUser = (new UserInfo()).getSNO();
+
+
+
+
+}
+
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+
+<div class="col-md-12">
+    <input type="hidden" value="@currentUser" name="RESPONSIBLE" />
+</div>
+@if (permit == "16")
+{
+    if (ViewBag.JundStop == "")
+    {
+        <div class="col-md-12">
+            <div class="form-group">
+                @Resources.Passes.ResourceManager.GetString("Service_number" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                <input type="text" name="SERVICE_NUMBER" class="service-number-input form-control" required="" oninvalid="this.setCustomValidity('@required')" oninput="setCustomValidity('')" autocomplete="off" />
+                @Html.ValidationMessageFor(model => model.SERVICE_NUMBER, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <div class="form-group">
+                @Resources.Passes.ResourceManager.GetString("Service_number" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                <input type="text" name="SERVICE_NUMBER" class="form-control" required="" oninvalid="this.setCustomValidity('@required')" oninput="setCustomValidity('')" autocomplete="off" />
+                @Html.ValidationMessageFor(model => model.SERVICE_NUMBER, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Resources.Passes.ResourceManager.GetString("Visitor_name" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                @Html.EditorFor(model => model.NAME_A, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+                @Html.ValidationMessageFor(model => model.NAME_A, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Resources.Passes.ResourceManager.GetString("Name_e" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                @Html.EditorFor(model => model.NAME_E, new { htmlAttributes = new { @class = "form-control", @required = "", autocomplete = "off" } })
+                @Html.ValidationMessageFor(model => model.NAME_E, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Resources.Passes.ResourceManager.GetString("rank" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                @Html.EditorFor(model => model.RANK_A, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+                @Html.ValidationMessageFor(model => model.RANK_A, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+}
+<div class="col-md-4">
+    <div class="form-group">
+
+        @Resources.Passes.ResourceManager.GetString("host_section" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+        @if (permit == "11")
+        {
+            <input type="text" class="form-control" name="UNIT_A" readonly value="المركز الطبي" />
+        }
+        @if (permit == "12")
+        {
+
+            @Html.EditorFor(model => model.UNIT_A, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.UNIT_A, "", new { @class = "text-danger" })
+        }
+        @if (permit == "13")
+        {
+            @Html.EditorFor(model => model.UNIT_A, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.UNIT_A, "", new { @class = "text-danger" })
+        }
+        @if (permit == "14")
+        {
+            @Html.EditorFor(model => model.UNIT_A, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.UNIT_A, "", new { @class = "text-danger" })
+        }
+        @if (permit == "16")
+        {
+            @Html.EditorFor(model => model.UNIT_A, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.UNIT_A, "", new { @class = "text-danger" })
+        }
+    </div>
+</div>
+@if (permit == "12")
+{
+    <div class="col-md-4">
+        <div class="form-group">
+            @Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+            @Html.DropDownList("COMPANY_CODE", null, "--اختر--", htmlAttributes: new { @class = "form-control", id = "COMPANYCODE", @Style = "width:100%", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" })
+            @Html.ValidationMessageFor(model => model.COMPANY_CODE, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+@if (permit != "16")
+{
+    <div class="col-md-4">
+        <div class="form-group">
+            @Resources.Passes.ResourceManager.GetString("Visitor_name" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+            @Html.EditorFor(model => model.NAME_A, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.NAME_A, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            @Resources.Passes.ResourceManager.GetString("Name_e" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+            @Html.EditorFor(model => model.NAME_E, new { htmlAttributes = new { @class = "form-control", @required = "", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.NAME_E, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+@{
+
+    List<string>
+       noRelative = new List<string>
+           { "12", "16" }; }
+@if (!noRelative.Contains(permit))
+{
+    <div class="col-md-4">
+        <div class="form-group">
+            @Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+            @Html.DropDownList("RELATIVE_TYPE_CODE", null, "--اختر--", htmlAttributes: new { @class = "form-control", id = "RELATIVE", @Style = "width:100%", @required = "" })
+            @Html.ValidationMessageFor(model => model.RELATIVE_TYPE_CODE, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            @Resources.Passes.ResourceManager.GetString("Building_num" + "_" + ViewBag.lang)
+            @Html.EditorFor(model => model.BUILDING_NUMBER, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.BUILDING_NUMBER, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+}
+<div class="col-md-4">
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)@*<b class="text-danger"> * </b>*@
+                <input type="file" name="PERSONAL_IMAGE" accept="image/*" class="form-control" @*required="" oninvalid="this.setCustomValidity('@required')" oninput="setCustomValidity('')"*@ onchange="showpreview(this);" />
+                @Html.ValidationMessageFor(model => model.PERSONAL_IMAGE, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-1 p-2">
+            <img src="~/Content/images/adminpic.png" style="display: none;" width="50" height="50" id="imagePreview" />
+
+        </div>
+    </div>
+
+</div>
+@if (permit != "16")
+{
+    <div class="col-md-4">
+        <div class="form-group">
+            @Resources.Passes.ResourceManager.GetString("worker_identity_card" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+            @Html.EditorFor(model => model.CIVIL_NUMBER, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.CIVIL_NUMBER, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+<div class="col-md-4">
+    <div class="form-group">
+        @Resources.Passes.ResourceManager.GetString("Gsm" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+        @Html.EditorFor(model => model.GSM, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+        @Html.ValidationMessageFor(model => model.GSM, "", new { @class = "text-danger" })
+    </div>
+</div>
+@if (permit == "13")
+{
+    <div class="col-md-4">
+        <div class="form-group">
+            @Resources.Passes.ResourceManager.GetString("host_phone_number" + "_" + ViewBag.lang)
+            @Html.EditorFor(model => model.PHONE_NUMBER, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.PHONE_NUMBER, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+<div class="col-md-4">
+    <div class="form-group">
+        @Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+        @Html.DropDownList("IDENTITY_CODE", null, "--اختر--", htmlAttributes: new { @class = "form-control", id = "IDENTITY", @Style = "width:100%", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" })
+        @Html.ValidationMessageFor(model => model.IDENTITY_CODE, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="form-group">
+        @Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+        @Html.DropDownList("GENDER_ID", null, "--اختر--", htmlAttributes: new { @class = "form-control", id = "GENDER", @Style = "width:100%", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" })
+        @Html.ValidationMessageFor(model => model.GENDER_ID, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="form-group">
+        @Resources.Passes.ResourceManager.GetString("number_of_hosted" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+        @Html.EditorFor(model => model.NUMBER_OF_HOSTED, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')", autocomplete = "off" } })
+        @Html.ValidationMessageFor(model => model.NUMBER_OF_HOSTED, "", new { @class = "text-danger" })
+    </div>
+</div>
+@if (permit == "11" || permit == "14")
+{
+
+    <div class="col-md-4">
+        <div class="form-group">
+            @Resources.Passes.ResourceManager.GetString("visitor_employer" + "_" + ViewBag.lang)
+            @Html.EditorFor(model => model.VISITOR_EMPLOYER, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.VISITOR_EMPLOYER, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+@if (permit == "11")
+{
+    <div class="col-md-4">
+        <div class="form-group">
+            @Resources.Passes.ResourceManager.GetString("sn_host" + "_" + ViewBag.lang)
+            @Html.EditorFor(model => model.SN_FOR_THE_GUARDIAN, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.SN_FOR_THE_GUARDIAN, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+@if (permit == "12")
+{
+    if ((ViewBag.RESPO_STATE <= 1 || ViewBag.RESPO_STATE == 11) || ViewBag.NOT_RELATED_STATION == true)
+    {
+        <div class="col-md-12">
+            <br />
+            <div class="form-group">
+
+                @Resources.Passes.ResourceManager.GetString("Workflow_respo" + "_" + ViewBag.lang) <b class="text-danger"> * </b>
+
+                @Html.DropDownList("WORKFLOW_RESPO_CODE", null, "--اختر--", htmlAttributes: new { @class = "form-control", id = "WORKFLOWRESPOCODE", @Style = "width:100%", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" })
+
+                @Html.ValidationMessageFor(model => model.WORKFLOW_RESPO_CODE, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+}
+<div class="col-md-12">
+    <hr />
+    <h5 id="confirm_car" class="text-danger"><input type="checkbox" name="with_car" id="yes_car" /> @Resources.Passes.ResourceManager.GetString("with_car" + "_" + ViewBag.lang)</h5>
+    <input type="hidden" value="no" name="is_with_car" id="is_with_car" />
+</div>
+<div class="col-md-12">
+    <div id="car_option" style="display:none">
+        <div class="card">
+            <div class="card-header">@Resources.Passes.ResourceManager.GetString("car_details" + "_" + ViewBag.lang)</div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Vechile_cat" + "_" + ViewBag.lang)
+
+                                @if (ViewBag.VECHILE_CODE != null)
+                                {
+                                    // True, the list is not empty
+
+                                    @Html.DropDownListFor(model => model.VECHILE_CODE, ViewBag.VECHILE_CODE as IEnumerable<SelectListItem>, new { @class = "form-control", id = "catigory", @Style = "width:100%" })
+                                    @Html.ValidationMessageFor(model => model.VECHILE_CODE,
+                                     "", new { @class = "text-danger" })
+
+                                }
+                                else
+                                {
+
+                                }
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Vechile_name" + "_" + ViewBag.lang)
+
+                                <select id="car" class="form-control" name="VECHILE_NAME_CODE">
+                                    @if (Model != null && Model.VECHILE_NAME_CODE != null)
+                                    {
+                                        <option value="@Model.VECHILE_NAME_CODE">@Html.DisplayFor(model => model.RA42_VECHILE_NAME_MST.VECHILE_NAME)</option>
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(model => model.VECHILE_NAME_CODE,
+                                     "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Plate_type" + "_" + ViewBag.lang)
+
+                                @Html.DropDownList("PLATE_CODE", null, htmlAttributes: new { @class = "form-control", id = "PLATECODE", @Style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.PLATE_CODE, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Plate_number" + "_" + ViewBag.lang)
+
+                                @Html.EditorFor(model => model.PLATE_NUMBER, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                                @Html.ValidationMessageFor(model => model.PLATE_NUMBER, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Plate_char" + "_" + ViewBag.lang)
+
+                                @Html.DropDownList("PLATE_CHAR_CODE", null, htmlAttributes: new { @class = "form-control", id = "PLATECHARCODE", @Style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.PLATE_CHAR_CODE, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Resources.Passes.ResourceManager.GetString("Vechile_color" + "_" + ViewBag.lang)
+
+                                @Html.DropDownList("VECHILE_COLOR_CODE", null, htmlAttributes: new { @class = "form-control", id = "CARCOLOR", @Style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.VECHILE_COLOR_CODE, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </br>
+    </div>
+
+            @if (permit != "16")
+            {
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            @Resources.Passes.ResourceManager.GetString("Duration" + "_" + ViewBag.lang)
+                        </div>
+                        <div class="row p-2">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                    @Html.EditorFor(model => model.DATE_FROM, new { htmlAttributes = new { @class = "form-control", @required = "", style = "width:100%", onkeydown = "javascript: return false;", @autocomplete = "off" } })
+                                    @Html.ValidationMessageFor(model => model.DATE_FROM, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                    @Html.EditorFor(model => model.DATE_TO, new { htmlAttributes = new { @class = "form-control", @required = "", style = "width:100%", onkeydown = "javascript: return false;", @autocomplete = "off" } })
+                                    @Html.ValidationMessageFor(model => model.DATE_TO, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+

@@ -1,0 +1,326 @@
+﻿@using APP.Util
+@using System.Text;
+@using SecurityClearanceWebApp.Models;
+
+@{
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+    var col = 12;
+
+    string type = (Request.QueryString["type"] !=null? Request.QueryString["type"] : ViewData["access"] as string);
+    // Example list of strings to be passed in the URL
+    List<string> sampleList = new List<string> {};
+    // Serialize the list to a comma-separated string
+
+    string icon = "";
+    string permit_type_name = "";
+    int new_permites = 0;
+    int to_print_permits = 0;
+    var access = int.Parse(type.ToString());
+    RA42_SECURITY_CLEARANCEEntities db = new RA42_SECURITY_CLEARANCEEntities();
+    var get_permits = db.RA42_CARD_FOR_MST.Where(a => a.ACCESS_TYPE_CODE == access && a.DLT_STS !=true).ToList();
+
+    if (get_permits != null)
+    {
+        foreach (var item in get_permits)
+        {
+            sampleList.Add(item.CARD_SECRET_CODE);
+        }
+    }
+
+    switch (type)
+    {
+        case "1":
+            icon = "fa fa-shield";
+            new_permites += ViewBag.COUNTAUTHO;
+            to_print_permits += ViewBag.COUNTAUTHOTOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("access_type_autho" + "_" + ViewBag.lang);
+            break;
+        case "2":
+            icon = "fa fa-user-shield";
+            new_permites += ViewBag.COUNTSECUR;
+            to_print_permits += ViewBag.COUNTSECURTOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("access_type_security" + "_" + ViewBag.lang);
+            break;
+        case "3":
+            icon = "fa fa-user-plus";
+            new_permites += ViewBag.COUNTVECHIL;
+            to_print_permits += ViewBag.COUNTVECHILTOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("access_type_vechile" + "_" + ViewBag.lang);
+
+
+            break;
+        case "4":
+            icon = "fa fa-users";
+            new_permites += ViewBag.COUNTFAMILY;
+            to_print_permits += ViewBag.COUNTFAMILYTOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("Family_pass" + "_" + ViewBag.lang);
+
+            break;
+        case "5":
+            icon = "fa fa-user-friends";
+            new_permites += ViewBag.COUNTTEMPRORY;
+            to_print_permits += ViewBag.COUNTTEMPRORYTOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("TemproryCompanyPass" + "_" + ViewBag.lang);
+
+
+            break;
+        case "6":
+            icon = "fa fa-id-card";
+            new_permites += ViewBag.COUNTCONTRACT;
+            to_print_permits += ViewBag.COUNTCONTRACTTOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("ContractedCompanyPass" + "_" + ViewBag.lang);
+            break;
+        case "7":
+            icon = "fa fa-calendar";
+            new_permites += ViewBag.COUNTEVENTEXERCISE;
+            to_print_permits += ViewBag.COUNTEVENTEXERCISETOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("Event_Exercise_pass" + "_" + ViewBag.lang);
+
+            break;
+        case "8":
+            icon = "fa fa-user-cog";
+            new_permites += ViewBag.COUNTTRAINEE;
+            to_print_permits += ViewBag.COUNTTRAINEETOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("Trainees_pass" + "_" + ViewBag.lang);
+
+            break;
+        case "9":
+
+            icon = "fa fa-user";
+            new_permites += ViewBag.COUNTVISITOR;
+            to_print_permits += ViewBag.COUNTVISITORTOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("Visitor_pass" + "_" + ViewBag.lang);
+            break;
+        case "10":
+            icon = "fa fa-plane";
+            new_permites += ViewBag.COUNTAIR;
+            to_print_permits += ViewBag.COUNTAIRTOPRINT;
+            permit_type_name = Resources.Passes.ResourceManager.GetString("AirCrew" + "_" + ViewBag.lang);
+            break;
+
+
+    }
+
+    string serializedList = string.Join(",", sampleList);
+
+
+
+    }
+
+<style>
+    td, th {
+        text-align: center !important;
+    }
+</style>
+@{
+    Html.RenderPartial("_pass_nav_");
+
+}
+
+<div class="container-fluid mb-3" dir="@dir">
+    <div class="row">
+
+
+        <div class="col-md-@col">
+
+
+
+            <div class="card shadow-lg">
+                <div class="card-header text-primary mb-2"><h4><i class="@icon"></i> @permit_type_name</h4></div>
+
+                <div class="card-body text-center">
+                    <div class="row justify-content-center">
+
+
+                        <div class="btn-group">
+
+                            @if (ViewBag.RESPO_STATE == 3 || ViewBag.RESPO_STATE == 4)
+                            {
+
+
+                                if (type == "5")
+                                {
+                                    <a class="btn btn-outline-primary p-2 text-center  @if (new_permites != 0)
+                                    { <text>notification</text>} @if (ViewBag.activetab == "NewPermits") { <text>active</text>}"
+                                       href="@Url.Action("CompaniesBrowse", "Permitsdtl", new { type = type,tab ="NewPermits"})">
+                                        <h5 class="text-center text-uppercase">
+                                            <i class="fa fa-download"></i>
+                                            &nbsp;
+                                            @if (new_permites != 0)
+                                            {
+                                                <span class="badge2 numbersfont2">@new_permites</span>
+
+                                            }
+                                            @Resources.Passes.ResourceManager.GetString("Newpasses" + "_" + ViewBag.lang)
+                                        </h5>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-outline-primary p-2 text-center  @if (new_permites != 0)
+                                    { <text>notification</text>} @if (ViewBag.activetab == "NewPermits") { <text>active</text>}"
+                                       href="@Url.Action("Browse", "Permitsdtl", new { type = type,tab ="NewPermits"})">
+                                        <h5 class="text-center text-uppercase">
+                                            <i class="fa fa-download"></i>
+                                            &nbsp;
+                                            @if (new_permites != 0)
+                                            {
+                                                <span class="badge2 numbersfont2">@new_permites</span>
+
+                                            }
+                                            @Resources.Passes.ResourceManager.GetString("Newpasses" + "_" + ViewBag.lang)
+                                        </h5>
+                                    </a>
+                                }
+
+
+
+
+
+                                if (ViewBag.RESPO_STATE == 3)
+                                {
+                                    if (type == "5")
+                                    {
+                                        <a class="btn btn-outline-primary p-2 text-center  @if (new_permites != 0)
+                                        { <text>notification</text>} @if (ViewBag.activetab == "ToPrint")
+                                        { <text>active</text>}"
+                                           href="@Url.Action("CompaniesBrowse", "Permitsdtl", new { type = type, tab = "ToPrint" })">
+                                            <h5 class="text-center text-uppercase">
+                                                <i class="fa fa-upload"></i>
+                                                &nbsp;
+                                                @if (to_print_permits != 0)
+                                                {
+                                                    <span class="badge2 numbersfont2">@to_print_permits</span>
+
+                                                }
+                                                @Resources.Passes.ResourceManager.GetString("to_print" + "_" + ViewBag.lang)
+                                            </h5>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                    <a class="btn btn-outline-primary  p-2  text-center @if (to_print_permits != 0)
+                                    { <text>notification</text>}  @if (ViewBag.activetab == "ToPrint")
+                                        { <text>active</text>} "
+                                       href="@Url.Action("Browse", "Permitsdtl", new { type = type, tab = "ToPrint" })">
+                                        <h5 class="text-center text-uppercase">
+                                            <i class="fa fa-upload"></i>
+                                            &nbsp;
+                                            @if (to_print_permits != 0)
+                                            {
+                                                <span class="badge2 numbersfont2">@to_print_permits</span>
+
+                                            }
+                                            @Resources.Passes.ResourceManager.GetString("to_print" + "_" + ViewBag.lang)
+                                        </h5>
+                                    </a>
+                                    }
+                                    <a class="btn btn-outline-primary  p-2  text-center @if (ViewBag.activetab == "printed_permits")
+                                { <text>active</text>} "
+                                       href="@Url.Action("Browse", "Permitsdtl", new { type = type,tab ="printed_permits"})">
+                                        <h5 class="text-center text-uppercase">
+                                            <i class="fa fa-print"></i>
+                                            &nbsp;
+                                            @Resources.Passes.ResourceManager.GetString("printed_permits" + "_" + ViewBag.lang)
+                                        </h5>
+                                    </a>
+
+                                }
+
+
+
+                            }
+
+
+
+                            @if (ViewBag.RESPO_STATE == 2)
+                            {
+
+
+
+
+
+                                if (type == "5")
+                                {
+
+                                    <a class="btn btn-outline-primary  p-2  text-center @if (new_permites != 0)
+                                    { <text>notification</text>} @if (ViewBag.activetab == "AuthoPermits") { <text>active</text>} "
+                                       href="@Url.Action("CompaniesBrowse", "Permitsdtl", new { type = type,tab ="AuthoPermits"})">
+                                        <h5 class="text-center text-uppercase">
+                                            <i class="fa fa-download"></i>
+                                            &nbsp;
+                                            @if (new_permites != 0)
+                                            {
+                                                <span class="badge2 numbersfont2">@new_permites</span>
+
+                                            }
+                                            @Resources.Passes.ResourceManager.GetString("Authopasses" + "_" + ViewBag.lang)
+                                        </h5>
+                                    </a>
+
+                                }
+                                else
+                                {
+
+                                    <a class="btn btn-outline-primary  p-2  text-center @if (new_permites != 0)
+                                { <text>notification</text>} @if (ViewBag.activetab == "AuthoPermits")
+                                    { <text>active</text>} "
+                                       href="@Url.Action("Browse", "Permitsdtl", new { type = type, tab = "AuthoPermits" })">
+                                        <h5 class="text-center text-uppercase">
+                                            <i class="fa fa-download"></i>
+                                            &nbsp;
+                                            @if (new_permites != 0)
+                                            {
+                                                <span class="badge2 numbersfont2">@new_permites</span>
+
+                                            }
+                                            @Resources.Passes.ResourceManager.GetString("Authopasses" + "_" + ViewBag.lang)
+                                        </h5>
+                                    </a>
+
+                                }
+                            }
+
+                            @if (ViewBag.DEVELOPER == true || ViewBag.ADMIN == true)
+                            {
+
+
+
+
+
+
+                                <a class="btn btn-outline-primary  p-2  text-center @if (ViewBag.activetab == "AllPermits") { <text>active</text>} "
+                                   href="@Url.Action("Browsepermits", "Permitsdtl", new { type = type,tab ="AllPermits"})">
+                                    <h5 class="text-center text-uppercase">
+                                        <i class="fa fa-globe"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("browse_all_permits" + "_" + ViewBag.lang)
+                                    </h5>
+                                </a>
+
+                            }
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+</div>
+
+
+

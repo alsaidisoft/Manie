@@ -1,0 +1,215 @@
+﻿@using APP.Util
+
+
+
+@{
+    ViewBag.Title = "payment_report";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+
+
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+        <h1 class="card-header  text-primary"><i class="fa fa-file-excel"></i> @Resources.Passes.ResourceManager.GetString("payment_report" + "_" + ViewBag.lang)</h1>
+       
+            <div class="card-body">
+               
+                <hr />
+                <div class="col-md-12" id="pdf" dir="rtl">
+                    <div class="text-center" @*style="display:none"*@>
+                        <center>
+                            <h4>إيصال إستلام</h4>
+                            <h4>@ViewBag.CAMP_NAME</h4>
+                        </center>
+                        <hr />
+                        <center style="font-family: Arial !important">@ViewBag.Date</center>
+                        <br />
+                    </div>
+                    <table border="1" cellpadding="3" dir="rtl" class="table table-bordered" style="width:100% !important; white-space: nowrap">
+                        <thead class="bg-light">
+                            <tr>
+                            <th colspan="4"><b>بيانات المستلم</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>الاسم</td>
+                                <td width="70%"><input type="text" class="form-control" /></td>
+                                <td>الرقم</td>
+                                <td width="70%"><input type="text" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <td >رقم الهاتف</td>
+                                <td width="70%"><input type="text" class="form-control" /></td>
+                                <td>الرتبة</td>
+                                <td width="70%"><input type="text" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <td>الوحدة</td>
+                                <td width="70%"><input type="text" class="form-control" /></td>
+                                <td>التاريخ</td>
+                                <td width="70%"><input type="date" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">التوقيع</td>
+                                <td width="70%"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><center><b>بيانات القائم بالتسليم</b></center></td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="3">الاسم</td>
+                                <td width="70%"><input type="text" class="form-control" /></td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="3">التوقيع</td>
+                                <td width="70%"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr />
+                    <p onclick="addNewRow()" id="add"><i class="fa fa-plus-circle"></i> أضف صف</p>
+                    <table id="myTable" border="1" cellpadding="3" dir="rtl" class="table table-bordered" style="width:100% !important; white-space: nowrap">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>ت</th>
+                                @*<th>رقم التصريح</th>*@
+                                <th>الرقم</th>
+                                <th>الاسم</th>
+                                <th>نوع التصريح</th>
+                                @*<th>نوع المعاملة</th>*@
+                                <th>من</th>
+                                <th>إلى</th>
+                                <th>الرسوم</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <!--<tr>-->
+                            @*<td><input type="number" class="form-control" /></td>*@
+                            <!--<td><input type="number" class="form-control" /></td>
+            <td><input type="text" class="form-control" /></td>
+            <td><input type="text" class="form-control" /></td>
+            <td><input type="text" class="form-control" /></td>
+            <td><input type="text" class="form-control" /></td>
+            <td><input type="text" class="form-control" /></td>
+            <td><input type="text" class="form-control" /></td>
+            <td><input type="number" class="form-control" /></td>
+        </tr>
+
+    <tr>
+        <td colspan="7">المجمـــــــــــــــــــــــــوع</td>
+        <td><input type="number" class="form-control" /> ريال عماني</td>
+    </tr>-->
+                            
+                        </tbody>
+                    </table>
+                    <p id="total"></p>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12" dir="@dir">
+                        <button type="button" id="cmd" class="btn btn-secondary"><i class="fa fa-print"></i> طباعة</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+@section Scripts {
+    
+
+    <script>
+        let txt = 0;
+        var x = 1;
+        function addNewRow() {
+            var table = document.getElementById("myTable");
+            var rows = table.getElementsByTagName("tr").length;
+            var row = table.insertRow(rows);
+            //var td = document.createElement("TD");
+            //row.appendChild(td);
+            var cell0 = row.insertCell(0);
+            var cell1 = row.insertCell(1);
+            var cell2 = row.insertCell(2);
+            var cell3 = row.insertCell(3);
+            var cell4 = row.insertCell(4);
+            var cell5 = row.insertCell(5);
+            var cell6 = row.insertCell(6);
+            //var cell7 = row.insertCell(7);
+            //var cell8 = row.insertCell(8);
+            cell0.innerHTML = x;
+            cell1.innerHTML = "<input type='text' class='form-control'/>";
+            cell2.innerHTML = "<input type='text' class='form-control'/>";
+            cell3.innerHTML = "<input type='text' class='form-control' />";
+            cell4.innerHTML = "<input type='date' class='form-control' />";
+            cell5.innerHTML = "<input type='date' class='form-control' />";
+            cell6.innerHTML = "<input type='number' class='form-control' />";
+            //cell7.innerHTML = "<input type='number' class='form-control' />";
+            //cell8.innerHTML = "<input type='text' class='form-control' id='t"+i+"' />";
+
+            x++;
+        }
+
+       
+
+        function printData() {
+           
+            $("input").each(function () {
+                $("<div>" + $(this).val() + "</div>").insertBefore($(this));
+                $(this).hide();
+            });
+            $("input[type=number]").each(function () {
+
+                let v = parseInt($(this).val());
+                
+                txt += v;
+                console.log(txt);
+            });
+            document.getElementById('total').innerHTML = "المجمــــــــــــــــــــــــوع: "+txt.toString() + " ريال عماني ";
+            //var printContents = document.getElementById('pdf').innerHTML;
+            //var originalContents = document.body.innerHTML;
+            //document.body.innerHTML = printContents;
+            //window.focus();
+            //window.print();
+            //document.body.innerHTML = originalContents;
+            document.getElementById("add").style.display="none";
+            var divToPrint = document.getElementById("pdf");
+            newWin = window.open("");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+            document.getElementById("add").style.display = "block";
+
+            // remove values, show fields
+            $("input").each(function () {
+                $(this).prev("div").remove();
+                $(this).show();
+            });
+            
+        }
+        
+      
+        $('#cmd').on('click', function () {
+            printData();
+        });
+    </script>
+
+
+}

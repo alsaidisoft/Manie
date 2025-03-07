@@ -1,0 +1,63 @@
+﻿@using portal.Controllers;
+@{
+    string currentUser = (new UserInfo()).getSNO();
+
+}
+<modal>
+    @if (ViewBag.state)
+    {
+        string image_link = "http://mamrafowebgov01/images/" + currentUser + ".gif";
+        <!-- User Details Modal  -->
+        <div class="modal fade bd-example-modal-lg" id="UserDetailsModal"
+             tabindex="-1" role="dialog"
+             aria-labelledby="UserDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-body" style="height: 100%" dir="rtl">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img style="width: 100%" src="@image_link" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/user.png")'" alt="user image">
+                            </div>
+
+                            <div class="col-md-8 align-self-center user-details" @if (ViewBag.lang == "ar") { <text> style="text-align: right" </text> }>
+                                <h5>
+                                    @Resources.Common.ResourceManager.GetString("service_number" + "_" + ViewBag.lang):
+                                    <span>@currentUser</span>
+                                </h5>
+                                <h5>
+                                    @Resources.Common.ResourceManager.GetString("rank" + "_" + ViewBag.lang):
+                                    <span>@ViewBag.RNK</span>
+                                </h5>
+                                <h5>
+                                    @Resources.Common.ResourceManager.GetString("name" + "_" + ViewBag.lang):
+                                    <span>@ViewBag.FULL_NAME</span>
+                                </h5>
+                                <h5>
+                                    @Resources.Common.ResourceManager.GetString("section" + "_" + ViewBag.lang):
+                                    <span>@ViewBag.USER_UNIT</span>
+                                </h5>
+                                <h5>
+                                    @Resources.Common.ResourceManager.GetString("main_unit" + "_" + ViewBag.lang):
+                                    <span>@ViewBag.FORCE_NAME</span>
+                                </h5>
+                                <h5>
+                                    @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang):
+                                    <span>@ViewBag.CAMP_NAME</span>
+                                </h5>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                            @Resources.Common.ResourceManager.GetString("close" + "_" + ViewBag.lang)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- User Details Modal  -->
+    }
+</modal>
+

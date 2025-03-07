@@ -1,0 +1,100 @@
+﻿@{
+    
+    
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        
+        dir = "rtl";
+    }
+
+
+}
+<div class="col-lg-12 bg-primary text-white p-2 m-0" dir="@dir">
+    <br />
+    <h5>
+        <i class="fa fa-external-link-alt"></i>
+        @Resources.Common.ResourceManager.GetString("important_links" + "_" + ViewBag.lang)
+    </h5>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <div class="col-md-12 p-2">
+                <a href="http://mamrafowebgov01/rafoapplication" class="text-white" target="_blank">
+                    <i class="fa fa-shapes"></i> @Resources.Common.ResourceManager.GetString("applications" + "_" + ViewBag.lang)
+                </a>
+
+            </div>
+            <div class="col-md-12 p-2">
+                <a href="http://gatepass.its.mod.saf/login.asp" class="text-white" target="_blank">
+                    <i class="fa fa-universal-access"></i> @Resources.Common.ResourceManager.GetString("mortafaa" + "_" + ViewBag.lang)
+                </a>
+            </div>
+            <div class="col-md-12 p-2">
+                <a href="https://saaei/CRSManager/tabid/90/ctl/Login/language/ar-OM/Default.aspx?returnurl=%2f#!" class="text-white" target="_blank">
+                    <i class="fa fa-envelope"></i> @Resources.Common.ResourceManager.GetString("saeei" + "_" + ViewBag.lang)
+                </a>
+
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="col-md-12 p-2">
+                <a href="https://mail.mod.saf/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmail.mod.saf%2fowa%2f" class="text-white" target="_blank">
+                    <i class="fa fa-mail-bulk"></i>  @Resources.Common.ResourceManager.GetString("outlook" + "_" + ViewBag.lang)
+                </a>
+
+            </div>
+
+            <div class="col-md-12 p-2">
+                <a href="https://mod.gov.om/ar-OM/RAFO/Pages/formsrequests/security.aspx" class="text-white" target="_blank">
+                    <i class="fa fa-file-alt"></i>  @Resources.Common.ResourceManager.GetString("requests" + "_" + ViewBag.lang)
+                </a>
+
+            </div>
+
+            <div class="col-md-12 p-2">
+                <p class="text-white">
+                    <i class="fa fa-phone"></i>    @Resources.Common.ResourceManager.GetString("support" + "_" + ViewBag.lang)
+                    : 339100
+                </p>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="text-white">
+                        <i class="fa fa-users"></i> @Resources.Common.ResourceManager.GetString("visitors" + "_" + ViewBag.lang):
+                    </p>
+                    <p>
+                        <i class="fa fa-server"></i> @Resources.Common.ResourceManager.GetString("visitor_now" + "_" + ViewBag.lang)
+                        : 243
+                    </p>
+                    <p>
+                        <i class="fa fa-globe"></i> @Resources.Common.ResourceManager.GetString("total_visitor" + "_" + ViewBag.lang)
+                        : 2342
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <p>
+                        @Resources.Common.ResourceManager.GetString("today" + "_" + ViewBag.lang)
+                        : @DateTime.Now
+                    </p>
+                    <img src="~/Content/images/rafo_logo2.png" width="100" height="120" class="rounded" />
+
+                    <img src="~/Content/images/slogo2.png" width="110" height="110" class="rounded" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-center">
+        <br />
+
+        <hr />
+        <h6 class="text-center">
+            @Resources.Common.ResourceManager.GetString("app_developer" + "_" + ViewBag.lang) © @DateTime.Now.Year
+
+        </h6>
+    </div>
+</div>

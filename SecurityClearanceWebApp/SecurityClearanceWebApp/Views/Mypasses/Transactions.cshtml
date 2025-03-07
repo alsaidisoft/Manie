@@ -1,0 +1,312 @@
+﻿@using APP.Util
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_TRANSACTION_DTL>
+
+
+@{
+    ViewBag.Title = "Transactions";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var app_name = Resources.Common.ResourceManager.GetString("app_name" + "_" + ViewBag.lang);
+    var urlHttp = Resources.Common.ResourceManager.GetString("urlHttp" + "_" + ViewBag.lang);
+}
+
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+        <h1 class="card-header  text-primary"><i class="fa fa-money-bill"></i> @Resources.Common.ResourceManager.GetString("prevuies_transactions" + "_" + ViewBag.lang)</h1>
+        <div class="card-body">
+            <table class="table table-bordered table-hover table-responsive data-table text-center" id="tb">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>#</th>
+
+                        <th width="40%">
+                            @Resources.Passes.ResourceManager.GetString("transaction_type" + "_" + ViewBag.lang)
+                        </th>
+
+                        <th>
+                            @Resources.Passes.ResourceManager.GetString("amount" + "_" + ViewBag.lang)
+                        </th>
+                        <th width="10%">
+                            @Resources.Passes.ResourceManager.GetString("doc" + "_" + ViewBag.lang)
+                        </th>
+                        <th width="20%">
+                            @Resources.Common.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)
+                        </th>
+                        <th>
+                            @Resources.Common.ResourceManager.GetString("crated_by" + "_" + ViewBag.lang)
+                        </th>
+
+                        <th width="20%">
+                            @Resources.Common.ResourceManager.GetString("created_date" + "_" + ViewBag.lang)
+
+                        </th>
+
+
+
+                        <th style="border-right:1px solid #ccc; width:10%">
+                            @Resources.Passes.ResourceManager.GetString("Actions" + "_" + ViewBag.lang)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int rowNo = 0;}
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            @{rowNo++;}
+                            <td>@rowNo</td>
+
+
+
+
+
+                            <td width="10%">
+                                @if (Language.GetCurrentLang() == "en")
+                                {
+                                    @Html.DisplayFor(modelItem => item.RA42_TRANSACTION_TYPE_MST.TRANSACTION_NAME_E)
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.RA42_TRANSACTION_TYPE_MST.TRANSACTION_NAME_A)
+
+                                }
+                            </td>
+
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RA42_TRANSACTION_TYPE_MST.AMOUNT)
+
+                            </td>
+
+
+                            <td>
+                                @if (item.RECEIPT != null)
+                                {
+                                    <a href="~/Files/Receipt/@item.RECEIPT" target="_blank" class="btn btn-link">@item.RECEIPT</a>
+                                }
+                            </td>
+                            <td>
+                                @item.REMARKS
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CRD_BY)
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CRD_DT)
+
+                            </td>
+
+
+                            <td style="border-right:1px solid #ccc;" dir="ltr">
+
+                                <div class="">
+                                    <div class="row justify-content-center">
+                                        <div class="btn-group p-2 justify-content-center">
+
+                                            <span id="deleteTransaction">
+                                                <a class="btn btn-danger text-center" title="@Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)" href="" id="@item.TRANSACTION_CODE">
+                                                    <i class="fa fa-trash"></i>
+
+                                                </a>
+                                            </span>
+                                            <a class="btn btn-warning text-center" title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)" href="#" onclick="EditRecord(@item.TRANSACTION_CODE)">
+                                                <i class="fa fa-edit"></i>
+
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="MyModal" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="form" method="post" enctype="multipart/form-data">
+                    <fieldset id="SubmitForm">
+                        <input type="hidden" name="TRANSACTION_CODE" id="TRANSACTION_CODE" />
+
+                        <div class="col-md-6">
+                            @Resources.Passes.ResourceManager.GetString("transaction_type" + "_" + ViewBag.lang)
+                            <div class="form-group">
+
+                                <select name="TRANSACTION_TYPE_CODE" class="form-control" id="DropDwn2">
+                                    @if (ViewBag.TRANSACTION_TYPE_CODE != null)
+                                    {
+                                        foreach (var option in ViewBag.TRANSACTION_TYPE_CODE)
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
+
+                                    }
+                                </select>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @Resources.Common.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <textarea name="REMARKS" class="form-control" id="REMARKS"></textarea>
+                            </div>
+                        </div>
+                       
+                        <div class="col-md-6">
+                            @Resources.Passes.ResourceManager.GetString("doc" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <input type="file" class="form-control" name="RECEIPT" accept="image/*" id="RECEIPT" />
+                                <br />
+                                <div id="img"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <a href="#" class="btn btn-block text-center" id="SaveRecord"></a>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+
+    <script>
+
+
+        $('#deleteTransaction a').click(function (e) {
+                e.preventDefault();
+
+                var id = $(this).attr("Id");
+                console.log(id);
+                //confirm(access);
+                var MSG = confirm("@Resources.Common.ResourceManager.GetString("delete_question" + "_" + ViewBag.lang)");
+
+                if (MSG) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("DeleteTransactin")',
+                        data: { id: id },
+                        dataType: "json",
+                        success: function () {
+                            setTimeout(function () { location.reload(); }, 1);
+                        },
+                        error: function () {
+                            alert("@Resources.Passes.ResourceManager.GetString("error" + "_" + ViewBag.lang)");
+                        }
+                    });
+                }
+            })
+
+
+         function EditRecord(Id) {
+            var url = "./GetObjectById?Id=" + Id;
+            console.log(Id);
+            $("#ModalTitle").html("<i class='fa fa-edit'></i> @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-save'></i> @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)").removeClass('btn-success').addClass("btn-warning");
+            $("#MyModal").modal();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetObjectById")',
+                data: { Id: Id },
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    $("#REMARKS").val(obj.REMARKS);
+                    $("#TRANSACTION_CODE").val(obj.TRANSACTION_CODE);
+                    $("#DropDwn2").val(obj.TRANSACTION_TYPE_CODE).trigger('change');
+
+                    var image = obj.RECEIPT != null ? obj.RECEIPT : "";
+                    var div = document.getElementById("img");
+                    var img = document.createElement("IMG");
+                    div.innerHTML = "";
+
+                    if (image != "") {
+
+                        img.setAttribute("src", "@urlHttp@app_name/Files/Receipt/" + image);
+                        img.setAttribute("width", "100");
+                        img.setAttribute("height", "100");
+                        div.appendChild(img);
+                    }
+                    else {
+
+
+                    }
+
+                }
+            })
+        }
+
+        $("#SaveRecord").click(function () {
+            var formData = new FormData();
+
+            formData.append("RECEIPT", $('#RECEIPT')[0].files[0]); //append the image file
+
+            var other_data = $('#SubmitForm').serializeArray();
+            $.each(other_data, function (key, input) { //append other input value
+                formData.append(input.name, input.value);
+            });
+
+            $.ajax({
+                type: "POST",
+                url:'@Url.Action("SaveDataInDatabase")',
+                data: formData,
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                success: function () {
+                            setTimeout(function () { location.reload(); }, 1);
+                        },
+                        error: function () {
+                            alert("@Resources.Passes.ResourceManager.GetString("error" + "_" + ViewBag.lang)");
+                        }
+            })
+        })
+    </script>
+
+
+}

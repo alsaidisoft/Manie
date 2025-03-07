@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Tabs";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+
+<style>
+    td, th {
+        text-align: center !important;
+    }
+</style>
+
+
+
+@if (ViewBag.RESPO_STATE > 1 && ViewBag.RESPO_STATE <= 4)
+{
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <div class="btn-group">
+
+                                <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "Search")
+                                    { <text>active</text>} " href="@Url.Action("Search", ViewBag.controllerName, null)">
+                                    <i class="fa fa-search"></i>
+                                    &nbsp;
+                                    @Resources.Passes.ResourceManager.GetString("Vechile_pass_Search" + "_" + ViewBag.lang)
+                                </a>
+                                <a class="btn btn-outline-primary text-center @if (ViewBag.activetab == "Supercreate")
+                                    { <text>active</text>} " href="@Url.Action("Supercreate", ViewBag.controllerName, null)">
+                                    <i class="fa fa-search-plus"></i>
+                                    &nbsp;
+                                    @Resources.Passes.ResourceManager.GetString("Vechile_pass_Supercreate" + "_" + ViewBag.lang)
+                                </a>
+                                @if (ViewBag.FORCE_TYPE_CODE == 1)
+                                {
+                                    <a class="btn btn-outline-primary text-center @if (ViewBag.activetab == "OtherpermitForFamily")
+                                    { <text>active</text>} " href="@Url.Action("OtherpermitForFamily", ViewBag.controllerName, null)">
+                                        <i class="fa fa-plus-square"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("Vechile_pass_otherfamily" + "_" + ViewBag.lang)
+                                    </a>
+                                }
+                                <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "Companypermit")
+                                    { <text>active</text>} " href="@Url.Action("Companypermit", ViewBag.controllerName, null)">
+                                    <i class="fa fa-expand-arrows-alt"></i>
+
+                                    &nbsp;
+                                    @Resources.Passes.ResourceManager.GetString("companypermit" + "_" + ViewBag.lang)
+                                </a>
+                                <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "Companypermitgeneraluse")
+                                    { <text>active</text>} " href="@Url.Action("Companypermitgeneraluse", ViewBag.controllerName, null)">
+                                    <i class="fa fa-compress-arrows-alt"></i>
+
+                                    &nbsp;
+                                    @Resources.Passes.ResourceManager.GetString("Companypermitgeneraluse" + "_" + ViewBag.lang)
+                                </a>
+
+                                <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "Otherpermit")
+                                    { <text>active</text>} " href="@Url.Action("Otherpermit", ViewBag.controllerName, null)">
+                                    <i class="fa fa-external-link-square-alt"></i>
+                                    &nbsp;
+                                    @Resources.Passes.ResourceManager.GetString("OtherpermitVechile" + "_" + ViewBag.lang)
+                                </a>
+
+                                <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "Trainee")
+                                    { <text>active</text>} " href="@Url.Action("Trainee", ViewBag.controllerName, null)">
+                                    <i class="fa fa-car-side"></i>
+                                    &nbsp;
+                                    @Resources.Passes.ResourceManager.GetString("trainee_with_car" + "_" + ViewBag.lang)
+                                </a>
+
+                                @if (ViewBag.FORCE_TYPE_CODE == 3)
+                                {
+                                    <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "ForSpecialArea")
+                                    { <text>active</text>} " href="@Url.Action("ForSpecialArea", ViewBag.controllerName, null)">
+                                        <i class="fa fa-minus"></i> <i class="fa fa-car-side"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("exception_area" + "_" + ViewBag.lang)
+                                    </a>
+                                }
+
+                                @if (ViewBag.FORCE_TYPE_CODE == 2)
+                                {
+                                    <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "ForOfficerDriver")
+                                    { <text>active</text>} " href="@Url.Action("ForOfficerDriver", ViewBag.controllerName, null)">
+                                        <i class="fa fa-plus"></i> <i class="fa fa-car-side"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("driver_permit" + "_" + ViewBag.lang)
+                                    </a>
+
+                                    <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "ProveIdentity")
+                                    { <text>active</text>} " href="@Url.Action("ProveIdentity", ViewBag.controllerName, null)">
+                                        <i class="fa fa-outdent"></i> <i class="fa fa-car-side"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("ProveIdentity_car_permit" + "_" + ViewBag.lang)
+                                    </a>
+
+                                    <a class="btn btn-outline-primary  text-center @if (ViewBag.activetab == "ProveIdentityBusdriver")
+                                    { <text>active</text>} " href="@Url.Action("ProveIdentityBusdriver", ViewBag.controllerName, null)">
+                                        <i class="fa fa-outdent"></i> <i class="fa fa-car-side"></i>
+                                        &nbsp;
+                                        @Resources.Passes.ResourceManager.GetString("prove_identity_bus_driver" + "_" + ViewBag.lang)
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+else
+{
+
+    var url = Url.RequestContext.RouteData.Values["id"];
+    var id = int.Parse(url.ToString());
+
+
+    if (ViewBag.RESPO_STATE > 1 && ViewBag.RESPO_STATE <= 4)
+    {
+        <div class="col-md-12 @align">
+            <a href="~/@ViewBag.lang/Mypasses/Select/@id" class="btn btn-outline-dark">
+                <i class="fa fa-backward"></i>
+                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+            </a>
+        </div>
+    }
+}
+

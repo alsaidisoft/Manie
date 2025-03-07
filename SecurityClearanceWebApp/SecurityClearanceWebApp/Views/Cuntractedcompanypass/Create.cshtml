@@ -1,0 +1,1226 @@
+﻿@using APP.Util;
+@model SecurityClearanceWebApp.Models.RA42_CONTRACTING_COMPANIES_PASS_DTL
+
+@{
+    ViewBag.Title = "Create";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+    var agree = Resources.Common.ResourceManager.GetString("error_agree" + "_" + ViewBag.lang);
+    var main_z = Resources.Passes.ResourceManager.GetString("main_zone" + "_" + ViewBag.lang);
+    var sub_z = Resources.Passes.ResourceManager.GetString("sub_zone" + "_" + ViewBag.lang);
+    var remove = Resources.Passes.ResourceManager.GetString("Remove" + "_" + ViewBag.lang);
+    var all = Resources.Passes.ResourceManager.GetString("All" + "_" + ViewBag.lang);
+    var choose_sub_z = Resources.Passes.ResourceManager.GetString("choose_sub_zone_again" + "_" + ViewBag.lang);
+    var no_file_ = Resources.Passes.ResourceManager.GetString("not_allowed_m_ten" + "_" + ViewBag.lang);
+    var no_zone_ = Resources.Passes.ResourceManager.GetString("not_allowed_m_50" + "_" + ViewBag.lang);
+    var no_file_format = Resources.Passes.ResourceManager.GetString("file_format" + "_" + ViewBag.lang);
+    var doc = Resources.Passes.ResourceManager.GetString("document_type" + "_" + ViewBag.lang);
+    var no_persons = Resources.Passes.ResourceManager.GetString("Not_allowed_50_person" + "_" + ViewBag.lang);
+    var relative = Resources.Passes.ResourceManager.GetString("Relative_type" + "_" + ViewBag.lang);
+    var civil_num = Resources.Passes.ResourceManager.GetString("Civil_number" + "_" + ViewBag.lang);
+    var identity = Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang);
+    var gender = Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang);
+    var controller = "Mypasses";
+    var required = Resources.Common.ResourceManager.GetString("required" + "_" + ViewBag.lang);
+    var add_employees = Resources.Passes.ResourceManager.GetString("add_employee" + "_" + ViewBag.lang);
+    var documents = Resources.Passes.ResourceManager.GetString("Documents" + "_" + ViewBag.lang);
+
+
+}
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 justify-content-center text-primary">
+                            <h4>
+                                <i class="fa fa-plus-circle"></i>&nbsp;
+                                @Resources.Passes.ResourceManager.GetString("company_contracted_pass_create" + "_" + ViewBag.lang) @*(@ViewBag.STATION_NAME)*@
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 @align">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @{
+                        if (TempData["Success"] != null)
+                        {
+                            <p class="alert alert-success">@TempData["Success"]</p>
+                        }
+                        if (TempData["Erorr"] != null)
+                        {
+                            <p class="alert alert-danger">@TempData["Erorr"]</p>
+                        }
+                    }
+                    @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "if(document.getElementById('agree').checked) { return true; } else { alert('" + agree + "'); document.getElementById('confirm_r').style.color='red'; return false; }" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="col-md-12">
+                                <input type="hidden" value="@ViewBag.Service_No" name="SERVICE_NUMBER" class="" />
+                            </div>
+                            <br />
+                            <div class="col-md-12">
+
+                                <span class="alert-warning p-1 rounded">
+                                    <b class="text-danger"> * </b>@Resources.Passes.ResourceManager.GetString("required_fields" + "_" + ViewBag.lang)
+                                </span>
+                                <hr />
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("respo_unit" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                    @Html.EditorFor(model => model.RESPONSIBLE, new { htmlAttributes = new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.RESPONSIBLE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("company_name" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                    @Html.DropDownList("COMPANY_CODE", null, htmlAttributes: new { @class = "form-control", id = "COMPANYCODE", @Style = "width:100%", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(model => model.COMPANY_CODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("worker_identity_card" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.EditorFor(model => model.ID_CARD_NUMBER, new { htmlAttributes = new { @class = "form-control", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.ID_CARD_NUMBER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("worker_id_card_expaired" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.EditorFor(model => model.CARD_EXPIRED_DATE, new { htmlAttributes = new { @class = "form-control", @Style = "width:100%;", onkeydown = "javascript: return false;", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.CARD_EXPIRED_DATE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("worker_namea" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.EditorFor(model => model.NAME_A, new { htmlAttributes = new { @class = "form-control", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.NAME_A, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("worker_namee" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.EditorFor(model => model.NAME_E, new { htmlAttributes = new { @class = "form-control", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.NAME_E, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Proffision_a" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.EditorFor(model => model.PROFESSION_A, new { htmlAttributes = new { @class = "form-control", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.PROFESSION_A, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Proffision_e" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.EditorFor(model => model.PROFESSION_E, new { htmlAttributes = new { @class = "form-control", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.PROFESSION_E, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.DropDownList("IDENTITY_CODE", null, htmlAttributes: new { @class = "form-control", id = "IDENTITY", @Style = "width:100%" })
+                                    @Html.ValidationMessageFor(model => model.IDENTITY_CODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                    @Html.DropDownList("GENDER_ID", null, htmlAttributes: new { @class = "form-control", id = "GENDER", @Style = "width:100%" })
+                                    @Html.ValidationMessageFor(model => model.GENDER_ID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <div class="form-group">
+                                            @Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                            <input type="file" name="PERSONAL_IMAGE" accept="image/*" class="form-control" required="" oninvalid="this.setCustomValidity('@required')" oninput="setCustomValidity('')" onchange="showpreview(this);" />
+                                            @Html.ValidationMessageFor(model => model.PERSONAL_IMAGE, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 p-2">
+                                        <img src="~/Content/images/adminpic.png" style="display: none;" width="50" height="50" id="imagePreview" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Pass_type" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.DropDownList("PASS_TYPE_CODE", null, htmlAttributes: new { @class = "form-control", id = "PASSTYPECODE", @Style = "width:100%" })
+                                    @Html.ValidationMessageFor(model => model.IDENTITY_CODE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("work_place" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                    @Html.EditorFor(model => model.WORK_PLACE, new { htmlAttributes = new { @class = "form-control", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+
+
+                                    @Html.ValidationMessageFor(model => model.WORK_PLACE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("address" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.EditorFor(model => model.ADDRESS, new { htmlAttributes = new { @class = "form-control", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.ADDRESS, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Gsm" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.EditorFor(model => model.GSM, new { htmlAttributes = new { @class = "form-control", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" } })
+                                    @Html.ValidationMessageFor(model => model.GSM, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <br />
+                                <div class="card">
+                                    <div class="card-header">
+                                        @Resources.Passes.ResourceManager.GetString("Duration" + "_" + ViewBag.lang)
+                                    </div>
+                                    <div class="row p-2">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                                @Html.EditorFor(model => model.DATE_FROM, new { htmlAttributes = new { @class = "form-control", @required = "", @Style = "width:100%;", onkeydown = "javascript: return false;", @autocomplete = "off" } })
+                                                @Html.ValidationMessageFor(model => model.DATE_FROM, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                                @Html.EditorFor(model => model.DATE_TO, new { htmlAttributes = new { @class = "form-control", @required = "", @Style = "width:100%;", onkeydown = "javascript: return false;", @autocomplete = "off" } })
+                                                @Html.ValidationMessageFor(model => model.DATE_TO, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Workflow_respo" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+
+                                    @Html.DropDownList("WORKFLOW_RESPO_CODE", null, "--اختر--", htmlAttributes: new { @class = "form-control", id = "WORKFLOWRESPOCODE", @Style = "width:100%", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(model => model.COMPANY_CODE, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+
+                            @*<div class="col-md-12 alert alert-warning">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    @Resources.Passes.ResourceManager.GetString("contract_employee_note" + "_" + ViewBag.lang)
+
+                </div>*@
+                            <br />
+
+
+                            @*<div class="col-md-6">
+
+                    <div class="col-md-12">
+                        <button onclick="AddZones()" class="btn btn-outline-primary btn-block text-center" type="button">
+                            <i class="fa fa-plus-circle"></i> @Resources.Passes.ResourceManager.GetString("Add_zones" + "_" + ViewBag.lang)
+                        </button>
+                    </div>
+
+                    <br />
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div id="dvContainer"></div>
+                        </div>
+                    </div>
+                </div>*@
+
+                            <div class="col-md-4">
+
+                                <div class="col-md-12">
+                                    <h5 class="alert-secondary alert text-center">
+                                        <i class="fa fa-file-pdf p-1"></i> @documents
+                                    </h5>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="fContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-12"><hr /></div>
+                <br />*@
+                            @*<div class="col-md-8">
+
+                    <div class="col-md-12">
+                        <button onclick="AddPerson()" class="btn btn-outline-info btn-block text-center" type="button">
+                            <i class="fa fa-plus-circle"></i> @Resources.Passes.ResourceManager.GetString("add_employee" + "_" + ViewBag.lang)
+                        </button>
+                    </div>
+                    <br />
+
+
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+
+                            <div id="PrContainer">
+
+                            </div>
+                            <br />
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>*@
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("PURPOSE_OF_PASS" + "_" + ViewBag.lang)<b class="text-danger"> * </b>
+                                    @Html.TextAreaFor(model => model.PURPOSE_OF_PASS, new { @class = "form-control", @required = "", @oninvalid = "this.setCustomValidity('" + required + "')", @oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(model => model.PURPOSE_OF_PASS, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                    @Html.TextAreaFor(model => model.REMARKS, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.REMARKS, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div style="overflow:scroll; height:200px;" class="overflow-auto">
+                                    @if (ViewBag.CAVEATES != null)
+                                    {
+                                        if (Language.GetCurrentLang() == "en")
+                                        {
+
+                                            <div class="card shadow-lg bg-light">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <h1 class="text-danger  text-center">
+                                                                @Resources.Passes.ResourceManager.GetString("Security_caves" + "_" + ViewBag.lang)
+                                                            </h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    @if (ViewBag.CAVEATES.FILE_IMAGE != null)
+                                                    {
+                                                        <div class="text-center">
+                                                            <img src="~/Files/Others/@ViewBag.CAVEATES.FILE_IMAGE" id="caveatesimg" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="security image">
+                                                            <hr />
+                                                        </div>
+                                                    }
+                                                    <p class="text-dark text-left" id="caveates" dir="ltr" style="white-space: pre-line;line-height: 30px;">
+                                                        @ViewBag.CAVEATES.SECURITY_CAVEATES_EN
+                                                        <br />
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="card shadow-lg bg-light">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-12">
+
+                                                            <h1 class="text-danger  text-center">
+                                                                @Resources.Passes.ResourceManager.GetString("Security_caves" + "_" + ViewBag.lang)
+                                                            </h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    @if (ViewBag.CAVEATES.FILE_IMAGE != null)
+                                                    {
+                                                        <div class="text-center">
+                                                            <img src="~/Files/Others/@ViewBag.CAVEATES.FILE_IMAGE" id="caveatesimg" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="security image">
+                                                            <hr />
+                                                        </div>
+                                                    }
+                                                    <p class="text-dark text-right" id="caveates" dir="rtl" style="white-space: pre-line; line-height: 30px;">
+                                                        @ViewBag.CAVEATES.SECURITY_CAVEATES_AR
+
+                                                        <br />
+
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
+                                </div>
+                                <div class="col-md-12">
+                                    <hr />
+
+                                    <div class="col-md-12">
+                                        <div class="row">
+
+                                            <div class="col-md-11">
+                                                <p id="confirm_r"><input type="checkbox" name="checkbox" id="agree" /> @Resources.Passes.ResourceManager.GetString("Confirm_read" + "_" + ViewBag.lang)</p>
+                                            </div>
+                                            <div class="col-md-1 text-left">
+                                                <a href="#" class="btn btn-dark" onclick="SecurityCaveates();"><i class="fa fa-book-reader"></i></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                </div>
+
+                            </div>
+                            <input type="checkbox" id="employees" style="display:none" />
+
+                            <div class="col-md-12">
+                                <div class="form-group @align">
+                                    <button type="submit" value="Create" class="btn btn-success">
+                                        <i class="fa fa-plus-circle"></i> &nbsp;
+                                        @Resources.Common.ResourceManager.GetString("new_request" + "_" + ViewBag.lang)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="Caveates" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_caveates">
+                                @Resources.Passes.ResourceManager.GetString("Security_caves" + "_" + ViewBag.lang)
+                            </h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+
+
+                <div class="col-md-12">
+
+
+                    <div id="dimg" class="text-center"></div>
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <h6 class="details-info-content text-dark" dir="@dir" style="white-space: pre-line; line-height: 30px;" id="cav"></h6>
+                    <hr />
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    <link href="~/Content/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/select2.min.js"></script>
+    <link href="~/Content/Kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/Kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="~/Scripts/Kendo/js/kendo.all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            showProgressBar($(".service-number-field"));
+            showServiceInfo($(".service-number-field"));
+
+            AddFiles();
+
+             $("#COMPANYCODE").kendoComboBox({
+                filter: "contains",
+                change: function (e) {
+                    var widget = e.sender;
+
+                    if (widget.value() && widget.select() === -1) {
+                        //custom has been selected
+                        widget.value(""); //reset widget
+                        //widget.trigger("change");
+                    }
+                }
+             });
+           
+
+            $("#CARD_EXPIRED_DATE").kendoDatePicker({
+                format: "dd/MM/yyyy"
+            });
+            
+
+            $(function () {
+                var dateToday = new Date();
+                var yrRange = dateToday.getFullYear() + ":" + (dateToday.getFullYear() + 2);
+                $("#DATE_FROM").datepicker({
+                    //minDate: 0,
+                    dateFormat: "dd/mm/yy",
+                    yearRange: yrRange,
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    changeYear: true,
+                    onClose: function (selectedDate, inst) {
+                        var minDate = new Date(Date.parse(selectedDate));
+                        //minDate.setDate(maxDate.getDate() + 1);
+                        $("#DATE_TO").datepicker("option", "minDate", selectedDate);
+                    }
+                });
+
+                $("#DATE_TO").datepicker({
+                    minDate: "+1D",
+                    dateFormat: "dd/mm/yy",
+                    yearRange: yrRange,
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    changeYear: true,
+                    onClose: function (selectedDate, inst) {
+                        var maxDate = new Date(Date.parse(selectedDate));
+                        //maxDate.setDate(maxDate.getDate() - 1);
+                        //$("#DATE_FROM").datepicker("option", "maxDate", maxDate);
+                    }
+                });
+            });
+
+            $("#IDENTITY").kendoComboBox({
+                filter: "contains",
+                change: function (e) {
+                    var widget = e.sender;
+
+                    if (widget.value() && widget.select() === -1) {
+                        //custom has been selected
+                        widget.value(""); //reset widget
+                        //widget.trigger("change");
+                    }
+                }
+            });
+            $("#GENDER").kendoComboBox({
+                filter: "contains",
+                change: function (e) {
+                    var widget = e.sender;
+
+                    if (widget.value() && widget.select() === -1) {
+                        //custom has been selected
+                        widget.value(""); //reset widget
+                        //widget.trigger("change");
+                    }
+                }
+            });
+            $("#PASSTYPECODE").kendoComboBox({
+                filter: "contains",
+                change: function (e) {
+                    var widget = e.sender;
+
+                    if (widget.value() && widget.select() === -1) {
+                        //custom has been selected
+                        widget.value(""); //reset widget
+                        //widget.trigger("change");
+                    }
+                }
+            });
+
+        });
+
+          function showpreview(input) {
+
+            if (input.files && input.files[0]) {
+
+                var val = $(input).val().toLowerCase(),
+                    regex = new RegExp("(.*?)\.(gif|jpg|jpeg|JPEG|GIF|JPG)$");
+
+                if (!(regex.test(val))) {
+                    $(input).val('');
+                    $('#imagePreview').css('display', 'none');
+
+                    alert('@no_file_format');
+
+                }
+                else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imagePreview').css('display', 'inline');
+                        $('#imagePreview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        }
+    </script>
+    <script>
+
+
+        function AddZones() {
+
+
+                var zones = JSON.parse('@Html.Raw(Json.Encode(ViewBag.ZONE_CODE))');
+
+
+                var dvContainer = document.getElementById("dvContainer");
+                var div = document.createElement("DIV");
+                div.className = "bg-light rounded";
+                //Add data
+            for (var i = 0; i < zones.length; i++) {
+                var ddlZones = document.createElement("INPUT");
+                ddlZones.type = "checkbox"
+                ddlZones.name = "ZONE[]"
+                ddlZones.className = "m-2";
+                ddlZones.id = "zone" + i;
+                ddlZones.value = zones[i].Value;
+
+                var Sub_ddlZones = document.createElement("INPUT");
+                Sub_ddlZones.type = "text"
+                Sub_ddlZones.name = "SUB_ZONE[]"
+                Sub_ddlZones.value = 0;
+                Sub_ddlZones.hidden = true;
+
+                var label = document.createElement("label");
+                    //Set zone Name in Text part.
+                    label.htmlFor = "zone" + i;
+                    label.appendChild(document.createTextNode(zones[i].Text));
+                    //Set value in Value part.
+                    //Add to DIV.
+
+                    var br2 = document.createElement("br");
+
+                    div.appendChild(ddlZones);
+                    div.appendChild(label);
+                    div.appendChild(Sub_ddlZones);
+                    div.appendChild(br2);
+                    dvContainer.appendChild(div);
+
+                }
+
+
+            }
+
+
+
+        function AddFiles() {
+            //Build an array containing Customer records.
+
+
+                var file_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.FILE_TYPES))');
+
+
+
+                //Reference the container DIV.
+                var fContainer = document.getElementById("fContainer")
+                //Add  to DIV.
+                var div = document.createElement("DIV");
+                div.className = "bg-light p-2 rounded";
+                div.id = "file_div";
+
+
+
+
+                //Add the Options to the DropDownList.
+                for (var i = 0; i < file_types.length; i++) {
+                    //Create  element.
+
+                    var val = file_types[i].Text.split(/-(.*)/)[1];
+                    console.log(val);
+                    var val2 = file_types[i].Text.replace(/\-.*/g, "$'");
+
+
+
+                    var files = document.createElement("INPUT");
+                    files.name = "files";
+                    files.type = "file";
+                    files.id = "file_" + file_types[i].Value+"_"+val;
+                    files.className = "form-control m-1";
+                    files.onchange = function () { setFileType(this.id); };
+
+
+                    var label = document.createElement("label");
+                    //Set file Name in Text part.
+                    label.htmlFor = "file_types_text" + i;
+                    label.appendChild(document.createTextNode(val2));
+
+                    var div_after = document.createElement("DIV");
+                    div_after.id = "lbl" + file_types[i].Value;
+                    var br2 = document.createElement("br");
+
+                    //div.appendChild(file_types_codes);
+                    div.appendChild(label);
+                    div.appendChild(files);
+                    div.appendChild(div_after);
+                    div.appendChild(br2);
+                    fContainer.appendChild(div);
+
+
+                }
+
+
+        }
+
+        function setFileType(id) {
+            console.log(id);
+            var file_id = id.split('_')[1];
+            console.log(file_id);
+            var val = id.split('_')[2];
+            console.log(val);
+
+            var file_types_codes = document.createElement("INPUT");
+            file_types_codes.type = "text";
+            file_types_codes.name = "FILE_TYPES[]";
+            file_types_codes.value = file_id;
+            file_types_codes.hidden = true;
+            var fContainer = document.getElementById("fContainer");
+            fContainer.appendChild(file_types_codes);
+
+
+            var file_types_text = document.createElement("INPUT");
+            file_types_text.type = "text";
+            file_types_text.name = "FILE_TYPES_TEXT[]";
+            file_types_text.autocomplete = "off";
+            file_types_text.placeholder = "@Resources.Settings.ResourceManager.GetString("REMARKS" + "_" + ViewBag.lang)";
+            file_types_text.className = "col-md-12 form-control mr-1";
+
+
+                    if (val == 1) {
+                        file_types_text.placeholder = "@Resources.Passes.ResourceManager.GetString("worker_id_card_expaired" + "_" + ViewBag.lang)";
+                        file_types_text.className = "col-md-12 form-control mr-1 datepicker_recurring_start";
+                        var dateToday = new Date();
+                        var yrRange = dateToday.getFullYear() + ":" + (dateToday.getFullYear() + 8);
+
+                        $('body').on('focus', ".datepicker_recurring_start", function () {
+                            $(this).datepicker(
+                                {
+                                dateFormat: "dd/mm/yy",
+                                yearRange: yrRange,
+                                changeMonth: true,
+                                numberOfMonths: 1,
+                                changeYear: true,
+                            }
+                            );
+                        });
+
+            }
+            var z = "lbl" + file_id;
+            var file_div = document.getElementById(z);
+            file_div.appendChild(file_types_text);
+
+
+        }
+
+        //Show The Popup Modal For security caveates
+        function SecurityCaveates() {
+            //console.log(Id);
+            $("#Caveates").modal();
+
+            var image = document.getElementById('caveatesimg').src;
+            var caveates = $('#caveates').text();
+            console.log(image);
+            console.log(caveates);
+
+            $("#cav").text(caveates);
+
+            var div = document.getElementById("dimg");
+            var img = document.createElement("IMG");
+            div.innerHTML = "";
+
+            if (image != "") {
+
+                img.setAttribute("src", image);
+                img.setAttribute("width", "100");
+                img.setAttribute("height", "100");
+                div.appendChild(img);
+            }
+
+        }
+
+    </script>
+
+
+    <!--<script>
+
+
+
+
+        var w = 0;
+            function AddPerson() {
+                document.getElementById("employees").checked = true;
+
+            //Build an array containing Customer records.
+            w++;
+            if (w < 11) {
+                var identity_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.IDENTITY_CODE))');
+                var pass_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.PASS_TYPE_CODE))');-->
+                @*var file_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.FILE_TYPES))');*@
+                <!--var gender_types = JSON.parse('@Html.Raw(Json.Encode(ViewBag.GENDER_ID))');
+                //Create a DropDownList element.
+                var work_card_number = document.createElement("INPUT");
+                var id_card_number = document.createElement("INPUT");
+                var work_card_expired_date = document.createElement("INPUT");
+                var name_a = document.createElement("INPUT");
+                var name_e = document.createElement("INPUT");
+                var profession_a = document.createElement("INPUT");
+                var profession_e = document.createElement("INPUT");
+                var work_place = document.createElement("INPUT");
+                var gsm = document.createElement("INPUT");
+                var address = document.createElement("INPUT");
+                var date_from = document.createElement("INPUT");
+                var date_to = document.createElement("INPUT");
+                var image = document.createElement("IMG");
+                var imagediv = document.createElement("DIV");
+                var img = document.createElement("INPUT");
+                var lbl = document.createElement("LABEL");
+                var lbl1 = document.createElement("LABEL");
+                var lbl2 = document.createElement("LABEL");
+                var lbl3 = document.createElement("LABEL");
+                var lbl4 = document.createElement("LABEL");
+                var lbl5 = document.createElement("LABEL");
+                lbl.innerText = "@Resources.Passes.ResourceManager.GetString("Personal_image" + "_" + ViewBag.lang)";
+                lbl1.innerText = "@Resources.Passes.ResourceManager.GetString("Identity" + "_" + ViewBag.lang)";
+                lbl2.innerText = "@Resources.Passes.ResourceManager.GetString("Gender" + "_" + ViewBag.lang)";
+                lbl3.innerText = "@Resources.Passes.ResourceManager.GetString("Pass_type" + "_" + ViewBag.lang)";
+                lbl4.innerText = "@Resources.Passes.ResourceManager.GetString("Employee_Num" + "_" + ViewBag.lang)" + w;
+                lbl5.innerText = "@Resources.Passes.ResourceManager.GetString("Duration" + "_" + ViewBag.lang)";
+                lbl.className = "ml-2";
+                lbl1.className = "ml-2";
+                lbl2.className = "ml-2";
+                lbl3.className = "ml-2";
+                lbl4.className = "text-white font-weight-bold bg-dark p-2 rounded";
+
+                image.id = "imagePreview_" + w;
+                image.width = "100";
+                imagediv.className = "col-md-12 m-1";
+
+
+                img.name = "PERSONAL_IMAGE";
+                img.type = "file";
+                img.id =  w;
+                img.className = "form-control col-md-4 m-1";
+                img.onchange = function () { showpreview(this); };
+
+                work_card_number.name = "WORK_CARD_NUMBER[]";
+                work_card_number.type = "text";
+                work_card_number.id = "work_card_number" + w;
+                work_card_number.placeholder = "@Resources.Passes.ResourceManager.GetString("worker_id_card" + "_" + ViewBag.lang)";
+                work_card_number.className = "form-control col-md-4 m-1";
+                work_card_number.hidden = true;
+
+                id_card_number.name = "ID_CARD_NUMBER[]";
+                id_card_number.type = "text";
+                id_card_number.id = "id_card_number" + w;
+                id_card_number.placeholder = "@Resources.Passes.ResourceManager.GetString("worker_identity_card" + "_" + ViewBag.lang)";
+                id_card_number.className = "form-control col-md-4 m-1";
+                id_card_number.required = true;
+
+                work_card_expired_date.name = "CARD_EXPIRED_DATE[]";
+                work_card_expired_date.type = "text";
+                work_card_expired_date.className = "form-control col-md-4 w-100 m-1";
+                work_card_expired_date.id = "work_card_expired_date" + w;
+                work_card_expired_date.placeholder = "@Resources.Passes.ResourceManager.GetString("worker_id_card_expaired" + "_" + ViewBag.lang)";
+                work_card_expired_date.required = true;
+
+                name_a.name = "NAME_A[]";
+                name_a.type = "text";
+                name_a.id = "namea" + w;
+                name_a.placeholder = "@Resources.Passes.ResourceManager.GetString("worker_namea" + "_" + ViewBag.lang)";
+                name_a.className = "form-control col-md-4 m-1";
+                name_a.required = true;
+
+
+                name_e.name = "NAME_E[]";
+                name_e.type = "text";
+                name_e.id = "namee" + w;
+                name_e.placeholder = "@Resources.Passes.ResourceManager.GetString("worker_namee" + "_" + ViewBag.lang)";
+                name_e.className = "form-control col-md-4 m-1";
+                name_e.required = true;
+
+
+                profession_a.name = "PROFESSION_A[]";
+                profession_a.type = "text";
+                profession_a.id = "professiona" + w;
+                profession_a.placeholder = "@Resources.Passes.ResourceManager.GetString("Proffision_a" + "_" + ViewBag.lang)";
+                profession_a.className = "form-control col-md-4 m-1";
+                profession_a.required = true;
+
+
+                profession_e.name = "PROFESSION_E[]";
+                profession_e.type = "text";
+                profession_e.id = "professione" + w;
+                profession_e.placeholder = "@Resources.Passes.ResourceManager.GetString("Proffision_e" + "_" + ViewBag.lang)";
+                profession_e.className = "form-control col-md-4 m-1";
+                profession_e.required = true;
+
+
+                work_place.name = "WORK_PLACE[]";
+                work_place.type = "text";
+                work_place.id = "workplace" + w;
+                work_place.placeholder = "@Resources.Passes.ResourceManager.GetString("work_place" + "_" + ViewBag.lang)";
+                work_place.className = "form-control col-md-4 m-1";
+                work_place.required = true;
+
+
+                gsm.name = "GSM[]";
+                gsm.type = "number";
+                gsm.id = "gsm" + w;
+                gsm.placeholder = "@Resources.Passes.ResourceManager.GetString("Gsm" + "_" + ViewBag.lang)";
+                gsm.className = "form-control col-md-4 m-1";
+                gsm.required = true;
+
+
+                address.name = "ADDRESS[]";
+                address.type = "text";
+                address.id = "address" + w;
+                address.placeholder = "@Resources.Passes.ResourceManager.GetString("address" + "_" + ViewBag.lang)";
+                address.className = "form-control col-md-4 m-1";
+
+
+                date_from.name = "DATE_FROM[]";
+                date_from.type = "text";
+                date_from.id = "date_from" + w;
+                date_from.placeholder = "@Resources.Passes.ResourceManager.GetString("Property_issued" + "_" + ViewBag.lang)";
+                //date_from.className = "m-3";
+                date_from.required = true;
+
+
+                date_to.name = "DATE_TO[]";
+                date_to.type = "text";
+                date_to.id = "date_to" + w;
+                date_to.placeholder = "@Resources.Passes.ResourceManager.GetString("Property_expired" + "_" + ViewBag.lang)";
+                //date_to.className = "w-25";
+                date_to.required = true;
+
+
+
+
+                //var file_types_codes = document.createElement("SELECT");
+                //file_types_codes.name = "FILES[]";
+                //file_types_codes.id = "file_types" + w;
+                //file_types_codes.className = "form-control m-1";
+
+                var pass_types_codes = document.createElement("SELECT");
+                pass_types_codes.name = "PASS_TYPE_CODE[]";
+                pass_types_codes.id = "pass_types" + w;
+                pass_types_codes.className = "";
+
+                var identity_types_codes = document.createElement("SELECT");
+                identity_types_codes.name = "IDENTITY_CODE[]";
+                identity_types_codes.id = "identity_types" + w;
+                identity_types_codes.className = "ml-2";
+
+                var gender_types_codes = document.createElement("SELECT");
+                gender_types_codes.name = "GENDER[]";
+                gender_types_codes.id = "gender_types" + w;
+                gender_types_codes.className = "ml-2";
+
+                //Add the Options to the DropDownList.
+                //for (var i = 0; i < file_types.length; i++) {
+                //    var option = document.createElement("OPTION");
+
+                //    //Set Customer Name in Text part.
+                //    option.innerHTML = file_types[i].Text;
+
+                //    //Set CustomerId in Value part.
+                //    option.value = file_types[i].Value;
+
+                //    //Add the Option element to DropDownList.
+                //    file_types_codes.options.add(option);
+
+                //}
+
+                //Add the Options to the DropDownList.
+                for (var i = 0; i < pass_types.length; i++) {
+                    var option = document.createElement("OPTION");
+
+                    //Set Customer Name in Text part.
+                    option.innerHTML = pass_types[i].Text;
+
+                    //Set CustomerId in Value part.
+                    option.value = pass_types[i].Value;
+
+                    //Add the Option element to DropDownList.
+                    pass_types_codes.options.add(option);
+
+                }
+
+                //Add the Options to the DropDownList.
+                for (var i = 0; i < identity_types.length; i++) {
+                    var option = document.createElement("OPTION");
+
+                    //Set Customer Name in Text part.
+                    option.innerHTML = identity_types[i].Text;
+
+                    //Set CustomerId in Value part.
+                    option.value = identity_types[i].Value;
+
+                    //Add the Option element to DropDownList.
+                    identity_types_codes.options.add(option);
+
+                }
+
+                //Add the Options to the DropDownList.
+                for (var i = 0; i < gender_types.length; i++) {
+                    var option = document.createElement("OPTION");
+
+                    //Set Customer Name in Text part.
+                    option.innerHTML = gender_types[i].Text;
+
+                    //Set CustomerId in Value part.
+                    option.value = gender_types[i].Value;
+
+                    //Add the Option element to DropDownList.
+                    gender_types_codes.options.add(option);
+
+                }
+
+
+                //Reference the container DIV.
+                var mContainer = document.getElementById("PrContainer")
+                var br = document.createElement("br");
+                var br1 = document.createElement("br");
+                var br2 = document.createElement("br");
+                var br3 = document.createElement("br");
+                var br4 = document.createElement("br");
+
+                //Add the DropDownList to DIV.
+                var div = document.createElement("DIV");
+                div.className = "bg-light p-4 m-2 rounded ";
+                var row = document.createElement("DIV");
+                row.className = "row";
+                div.appendChild(lbl4);
+                div.appendChild(br2);
+                div.appendChild(lbl1);
+                div.appendChild(identity_types_codes);
+                div.appendChild(lbl2);
+                div.appendChild(gender_types_codes);
+                div.appendChild(lbl3);
+                div.appendChild(pass_types_codes);
+                div.appendChild(row);
+                row.appendChild(id_card_number);
+                row.appendChild(work_card_number);
+                row.appendChild(work_card_expired_date);
+                row.appendChild(name_a);
+                row.appendChild(name_e);
+                row.appendChild(profession_a);
+                row.appendChild(profession_e);
+                row.appendChild(work_place);
+                div.appendChild(lbl);
+                div.appendChild(img);
+                div.appendChild(image);
+                div.appendChild(imagediv);
+                row.appendChild(gsm);
+                row.appendChild(address);
+                div.appendChild(lbl5);
+                div.appendChild(br3);
+                div.appendChild(date_from);
+                div.appendChild(br);
+                div.appendChild(date_to);
+                div.appendChild(br1);
+
+                mContainer.appendChild(div);
+                //Create a Remove Button.
+                var btnRemove = document.createElement("INPUT");
+                btnRemove.value = "@remove";
+                btnRemove.type = "button";
+                btnRemove.className = "btn btn-danger btn-sm m-1";
+                btnRemove.onclick = function () {
+                    mContainer.removeChild(this.parentNode);
+                    pass_types_codes.remove(this.parentNode);
+                    identity_types_codes.remove(this.parentNode);
+                    gender_types_codes.remove(this.parentNode);
+                    id_card_number.remove(this.parentNode);
+                    work_card_number.remove(this.parentNode);
+                    name_a.remove(this.parentNode);
+                    name_e.remove(this.parentNode);
+                    profession_a.remove(this.parentNode);
+                    profession_e.remove(this.parentNode);
+                    work_place.remove(this.parentNode);
+                    gsm.remove(this.parentNode);
+                    address.remove(this.parentNode);
+                    date_from.remove(this.parentNode);
+                    date_to.remove(this.parentNode);
+                    img.remove(this.parentNode);
+                    lbl.remove(this.parentNode);
+                    lbl1.remove(this.parentNode);
+                    lbl2.remove(this.parentNode);
+                    lbl3.remove(this.parentNode);
+                    lbl4.remove(this.parentNode);
+                    lbl5.remove(this.parentNode);
+
+
+                };
+
+
+                //Add the Remove Buttton to DIV.
+                div.appendChild(btnRemove);
+
+
+
+
+
+                //$("#date_from" + w).kendoDatePicker({
+                //    format: "dd/MM/yyyy"
+                //});
+                //$("#date_to" + w).kendoDatePicker({
+                //    format: "dd/MM/yyyy"
+                //});
+
+                $(function () {
+                    $("#date_from" +w).datepicker({
+                        //minDate: 0,
+                        dateFormat: "dd/mm/yy",
+                        yearRange: '2020:2100',
+                        changeMonth: true,
+                        numberOfMonths: 1,
+                        changeYear: true,
+                        onClose: function (selectedDate, inst) {
+                            var minDate = new Date(Date.parse(selectedDate));
+                            //minDate.setDate(maxDate.getDate() + 1);
+                            $("#date_to"+w).datepicker("option", "minDate", selectedDate);
+                        }
+                    });
+
+                    $("#date_to"+w).datepicker({
+                        minDate: "+1D",
+                        dateFormat: "dd/mm/yy",
+                        yearRange: '2020:2100',
+                        changeMonth: true,
+                        numberOfMonths: 1,
+                        changeYear: true,
+                        onClose: function (selectedDate, inst) {
+                            var maxDate = new Date(Date.parse(selectedDate));
+                            maxDate.setDate(maxDate.getDate() - 1);
+                            $("#date_from"+w).datepicker("option", "maxDate", maxDate);
+                        }
+                    });
+                });
+                $("#work_card_expired_date" + w).kendoDatePicker({
+                    format: "dd/MM/yyyy"
+                });
+                $("#pass_types" + w).kendoComboBox({
+                    filter: "contains"
+                });
+                $("#identity_types" + w).kendoComboBox({
+                    filter: "contains"
+                });
+                $("#gender_types" + w).kendoComboBox({
+                    filter: "contains"
+                });-->
+
+                @*$(function () {
+                $('input[type=file]').change(function () {
+                    var val = $(this).val().toLowerCase(),
+                        regex = new RegExp("(.*?)\.(gif|jpg|jpeg|JPEG|GIF|JPG)$");
+
+                    if (!(regex.test(val))) {
+                        $(this).val('');
+                        alert('@no_file_format');
+                    }
+                    });
+                });*@
+
+            <!--} else {
+                alert('@no_persons')
+            }
+        };
+
+
+
+      function showpreview(input) {
+
+          console.log(input.id);
+          var id = "#imagePreview_" + input.id;
+            if (input.files && input.files[0]) {
+
+                var val = $(input).val().toLowerCase(),
+                    regex = new RegExp("(.*?)\.(gif|jpg|jpeg|JPEG|GIF|JPG)$");
+
+                if (!(regex.test(val))) {
+
+                        $(input).val('');
+                    $(id).css('display', 'none');
+
+
+                        alert('@no_file_format');
+
+
+                }
+                else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+
+                            $(id).css('display', 'inline');
+                        $(id).attr('src', e.target.result);
+
+
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        }
+
+
+    </script>-->
+
+
+
+}
+

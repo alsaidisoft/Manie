@@ -1,0 +1,69 @@
+﻿@using APP.Util
+
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_REPORTS_MST>
+
+
+@{
+    ViewBag.Title = "Reports";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+<style>
+    td {
+        font-family: Arial !important;
+        font-weight: bold;
+        font-size: 18px;
+    }
+</style>
+
+
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+        <h1 class="card-header  text-primary"><i class="fa fa-chart-line"></i> @Resources.Common.ResourceManager.GetString("reports" + "_" + ViewBag.lang)</h1>
+
+        <div class="card-body">
+            <br />
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                var station = "";
+                                <div class="col-md-4  @alignInverse">
+                                    <a class="btn btn-primary m-1 btn-block text-uppercase" href="@item.REPORT_URL" target="_blank" title="@(Language.GetCurrentLang()=="en"?item.REPORT_NAME_E:item.REPORT_NAME)">
+                                        <i class="fa fa-file-excel" aria-hidden="true"></i>
+                                        @(Language.GetCurrentLang()=="en"?item.REPORT_NAME_E:item.REPORT_NAME)
+                                        @if (ViewBag.DEVELOPER == true || ViewBag.ADMIN == true)
+                                        {
+                                            station = " (" + (Language.GetCurrentLang() == "en" ? @item.RA42_STATIONS_MST.STATION_NAME_E : @item.RA42_STATIONS_MST.STATION_NAME_A)+")";
+                                        }
+                                         @station
+                                    </a>
+
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

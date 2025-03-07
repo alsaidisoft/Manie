@@ -1,0 +1,1178 @@
+﻿@using APP.Util;
+@using SecurityClearanceWebApp.Controllers;
+@using SecurityClearanceWebApp.Models;
+@model SecurityClearanceWebApp.Models.RA42_PERMITS_DTL
+
+@{
+    ViewBag.Title = "PrintAllCards";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var b_lign = "left";
+    var left = "-50%";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        b_lign = "right";
+        left = "-85%";
+
+
+    }
+    var col = 12;
+    var controller = "Mypasses";
+
+
+    string barcode = Guid.NewGuid().ToString().Substring(0, 5);
+    var expired = Resources.Common.ResourceManager.GetString("expired" + "_" + ViewBag.lang);
+    var countinue = Resources.Common.ResourceManager.GetString("countinue" + "_" + ViewBag.lang);
+    var choose_trans = Resources.Passes.ResourceManager.GetString("choose_transaction_type" + "_" + ViewBag.lang);
+    var required = Resources.Common.ResourceManager.GetString("required" + "_" + ViewBag.lang);
+
+    List<string> employees = new List<string> { "7","8","9","15","16","21","27",
+ "35","36","37","42","43","44"};
+    List<string> others = new List<string> { "17","18","19","20","22","26","28","31","32",
+ "33","34","38","39","40","41"};
+    List<string> Families = new List<string> { "50", "51", "30", "23" };
+    List<string> noZones = new List<string> { "1", "10", "6" };
+    int access = Model.RA42_ACCESS_TYPE_MST.ACCESS_SECRET_CODE.Value;
+    string permit = Model.RA42_CARD_FOR_MST.CARD_SECRET_CODE;
+
+    ViewData["access"] = access.ToString();
+    RA42_SECURITY_CLEARANCEEntities db = new RA42_SECURITY_CLEARANCEEntities();
+
+
+}
+
+<style>
+    ul.tl li .timestamp {
+        color: #8D8D8D;
+        position: absolute;
+        width: 100%;
+        left: @left;
+        text-align: left;
+        font-size: 12px;
+    }
+</style>
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @if (ViewBag.RESPO_STATE > 1)
+        {
+            @Html.Partial("Index")
+            controller = ViewBag.controllerName;
+
+        }
+        <div class="col-md-@col">
+           
+
+
+
+            <div class="card shadow-sm">
+
+                <div class="card-header text-primary">
+                    <h5>
+                        <i class="fa fa-print"></i>
+                        @Resources.Passes.ResourceManager.GetString("print_all" + "_" + ViewBag.lang)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-9 text-primary">
+                            <h4>
+                                <i class="@Model.RA42_ACCESS_TYPE_MST.ICON"></i>&nbsp;
+                                @(Language.GetCurrentLang() == "en" ? Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E : Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE)
+                            </h4>
+                        </div>
+                        <div class="col-md-3 @align">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-dark">
+                                <i class="fa fa-backward"></i>
+                                @Resources.Passes.ResourceManager.GetString("back" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        @Resources.Passes.ResourceManager.GetString("main_info" + "_" + ViewBag.lang)
+                                    </div>
+
+                                    <div class="row p-2">
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Settings.ResourceManager.GetString("Force" + "_" + ViewBag.lang)
+                                                <p class="text-primary">
+                                                    @(Language.GetCurrentLang() == "en" ? Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_E :
+Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_A)
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("UNIT_CODE" + "_" + ViewBag.lang) 
+                                                <p class="text-primary" id="station">
+                                                    @(Language.GetCurrentLang() == "en" ? Model.RA42_STATIONS_MST.STATION_NAME_E :
+Model.RA42_STATIONS_MST.STATION_NAME_A)
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Resources.Passes.ResourceManager.GetString("main_permits_type" + "_" + ViewBag.lang)                                                <p class="text-primary">
+                                                    @(Language.GetCurrentLang() == "en" ? Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE_E :
+Model.RA42_ACCESS_TYPE_MST.ACCESS_TYPE)
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        
+
+                                    </div>
+                                </div>
+                                <br />
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="row">
+
+
+
+
+
+
+                                    <div class="col-lg-12">
+                                        <hr />
+                                        <h4 class="text-primary">
+                                            @Resources.Passes.ResourceManager.GetString("list_of_want_to_print" + "_" + ViewBag.lang):
+                                        </h4>
+                                        <hr />
+                                        @{
+                                            int xx = 1;
+                                        }
+                                        @foreach (var listEmloyees in ViewBag.GetEmployees)
+                                        {
+                                            var dot = ".";
+                                            <div class="col-md-12 alert-dark p-1 rounded">
+                                                <div class="mt-1 h-75 w-100">
+                                                    <div class="@alignInverse">
+                                                        <span class="bg-dark text-white rounded ml-1 p-1">@xx@dot</span>
+                                                        <img src="~/Files/Profiles/@listEmloyees.PERSONAL_IMAGE" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" width="50" height="50" id="personal_img_@xx" />
+
+                                                        | @(Language.GetCurrentLang() == "en" ? @listEmloyees.NAME_E : @listEmloyees.NAME_A) | @listEmloyees.RA42_CARD_FOR_MST.CARD_FOR_A
+                                                        |  @listEmloyees.CIVIL_NUMBER
+                                                        <a href="~/@ViewBag.lang/@ViewBag.controllerName/Details/@listEmloyees.PERMIT_CODE" class="btn btn-primary details btn-sm" target="_blank"><i class="fa fa-eye"></i></a>
+                                                        |
+                                                        <a href="~/@ViewBag.lang/@ViewBag.controllerName/Edit/@listEmloyees.PERMIT_CODE" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-edit"></i></a>
+
+                                                    </div>
+                                                </div>
+
+                                                <p id="id_@xx" style="display: none"> @listEmloyees.PERMIT_CODE</p>
+                                                <p id="id_card_@xx" style="display: none"> @listEmloyees.CIVIL_NUMBER</p>
+                                                <p id="sn_no_@xx" style="display: none"> @listEmloyees.SERVICE_NUMBER</p>
+                                                <p id="name_@xx" style="display: none"> @listEmloyees.NAME_A</p>
+                                                <p id="rank_@xx" style="display: none"> @listEmloyees.RANK_A</p>
+                                                <p id="identity_@xx" style="display: none">@listEmloyees.RA42_IDENTITY_MST.IDENTITY_TYPE_A </p>
+                                                <p id="unit_@xx" style="display: none">@listEmloyees.UNIT_A </p>
+                                                <p id="respo_@xx" style="display: none">@listEmloyees.HOST_NAME_A </p>
+                                                <p id="host_building_@xx" style="display: none">@listEmloyees.BUILDING_NUMBER </p>
+                                                <p id="host_no_@xx" style="display: none">@listEmloyees.NUMBER_OF_HOSTED </p>
+                                                <p id="date_to_@xx" style="display: none"> @listEmloyees.DATE_TO.ToString("dd/MM/yyyy") </p>
+                                                <p id="barcode_@xx" style="display: none">@listEmloyees.BARCODE</p>
+                                                @if (listEmloyees.VECHILE_CODE != null)
+                                                {
+                                                    <p id="char_@xx" style="display: none;">@listEmloyees.RA42_PLATE_CHAR_MST.PLATE_CHAR</p>
+                                                    <p id="vechilnum_@xx" style="display: none"> @listEmloyees.PLATE_NUMBER </p>
+                                                    <p id="color_@xx" style="display: none">@listEmloyees.RA42_VECHILE_COLOR_MST.COLOR</p>
+                                                    <p id="type_@xx" style="display: none">@listEmloyees.RA42_VECHILE_CATIGORY_MST.VECHILE_CAT - @listEmloyees.RA42_VECHILE_NAME_MST.VECHILE_NAME</p>
+                                                    <p id="plate_type_@xx" style="display: none">@listEmloyees.RA42_PLATE_TYPE_MST.PLATE_TYPE</p>
+                                                    <p id="with_car_@xx" style="display: none">yes</p>
+                                                }
+
+
+                                                <hr />
+                                                <h6 class="text-dark">
+                                                    @Resources.Passes.ResourceManager.GetString("Zones" + "_" + ViewBag.lang)
+                                                </h6>
+
+
+                                                @{
+                                                    string zones = "";
+                                                    var zzz = "";
+                                                    if (ViewBag.GetZones.Count > 0)
+                                                    {
+                                                        var last_item = ViewBag.GetZones[ViewBag.GetZones.Count - 1];
+
+
+
+
+                                                        foreach (var listZones in ViewBag.GetZones)
+                                                        {
+
+                                                            if (listZones.ACCESS_ROW_CODE == listEmloyees.PERMIT_CODE)
+                                                            {
+                                                                zzz += " | " + listZones.RA42_ZONE_AREA_MST.ZONE_NAME;
+                                                                if (listZones.RA42_ZONE_AREA_MST.ZONE_TYPE == "Z")
+                                                                {
+                                                                    if (Model.RA42_STATIONS_MST.FORCE_ID == 3 || Model.RA42_STATIONS_MST.FORCE_ID == 4)
+                                                                    {
+                                                                        zones += listZones.RA42_ZONE_AREA_MST.ZONE_NAME;
+
+                                                                        if (listZones != last_item)
+                                                                        {
+                                                                            zones += ", ";
+                                                                        }
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        zones += listZones.RA42_ZONE_AREA_MST.ZONE_TYPE.ToLower() + "" + listZones.RA42_ZONE_AREA_MST.ZONE_NUMBER;
+
+                                                                        if (listZones != last_item)
+                                                                        {
+                                                                            zones += ", ";
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (Model.RA42_STATIONS_MST.FORCE_ID == 3 || Model.RA42_STATIONS_MST.FORCE_ID == 4)
+                                                                    {
+                                                                        zones += listZones.RA42_ZONE_AREA_MST.ZONE_NAME;
+
+                                                                        if (listZones != last_item)
+                                                                        {
+                                                                            zones += ", ";
+                                                                        }
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        zones += listZones.RA42_ZONE_AREA_MST.ZONE_TYPE.ToLower() + "" + listZones.RA42_ZONE_AREA_MST.ZONE_NUMBER;
+
+                                                                        if (listZones != last_item)
+                                                                        {
+                                                                            zones += ", ";
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+
+
+                                                    <div class="col-md-12">
+                                                        <div class="  mt-1 btn-block"><i class="fa fa-arrows-alt p-1"></i> @zzz</div>
+                                                    </div>
+
+                                                    <span id="zones_@xx" style="display: none;">@zones</span>
+
+
+                                                    {
+                                                        int card_code = listEmloyees.CARD_FOR_CODE;
+                                                        var card_for = db.RA42_CARD_DESIGN_DTL.Where(a => a.CARD_FOR_CODE == card_code && a.ACCESS_TYPE_CODE ==
+                                                        Model.ACCESS_TYPE_CODE && a.RA42_FORCES_MST.FORCE_ID == Model.RA42_STATIONS_MST.FORCE_ID).FirstOrDefault();
+                                                        if (card_for != null)
+                                                        {
+                                                            <p id="access_@xx" style="display:none;"> @card_for.RA42_ACCESS_TYPE_MST.ACCESS_SECRET_CODE </p>
+                                                            <p id="front_@xx" style="display:none;">@card_for.BASE64_ENCODE_FRONT</p>
+                                                            <p id="back_@xx" style="display:none;">@card_for.BASE64_ENCODE_BACK</p>
+                                                            <p id="form_layout_@xx" style="display:none;">@card_for.BASE64_ENCODE_TEMP</p>
+                                                            <p id="permit_secret_code_@xx" style="display:none;">@card_for.RA42_CARD_FOR_MST.CARD_SECRET_CODE</p>
+                                                            <p id="access_type_a_@xx" style="display: none;"> @Model.RA42_CARD_FOR_MST.CARD_FOR_A</p>
+                                                            <p id="access_type_e_@xx" style="display: none;">@Model.RA42_CARD_FOR_MST.CARD_FOR_E</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="col-md-12">
+                                                                <div class="alert alert-warning">
+                                                                    <i class="fa fa-exclamation-triangle"></i>
+                                                                    @Resources.Common.ResourceManager.GetString("no_design" + "_" + ViewBag.lang)
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    xx++;
+                                                }
+
+                                            </div>
+                                            <hr />
+                                        }
+                                        <p id="xx_size" style="display: none;">@xx</p>
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="col-md-12">
+                                    <hr />
+                                    @Resources.Settings.ResourceManager.GetString("autho_signature" + "_" + ViewBag.lang)
+                                    @{
+                                        var signature = db.RA42_AUTHORAIZATION_SIGNAURE_MST.Where(a => a.RA42_STATIONS_MST.STATION_CODE == Model.STATION_CODE && a.DLT_STS != true).OrderByDescending(a => a.AUTHO_SIGNATURE_CODE).FirstOrDefault();
+                                        var sign = "";
+                                        if (signature != null)
+                                        {
+                                            sign = /*@urlHttp + @app_name +*/ "/Files/Signatures/" + signature.SIGNATURE;
+                                        }
+                                        <p><img src="@sign" style="display: none;" id="signature" /></p>
+                                        <img src="@sign" />
+                                    }
+
+                                </div>
+
+
+
+                                <p id="force_id" style="display:none;">@Model.RA42_STATIONS_MST.FORCE_ID</p>
+                                <p id="force_logo" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.LOGO</p>
+                                <p id="force_a" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_A</p>
+                                <p id="force_e" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_E</p>
+                                <p id="directorate_a" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.DIRECTORATE_A</p>
+                                <p id="directorate_e" style="display: none;">@Model.RA42_STATIONS_MST.RA42_FORCES_MST.DIRECTORATE_E</p>
+                                <p id="access_type_a" style="display: none;">@Model.RA42_CARD_FOR_MST.CARD_FOR_A</p>
+                                <p id="access_type_e" style="display: none;">@Model.RA42_CARD_FOR_MST.CARD_FOR_E</p>
+                                <p id="phone_num" style="display: none;">@Model.RA42_STATIONS_MST.PHONE_NUMBER</p>
+                                <br />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 border-right">
+                            @{
+
+                                if (TempData["Success"] != null)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @if (TempData["Success"] != null)
+                                            {
+                                                <div class="alert alert-success"><i class="fa fa-check"></i> @TempData["Success"]</div>
+                                            }
+                                            @if (TempData["Erorr"] != null)
+                                            {
+                                                <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> @TempData["Erorr"]</div>
+                                            }
+                                        <div class="row">
+                                            @if (ViewBag.checkViolations == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-danger">
+                                                        <i class="fa fa-exclamation-triangle"></i> @Resources.Passes.ResourceManager.GetString("prevented_by_violation" + "_" + ViewBag.lang)
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 mt-1">
+                                                    <h4 class="text-danger">
+                                                        <i class="fa fa-exclamation-triangle"></i> @Resources.Passes.ResourceManager.GetString("violation_details" + "_" + ViewBag.lang)
+                                                    </h4>
+                                                    @if (ViewBag.EmployeeViolation != null)
+                                                    {
+                                                        <div class="mt-1 h-75 w-100">
+                                                            <div class="@alignInverse">
+                                                                <img src="~/Files/Profiles/@ViewBag.EmployeeViolation.PERSONAL_IMAGE" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" width="50" height="50" />
+
+                                                                | @(Language.GetCurrentLang() == "en" ? @ViewBag.EmployeeViolation.NAME_E : @ViewBag.EmployeeViolation.NAME_A) | @ViewBag.EmployeeViolation.RA42_CARD_FOR_MST.CARD_FOR_A
+                                                                |  @ViewBag.EmployeeViolation.CIVIL_NUMBER
+                                                                <a href="~/@ViewBag.lang/@ViewBag.controllerName/Details/@ViewBag.EmployeeViolation.PERMIT_CODE" class="btn btn-primary details btn-sm" target="_blank"><i class="fa fa-eye"></i></a>
+                                                                |
+                                                                <a href="~/@ViewBag.lang/@ViewBag.controllerName/Edit/@ViewBag.EmployeeViolation.PERMIT_CODE" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-edit"></i></a>
+
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        else
+                                            {
+
+                
+                                            <div class="col-md-12">
+                                                <div class="btn-group m-1 @align">
+
+                                                    <a href="javascript:PrintCards()" class="btn btn-dark">
+                                                        <i class="fa fa-print"></i> &nbsp;
+                                                        @Resources.Passes.ResourceManager.GetString("print_all" + "_" + ViewBag.lang)
+                                                    </a>
+
+                                                    @*<a href="javascript:PrintTempForm()" class="btn btn-primary details">
+                                                        <i class="fa fa-file-alt"></i> &nbsp;
+                                                        @Resources.Common.ResourceManager.GetString("print_form" + "_" + ViewBag.lang)
+                                                    </a>*@
+                                                    @*<a class="btn btn-warning text-center"
+                                                       title="@Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)"
+                                                       href="@Url.Action("CompanyPermitEdit", ViewBag.controllerName, new { id = Model.COMPANY_PASS_CODE })">
+                                                        <i class="fa fa-edit"></i> &nbsp;
+                                                        @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)
+                                                    </a>*@
+
+                                                </div>
+                                            </div>
+                                            }
+                                            <div class="col-md-12 p-2"></div>
+                                            <div class="col-md-12">
+
+                                                <iframe id="frame" frameborder="0" height="500" type="application/pdf" style="display: none; width: 100%;"></iframe>
+
+
+                                            </div>
+
+                                        </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div class="col-12">
+
+
+                                        <div class="alert alert-warning">
+                                            <i class="fa fa-exclamation-triangle"></i> @Resources.Passes.ResourceManager.GetString("transaction_type_notify" + "_" + ViewBag.lang)
+                                        </div>
+
+                                        <hr />
+
+                                        @using (Html.BeginForm("PrintAllCards", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="row bg-light rounded p-2">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                                <input type="hidden" name="SelectedIds" value="@ViewBag.SelectedIds" />
+                                                <input type="hidden" name="CheckPrinted" value="Printed" />
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("trans_type" + "_" + ViewBag.lang)
+                                                        <select name="TRANSACTION_TYPE_CODE" class="form-control" onchange="SelectedMethod(this);" required="" oninvalid="this.setCustomValidity(' @required')" oninput="setCustomValidity('')">
+                                                            <option value="">@choose_trans</option>
+                                                            @if (ViewBag.TRANSACTION_TYPE_CODE != null)
+                                                            {
+                                                                foreach (var item in ViewBag.TRANSACTION_TYPE_CODE)
+                                                                {
+                                                                    <option value="@item.Value">@item.Text</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" id="receDiv">
+
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("Receipt" + "_" + ViewBag.lang)
+                                                        <input type="file" name="RECEIPT" id="RECEIPT" class="form-control" />
+                                                    </div>
+
+
+
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        @Resources.Passes.ResourceManager.GetString("Remarks" + "_" + ViewBag.lang)
+                                                        <textarea name="TRANSACTION_REMARKS" class="form-control"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" name="tab" value="@ViewBag.activetab" />
+                                                <div class="col-md-12">
+                                                    <div class="form-group @align">
+                                                        <button type="submit" value="Create" class="btn btn-success">
+                                                            <i class="fa fa-save"></i> &nbsp;
+                                                            @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        }
+                                    </div>
+                                }
+                            }
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section scripts{
+
+
+
+    <script type="text/javascript" src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jspdf.debug.js"></script>
+    <script type="text/javascript" src="~/Scripts/basic.js"></script>
+    <script type="text/javascript" src="~/Scripts/fonts.js"></script>
+    <script type="text/javascript" src="~/Scripts/default_vfs.js"></script>
+    <script type="text/javascript" src="~/Scripts/autotable/jspdf.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/autotable/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+
+         function SelectedMethod(sel) {
+            var check = sel.options[sel.selectedIndex].text;
+
+            var amount = check.replace(/[^0-9]/g, '');
+            if (amount > 0) {
+                $("#receDiv").show();
+            }
+            else {
+                $("#receDiv").hide();
+            }
+
+        }
+
+        var pf;
+        var br;
+        var si;
+        var sec;
+
+        $(document).ready(function () {
+
+            $("#receDiv").hide();
+            var signature = document.getElementById("signature").src;
+
+
+            toDataURL2(signature, function (dataUrl) {
+                console.log('signature:', dataUrl)
+            });
+
+
+
+
+        });
+
+
+        function toDataURL(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    callback(reader.result);
+                    //pf = reader.result;
+                    //sessionStorage.setItem("base64", reader.result);
+
+
+                }
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+
+            xhr.responseType = 'blob';
+            xhr.send();
+        }
+        function toDataURL2(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    callback(reader.result);
+                    si = reader.result;
+
+                    //sessionStorage.setItem("barcode64", reader.result);
+
+
+                }
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+
+            xhr.responseType = 'blob';
+            xhr.send();
+        }
+
+         function Print(type,id) {
+              console.log(id);
+
+
+                  $.ajax({
+                      type: "POST",
+                      url: '@Url.Action("PrintById")',
+                      data: { id: id, type: type },
+                      dataType: "json",
+                      success: function () {
+                          console.log(type);
+                      },
+                      error: function () {
+                          console.log("somthing wrong while printed");
+                      }
+                  });
+
+          }
+
+        function convertImgToBase64(imgUrl) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+
+                img.onload = function () {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(img, 0, 0);
+
+                    const dataURL = canvas.toDataURL("image/png");
+                    resolve(dataURL);
+                };
+
+                img.onerror = reject;
+                img.src = imgUrl;
+            });
+        }
+        async function PrintCards() {
+
+         var model1 = '@Html.Raw(Json.Encode(employees))';
+         var model2 = '@Html.Raw(Json.Encode(others))';
+         var model3 = '@Html.Raw(Json.Encode(Families))';
+         var employees_list = JSON.parse(model1);
+         var others_list = JSON.parse(model2);
+         var families_list = JSON.parse(model3);
+
+
+            var doc = new jsPDF('l', 'mm', [242, 153]);
+
+            doc.addFileToVFS("Amiri-Regular.ttf", AmiriRegular);
+            doc.addFont('Amiri-Regular.ttf', 'Amiri', 'normal');
+
+            doc.addFileToVFS("Arialbd.ttf", Arial);
+            doc.addFont('Arialbd.ttf', 'arialbd', 'normal');
+
+            var width = doc.internal.pageSize.getWidth();
+            var height = doc.internal.pageSize.getHeight();
+            var imgdata;
+            var imgdata2;
+
+              var logo;
+              var xx_size = $("#xx_size").text();
+              let n = 1;
+              for (let i = 1; i < xx_size; i++) {
+                  n++;
+                  var profile = document.getElementById("personal_img_" + i).src;
+                  imgdata = $("#front_"+i).text();
+                  imgdata2 = $("#back_"+i).text();
+                  const base64Image = await convertImgToBase64(profile);
+                  doc.addImage(imgdata, 'JPEG', 0, 0, 85.6, 54);
+                  doc.setFontSize(6.5);
+                  logo = $("#force_logo").text();
+
+                  doc.addImage(logo, 'png', width / 2.2, 1, 8, 8);
+
+
+                  var force_id = $("#force_id").text();
+                  var force_a = $("#force_a").text();
+                  var force_e = $("#force_e").text();
+                  var direc_a = $("#directorate_a").text();
+                  var direc_e = $("#directorate_e").text();
+                  var access_a = $("#access_type_a").text();
+                  var access_e = $("#access_type_e").text();
+
+                  var access = $("#access_" + i).text();
+                  var permit = $("#permit_secret_code_" + i).text();
+                  var name = $("#name_" + i).text();
+                  var identity = $("#identity_" + i).text();
+                  var unit = $("#unit_" + i).text();
+                  var rank = $("#rank_" + i).text();
+                  var num_building = $("#host_building_" + i).text();
+                  var num_hosted = $("#host_no_" + i).text();
+                  var station = $("#station").text();
+                  var service_number = $("#sn_no_" + i).text();
+                  var civil_number = $("#id_card_" + i).text();
+                  var respo = $("#respo_"+i).text();
+                  var with_car = $("#with_car_" + i).text();
+                  var vechilnum = $("#vechilnum_" + i).text();
+                  var char = $("#char_" + i).text();
+                  var type = $("#type_" + i).text();
+                  var plate_type = $("#plate_type_" + i).text();
+                  var color = $("#color_" + i).text();
+                  var date = $("#date_to_" + i).text();
+                  var zones = $("#zones_"+i).text();
+                  var phone = $("#phone_num").text();
+                  var barcode = $("#barcode_" + i).text();
+                  var id = $("#id_" + i).text();
+
+                  Print("Card", id);
+                  doc.setFont('Amiri'); // set font Amiri
+                  doc.setFontSize(6.5);
+                  doc.text(force_a, 81, 3, { align: 'right', lang: 'ar' });
+                  doc.text(direc_a, 81, 6, { align: 'right', lang: 'ar' });
+                  doc.text(access_a, 81, 9, { align: 'right', lang: 'ar' });
+                  doc.setFontSize(6);
+                  doc.setFont('arialbd'); // set Arial
+                  doc.text(force_e, 4, 3, { align: 'left', lang: 'en' });
+                  doc.text(direc_e, 4, 6, { align: 'left', lang: 'en' });
+                  doc.text(access_e, 4, 9, { align: 'left', lang: 'en' });
+                  doc.setFontStyle('normal');
+
+
+                  var img = base64Image;
+                  doc.addImage(img, 'JPEG', 4, 17, 20, 20);
+
+
+                  var sig = si;
+                  doc.addImage(sig, 'JPEG', 4, 43, 10, 10);
+
+
+                  if (employees_list.includes(permit)) {
+                    
+                        if (with_car == "yes") {
+                            doc.setFontSize(8.5);
+                            doc.setFont('arialbd'); // set font
+                            doc.text(":رقم المركبة", 81, 40, { align: 'right', lang: 'ar' });
+                            doc.text(":اللون", 47, 40, { align: 'right', lang: 'ar' });
+                            doc.text(":اللوحة", 35, 45, { align: 'right', lang: 'ar' });
+                            doc.text(":نوع المركبة", 81, 45, { align: 'right', lang: 'ar' });
+                            doc.text(":الوحدة", 81, 15, { align: 'right', lang: 'ar' });
+                            doc.text(":الرقم", 81, 20, { align: 'right', lang: 'ar' });
+                            doc.text(":الاسم", 81, 25, { align: 'right', lang: 'ar' });
+                            doc.text(":الجنسية", 81, 30, { align: 'right', lang: 'ar' });
+                            doc.text(":الجهة", 81, 35, { align: 'right', lang: 'ar' });
+                            doc.text(":تاريخ الانتهاء", 81, 50, { align: 'right', lang: 'ar' });
+                            doc.text(":سلطة التخويل", 30, 50, { align: 'right', lang: 'ar' });
+                        }
+                        else {
+                            doc.setFontSize(8.5);
+                            doc.setFont('arialbd'); // set font
+                            doc.text(":الوحدة", 81, 19, { align: 'right', lang: 'ar' });
+                            doc.text(":الرقم", 81, 24, { align: 'right', lang: 'ar' });
+                            doc.text(":الاسم", 81, 31, { align: 'right', lang: 'ar' });
+                            doc.text(":الجنسية", 81, 36, { align: 'right', lang: 'ar' });
+                            doc.text(":الجهة", 81, 41, { align: 'right', lang: 'ar' });
+                            doc.text(":تاريخ الانتهاء", 81, 50, { align: 'right', lang: 'ar' });
+                            doc.text(":سلطة التخويل", 30, 50, { align: 'right', lang: 'ar' });
+                        }
+                        if (with_car == "yes") {
+                            doc.setFontSize(9);
+                            doc.setFont('arialbd'); // set font
+                            var number_of_vehicle = vechilnum + " - " + char;
+                            doc.text(number_of_vehicle, 67, 40, { align: 'right', lang: 'ar' });
+                            doc.text(color, 40, 40, { align: 'right', lang: 'ar' });
+                            doc.text(plate_type, 27, 45, { align: 'right', lang: 'ar' });
+                            doc.text(type, 68, 45, { align: 'right', lang: 'ar' });
+                            doc.text(service_number, 72, 20, { align: 'right', lang: 'ar' });
+                            doc.setFont('Amiri'); // set font
+                            doc.setFontSize(6);
+                            doc.text(":الرتبة", 50, 20, { align: 'right', lang: 'ar' });
+                            doc.setFontSize(9);
+                            doc.text(rank, 43, 20, { align: 'right', lang: 'ar' });
+                            doc.text(unit, 72, 35, { align: 'right', lang: 'ar' });
+                            doc.setFont('Amiri'); // set font
+                            doc.text(station, 72, 10.5, { align: 'right', lang: 'ar' });
+                            if (permit == "27") {
+                                doc.setFontSize(7);
+                                doc.text(name, 72, 25, { align: 'right', lang: 'ar' });
+                            }
+                            else {
+                                doc.text(name, 72, 25, { align: 'right', lang: 'ar' });
+                            }
+                            doc.text(identity, 72, 30, { align: 'right', lang: 'ar' });
+
+                            doc.setFontSize(9);
+                            doc.setFont('arialbd'); // set font
+                            doc.text(date, 50, 50, { align: 'left', lang: 'en' });
+                        }
+                        else {
+                            doc.setFontSize(9);
+                            doc.setFont('arialbd'); // set font
+                            doc.text(service_number, 72, 24, { align: 'right', lang: 'ar' });
+                            doc.setFont('Amiri'); // set font
+                            doc.setFontSize(6);
+                            doc.text(":الرتبة", 50, 24, { align: 'right', lang: 'ar' });
+                            doc.setFontSize(9);
+                            doc.text(rank, 43, 24, { align: 'right', lang: 'ar' });
+                            doc.text(unit, 72, 41, { align: 'right', lang: 'ar' });
+                            doc.setFont('Amiri'); // set font
+                            doc.text(station, 72, 15, { align: 'right', lang: 'ar' });
+                            doc.text(name, 72, 31, { align: 'right', lang: 'ar' });
+                            doc.text(identity, 72, 36, { align: 'right', lang: 'ar' });
+
+                            doc.setFontSize(9);
+                            doc.setFont('arialbd'); // set font
+                            doc.text(date, 50, 50, { align: 'left', lang: 'en' });
+                        }
+
+
+
+
+
+
+                       
+
+                      
+
+
+                }
+
+              
+                  if (families_list.includes(permit)) {
+                    doc.setFontSize(8.5);
+                    doc.setFont('arialbd'); // set font
+                    if (with_car == "yes") {
+                        doc.text(":الوحدة", 81, 15, { align: 'right', lang: 'ar' });
+                        doc.text(":الرقم", 81, 20, { align: 'right', lang: 'ar' });
+                        doc.text(":الاسم", 81, 24, { align: 'right', lang: 'ar' });
+                        doc.text(":الجنسية", 81, 28, { align: 'right', lang: 'ar' });
+                        doc.text(":المستضيف", 81, 32, { align: 'right', lang: 'ar' });
+                        doc.text(":الجهة", 81, 36, { align: 'right', lang: 'ar' });
+                        doc.text(":رقم المركبة", 81, 40, { align: 'right', lang: 'ar' });
+                        doc.text(":اللون", 47, 40, { align: 'right', lang: 'ar' });
+                        doc.text(":اللوحة", 35, 45, { align: 'right', lang: 'ar' });
+                        doc.text(":نوع المركبة", 81, 45, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(7);
+                        doc.text(":عدد المستضافين", 40, 45, { align: 'right', lang: 'ar' });
+                        doc.text(":رقم المنزل", 23, 45, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(8.5);
+                        doc.text(":تاريخ الانتهاء", 81, 50, { align: 'right', lang: 'ar' });
+                        doc.text(":سلطة التخويل", 30, 50, { align: 'right', lang: 'ar' });
+                    }
+                    else {
+                        doc.text(":الوحدة", 81, 19, { align: 'right', lang: 'ar' });
+                        doc.text(":الرقم", 81, 24, { align: 'right', lang: 'ar' });
+                        doc.text(":الاسم", 81, 29, { align: 'right', lang: 'ar' });
+                        doc.text(":الجنسية", 81, 33, { align: 'right', lang: 'ar' });
+                        doc.text(":المستضيف", 81, 37, { align: 'right', lang: 'ar' });
+                        doc.text(":الجهة", 81, 41, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(7);
+                        doc.text(":عدد المستضافين", 40, 45, { align: 'right', lang: 'ar' });
+                        doc.text(":رقم المنزل", 23, 45, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(8.5);
+                        doc.text(":تاريخ الانتهاء", 81, 50, { align: 'right', lang: 'ar' });
+                        doc.text(":سلطة التخويل", 30, 50, { align: 'right', lang: 'ar' });
+
+                    }
+                    if (with_car == "yes") {
+                        doc.setFontSize(9);
+                        doc.setFont('arialbd'); // set font
+                        var number_of_vehicle = vechilnum + " - " + char;
+                        doc.text(number_of_vehicle, 67, 40, { align: 'right', lang: 'ar' });
+                        doc.text(civil_number, 72, 20, { align: 'right', lang: 'ar' });
+                        doc.setFont('Amiri'); // set font
+                        doc.text(station, 72, 15, { align: 'right', lang: 'ar' });
+                        doc.text(name, 72, 24, { align: 'right', lang: 'ar' });
+                        doc.text(identity, 72, 27.5, { align: 'right', lang: 'ar' });
+                        //doc.text(respo, 71, 32, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(7.5);
+                        //doc.text(respo, 99.6, 27.8, { align: 'right', lang: 'ar' });
+                        doc.text(respo, 69, 32, { align: 'right', lang: 'ar' });
+
+                        doc.setFontSize(8);
+                        doc.text(unit, 72, 36, { align: 'right', lang: 'ar' });
+                        doc.text(color, 40, 40, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(7);
+                        doc.text(plate_type, 27, 45, { align: 'right', lang: 'ar' });
+                        doc.text(type, 68, 45, { align: 'right', lang: 'ar' });
+                        doc.setFont('arialbd'); // set font
+                        doc.text(num_hosted, 26, 45, { align: 'right', lang: 'ar' });
+                        doc.text(num_building, 13, 45, { align: 'right', lang: 'ar' });
+
+                    }
+                    else {
+
+                        doc.setFontSize(9);
+                        doc.setFont('arialbd'); // set font
+                        doc.text(civil_number, 72, 24, { align: 'right', lang: 'ar' });
+                        doc.setFont('Amiri'); // set font
+                        doc.text(station, 72, 19, { align: 'right', lang: 'ar' });
+                        doc.text(name, 72, 28.5, { align: 'right', lang: 'ar' });
+                        doc.text(identity, 72, 33, { align: 'right', lang: 'ar' });
+                        //doc.text(respo, 71, 32, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(7.5);
+                        //doc.text(respo, 99.6, 27.8, { align: 'right', lang: 'ar' });
+                        doc.text(respo, 69, 36.8, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(8);
+                        doc.text(unit, 72, 41, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(7);
+                        doc.setFont('arialbd'); // set font
+                        doc.text(num_hosted, 26, 45, { align: 'right', lang: 'ar' });
+                        doc.text(num_building, 13, 45, { align: 'right', lang: 'ar' });
+                    }
+                            doc.setFontSize(9);
+                            doc.setFont('arialbd'); // set font
+                            doc.text(date, 50, 46.5, { align: 'left', lang: 'en' });
+                            //doc.addPage();
+                            //doc.addImage(imgdata2, 'JPEG', 0, 0, 85.6, 54);
+                            //doc.setPage(2);
+
+
+                }
+
+
+                  if (others_list.includes(permit)) {
+
+                        if (with_car == "yes") {
+                            doc.setFontSize(8.5);
+                            doc.setFont('arialbd'); // set font
+                            doc.text(":رقم المركبة", 81, 40, { align: 'right', lang: 'ar' });
+                            doc.text(":اللون", 47, 40, { align: 'right', lang: 'ar' });
+                            doc.text(":اللوحة", 35, 45, { align: 'right', lang: 'ar' });
+                            doc.text(":نوع المركبة", 81, 45, { align: 'right', lang: 'ar' });
+                            doc.text(":الوحدة", 81, 15, { align: 'right', lang: 'ar' });
+                            doc.text(":الرقم", 81, 20, { align: 'right', lang: 'ar' });
+                            doc.text(":الاسم", 81, 25, { align: 'right', lang: 'ar' });
+                            if (permit == "31" || permit == "32") {
+                                if (force_id == "3") {
+                                    doc.text(":الغرض", 81, 30, { align: 'right', lang: 'ar' });
+
+                                }
+                                else {
+                                    doc.text(":التخصص", 81, 30, { align: 'right', lang: 'ar' });
+
+                                }
+                            }
+                            else {
+                                doc.text(":الجنسية", 81, 30, { align: 'right', lang: 'ar' });
+
+                            }
+                            doc.text(":الجهة", 81, 35, { align: 'right', lang: 'ar' });
+                            doc.text(":تاريخ الانتهاء", 81, 50, { align: 'right', lang: 'ar' });
+                            doc.text(":سلطة التخويل", 30, 50, { align: 'right', lang: 'ar' });
+                        }
+                        else {
+                            doc.setFontSize(8.5);
+                            doc.setFont('arialbd'); // set font
+                            doc.text(":الوحدة", 81, 19, { align: 'right', lang: 'ar' });
+                            doc.text(":الرقم", 81, 25, { align: 'right', lang: 'ar' });
+                            doc.text(":الاسم", 81, 30, { align: 'right', lang: 'ar' });
+                            if (permit == "31" || permit == "32") {
+                                if (force_id == "3") {
+                                    doc.text(":الغرض", 81, 35, { align: 'right', lang: 'ar' });
+
+                                }
+                                else {
+                                    doc.text(":التخصص", 81, 35, { align: 'right', lang: 'ar' });
+
+                                }
+                            }
+                            else {
+                                doc.text(":الجنسية", 81, 35, { align: 'right', lang: 'ar' });
+
+                            }
+                            doc.text(":الجهة", 81, 40, { align: 'right', lang: 'ar' });
+                            doc.text(":تاريخ الانتهاء", 81, 50, { align: 'right', lang: 'ar' });
+                            doc.text(":سلطة التخويل", 30, 50, { align: 'right', lang: 'ar' });
+                        }
+
+                    if (with_car == "yes") {
+                        doc.setFontSize(9);
+                        doc.setFont('arialbd'); // set font
+                        var number_of_vehicle = vechilnum + " - " + char;
+                        doc.text(number_of_vehicle, 67, 40, { align: 'right', lang: 'ar' });
+                        doc.text(civil_number, 72, 20, { align: 'right', lang: 'ar' });
+                        doc.setFont('Amiri'); // set font
+                        doc.setFontSize(6);
+                        doc.text(":الرتبة-الدرجة", 55, 20, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(9);
+                        doc.text(rank, 40, 20, { align: 'right', lang: 'ar' });
+                        doc.text(unit, 72, 34.5, { align: 'right', lang: 'ar' });
+                        doc.setFont('Amiri'); // set font
+                        doc.text(station, 72, 15, { align: 'right', lang: 'ar' });
+                        doc.text(name, 72, 25, { align: 'right', lang: 'ar' });
+                        if (permit == "31" || permit == "32") {
+                            if (force_id == "3") {
+                                doc.setTextColor(255, 0, 0);
+                                doc.text(puprpose, 72, 30, { align: 'right', lang: 'ar' });
+                            }
+                            else {
+                                doc.text(proffession, 72, 30, { align: 'right', lang: 'ar' });
+
+                            }
+                        }
+                        else {
+                            doc.text(identity, 72, 30, { align: 'right', lang: 'ar' });
+
+                        }
+                        doc.setTextColor(0, 0, 0);
+                        doc.text(color, 40, 40, { align: 'right', lang: 'ar' });
+                        doc.text(plate_type, 27, 45, { align: 'right', lang: 'ar' });
+                        doc.text(type, 68, 45, { align: 'right', lang: 'ar' });
+
+                    }
+                    else {
+                        doc.setFontSize(9);
+                        doc.setFont('arialbd'); // set font
+                        doc.text(civil_number, 72, 25, { align: 'right', lang: 'ar' });
+                        doc.setFont('Amiri'); // set font
+                        doc.setFontSize(6);
+                        doc.text(":الرتبة-الدرجة", 55, 25, { align: 'right', lang: 'ar' });
+                        doc.setFontSize(9);
+                        doc.text(rank, 40, 25, { align: 'right', lang: 'ar' });
+                        doc.text(unit, 72, 40, { align: 'right', lang: 'ar' });
+                        doc.setFont('Amiri'); // set font
+                        doc.text(station, 72, 19, { align: 'right', lang: 'ar' });
+                        doc.text(name, 72, 30, { align: 'right', lang: 'ar' });
+                        if (permit == "31" || permit == "32") {
+                            if (force_id == "3") {
+                                doc.setTextColor(255, 0, 0);
+                                doc.text(puprpose, 72, 35, { align: 'right', lang: 'ar' });
+                            }
+                            else {
+                                doc.text(proffession, 72, 35, { align: 'right', lang: 'ar' });
+
+                            }
+                        }
+                        else {
+                            doc.text(identity, 72, 35, { align: 'right', lang: 'ar' });
+
+                        }
+                        doc.setTextColor(0, 0, 0);
+
+                    }
+                        doc.setFontSize(9);
+                        doc.setFont('arialbd'); // set font
+                        doc.text(date, 50, 46.5, { align: 'left', lang: 'en' });
+                        //doc.addPage();
+                        //doc.addImage(imgdata2, 'JPEG', 0, 0, 85.6, 54);
+                        //doc.setPage(2);
+
+
+                }
+                 
+
+                  
+
+                  doc.addPage();
+                  doc.addImage(imgdata2, 'JPEG', 0, 0, 85.6, 54);
+                  doc.setPage();
+
+
+
+
+
+
+
+                  var barcode64 = textToBase64Barcode(barcode);
+                  doc.addImage(barcode64, 'PNG', 18, 41, 50, 10);
+
+                  doc.setTextColor(255, 0, 0);
+                  doc.setFontSize(11);
+                  doc.setFont('arialbd'); // set font
+                  var splitZone = doc.splitTextToSize(zones, 70);
+                  doc.text(splitZone, 77, 15, { align: 'right', lang: 'ar' });
+                  doc.setTextColor(0, 0, 0);
+                  doc.setFontSize(8.5);
+                  //doc.setFont('arialbd'); // set font
+                  doc.setFont('Amiri'); // set font
+                  //doc.setFont('arialbd'); // set font
+
+                  doc.setFontSize(6);
+                  var text1 = ".هذا التصريح ملك لـ" + force_a + " وحيازته لغير المصرح له بالاستخدام يعتبر جرما" + "*";
+                  var text2 = "إذا عثر عليه يسلم لأقرب وحدة عسكرية أو شرطة عمان السلطانية أو الاتصال بـ" + "*";
+                  var text3 = ".يجب إبراز التــــــــــــصريح للــــــحارس عـند البوابــات والمنـاطق الأمـنية المـصرح بالـــدخول إليها" + "*";
+                  var text4 = ".يعتبر الشخص مسؤولا عن التصريح وفي حالة الإنتهاء يسلم إلى قسم التصاريح الخاص بالوحدة" + "*";
+                  var text_1 = doc.splitTextToSize(text1, 93);
+                  var text_2 = doc.splitTextToSize(text2, 93);
+                  var text_3 = doc.splitTextToSize(text3, 93);
+                  var text_4 = doc.splitTextToSize(text4, 93);
+                  doc.text(text_1, 81, 25, { align: 'right', lang: 'ar' });
+                  doc.text(text_2, 81, 27.2, { align: 'right', lang: 'ar' });
+                  doc.text(text_3, 81, 29.2, { align: 'right', lang: 'ar' });
+                  doc.text(text_4, 81, 31.2, { align: 'right', lang: 'ar' });
+                  doc.setFont('arialbd'); // set font
+                  //doc.setFontStyle('italic');
+                  doc.setFontSize(6);
+
+                  var text5 = "*This permit for " + force_e + ",unothorized use is against security.";
+                  var text6 = "*When found take it to the military unit, Royal Oman Police or call: " + phone + ".";
+                  var text7 = "*Entry permit must be showen at each unit gate and zone when required."
+                  var text8 = "*When expired, please return it to the authorized unit section."
+                  doc.text(text5, 4, 34, { align: 'justify', lang: 'en' });
+                  doc.text(text6, 4, 36.2, { align: 'justify', lang: 'en' });
+                  doc.text(text7, 4, 38.1, { align: 'justify', lang: 'en' });
+                  doc.text(text8, 4, 40.3, { align: 'justify', lang: 'en' });
+                  doc.setFont('arialbd'); // set font
+                  var text0 = "." + phone;
+                  doc.text(text0, 7, 27.2, { align: 'justify', lang: 'en' });
+                  if (xx_size > n) {
+                      doc.addPage();
+                  }
+              }
+
+              var string = doc.output('datauristring');
+
+              document.getElementById("frame").style.display = "block";
+              $('#frame').attr('src', string);
+
+
+
+
+         }
+
+
+
+
+      
+        String.prototype.EntoAr = function () {
+            return this.replace(/\d/g, d => String.fromCharCode('0x066' + d))
+        }
+    </script>
+
+
+    <script src="@Url.Content("~/Scripts/JsBarcode.all.js")"></script>
+    <script>
+
+        $(function () {
+            $(".barcode-image").each(function () {
+                console.log($(this).data("imageid"));
+
+                var imageid = "#" + $(this).data("imageid");
+                var code = $(this).data("barcode");
+
+                JsBarcode(imageid, code, {
+                    format: "code39",
+                    displayValue: false,
+                    fontSize: 20,
+                    height: 30,
+                    width: 1,
+
+                });
+
+                $("#base-64-input").val($(this).attr("src"));
+
+
+            });
+        });
+
+
+
+        function textToBase64Barcode(text) {
+            var canvas = document.createElement("canvas");
+            JsBarcode(canvas, text, { format: "CODE39", displayValue: false });
+            return canvas.toDataURL("image/png");
+        }
+
+    </script>
+}
+
+

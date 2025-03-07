@@ -1,0 +1,179 @@
+﻿@using SecurityClearanceWebApp.Util;
+@using System.Globalization
+@using PagedList;
+@using PagedList.Mvc;
+@model List<ClearanceSearchResult>
+@{
+    ViewBag.Title = "Rno temprory permits";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+    }
+
+    string permit = Request.QueryString["permit"];
+
+    
+
+}
+
+<style>
+    th, td {
+        text-align: center !important;
+    }
+
+    .buttons-colvis, .buttons-print, .buttons-excel {
+        display: none !important;
+    }
+</style>
+<div class="container-fluid" dir="@dir">
+    <div class="card shadow-lg">
+        <h1 class="card-header  text-primary"><i class="fa fa-user-clock"></i> @Resources.Passes.ResourceManager.GetString("manage_temp_permits" + "_" + ViewBag.lang)</h1>
+
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Partial("TempRnoTabs")
+                </div>
+
+
+            </div>
+            <div class="card-body">
+                
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link notification" id="companies-tab" href="@Url.Action("RnoTempPermitsManage", "Permitsdtl", new { permit = 12, tab = "companies" })" aria-controls="companies" aria-selected="false">
+                                @Resources.Passes.ResourceManager.GetString("companies_temp" + "_" + ViewBag.lang)
+                                @if (ViewBag.companies_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.companies_temp</span>
+                                }
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link notification" id="medical-tab" href="@Url.Action("RnoTempPermitsManage", "Permitsdtl", new { permit = 11, tab = "medical" })" aria-controls="medical" aria-selected="false">
+                                @Resources.Passes.ResourceManager.GetString("medical_temp" + "_" + ViewBag.lang)
+                                @if (ViewBag.medical_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.medical_temp</span>
+                                }
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link notification" id="families-tab" href="@Url.Action("RnoTempPermitsManage", "Permitsdtl", new { permit = 13, tab = "families" })" aria-controls="families" aria-selected="false">
+                                @Resources.Passes.ResourceManager.GetString("family_temp" + "_" + ViewBag.lang)
+                                @if (ViewBag.families_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.families_temp</span>
+                                }
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link notification" id="visitors-tab" href="@Url.Action("RnoTempPermitsManage", "Permitsdtl", new { permit = 14, tab = "visitors" })" aria-controls="visitors" aria-selected="false">
+                                @Resources.Passes.ResourceManager.GetString("visitor_temp" + "_" + ViewBag.lang)
+                                @if (ViewBag.visitors_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.visitors_temp</span>
+                                }
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link notification" id="visitorsmod-tab" href="@Url.Action("RnoTempPermitsManage", "Permitsdtl", new { permit = 16, tab = "visitorsmod" })" aria-controls="visitorsmod" aria-selected="false">
+                                @Resources.Passes.ResourceManager.GetString("visitor_from_mod" + "_" + ViewBag.lang)
+                                @if (ViewBag.visitors_mod_temp != 0)
+                                {
+                                    <span class="badge3 numbersfont3">@ViewBag.visitors_mod_temp</span>
+                                }
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade" id="companies" role="tabpanel" aria-labelledby="companies-tab">
+                            <div class="col-md-12 p-3 bg-light">
+                                @Html.Partial("_companies")
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
+                            <div class="col-md-12 p-3 bg-light">
+                                @Html.Partial("_medical")
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="families" role="tabpanel" aria-labelledby="families-tab">
+                            <div class="col-md-12 p-3 bg-light">
+                                @Html.Partial("_families")
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="visitors" role="tabpanel" aria-labelledby="visitors-tab">
+                            <div class="col-md-12 p-3 bg-light">
+                                @Html.Partial("_visitors")
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="visitorsmod" role="tabpanel" aria-labelledby="visitorsmod-tab">
+                            <div class="col-md-12 p-3 bg-light">
+                                @Html.Partial("_visitorsmod")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 text-white mt-2 ml-2 @align justify-content-center">
+                    <a class="btn btn-secondary  text-center p-2" href="@Url.Action("Archive", "Permitsdtl", null)">
+                        <i class="fa fa-archive"></i>
+                        &nbsp;
+                        @Resources.Passes.ResourceManager.GetString("archive" + "_" + ViewBag.lang)
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<br />
+@section Scripts{
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var activeTab = urlParams.get('tab');
+
+        if (activeTab) {
+            var tabElement = document.querySelector('#myTab a[href*="' + activeTab + '"]');
+            if (tabElement) {
+                var tabPanes = document.querySelectorAll('.tab-pane');
+                tabPanes.forEach(function (tabPane) {
+                    tabPane.classList.remove('show', 'active');
+                });
+
+                var navLinks = document.querySelectorAll('#myTab .nav-link');
+                navLinks.forEach(function (navLink) {
+                    navLink.classList.remove('active');
+                });
+
+                tabElement.classList.add('active');
+                var tabContentElement = document.querySelector('#' + activeTab);
+                if (tabContentElement) {
+                    tabContentElement.classList.add('show', 'active');
+                }
+            }
+        } else {
+            // Default active tab if none is specified
+            var defaultTabElement = document.querySelector('#myTab .nav-link');
+            if (defaultTabElement) {
+                var defaultTabContentElement = document.querySelector(defaultTabElement.getAttribute('href'));
+                if (defaultTabContentElement) {
+                    defaultTabElement.classList.add('active');
+                    defaultTabContentElement.classList.add('show', 'active');
+                }
+            }
+        }
+    });
+</script>
+}
+

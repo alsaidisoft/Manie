@@ -1,0 +1,73 @@
+﻿@using APP.Util
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_STATIONS_MST>
+
+
+@{
+    ViewBag.Title = "Stations";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+    }
+
+
+}
+<div class="container-fluid" dir="@dir">
+    <div class="page-path">
+        <a href="@Url.Action("Index", ViewBag.controllerName, null)">
+            <i class="fa fa-universal-access"></i>
+            @Resources.Passes.ResourceManager.GetString("mypasses1" + "_" + ViewBag.lang)
+        </a>
+        <span>/</span>
+        <a href="@Url.Action("Forces", ViewBag.controllerName, null)">
+            <i class="fa fa-jedi"></i>
+            @Resources.Settings.ResourceManager.GetString("Forces" + "_" + ViewBag.lang)
+        </a>
+        <span>/</span>
+        <a>
+            <i class="fa fa-university"></i>
+            @Resources.Passes.ResourceManager.GetString("Units" + "_" + ViewBag.lang)
+        </a>
+    </div>
+    <div class="card shadow-lg">
+        <div class="card-body">
+
+            <div class="col-md-12">
+                @if (Language.GetCurrentLang() == "en")
+                {
+                    <h1 class="text-center font-weight-bolder text-primary" style="font-family: Arial;">Choose station to request permit</h1>
+                }
+                else
+                {
+                    <h1 class="text-center text-primary">اختر المعسكر - القاعدة الذي تود تقديم طلب تصريح فيه</h1>
+                }
+                <hr />
+                <div class="row justify-content-center row-@dir">
+
+                    @foreach (var item in Model)
+                    {
+                        if (Language.GetCurrentLang() == "en")
+                        {
+                            <div class="col-md-5 m-2">
+                                <a href="@Url.Content("~/en/Mypasses/Permits/" + item.STATION_CODE)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center text-uppercase" style="font-family:Arial;"><i class="fa fa-university"></i> @item.STATION_NAME_E </h1></a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-5 m-2">
+                                <a href="@Url.Content("~/ar/Mypasses/Permits/" + item.STATION_CODE)" class="btn btn-primary btn-block p-4 font-weight-bolder text-center"><h1 class="text-center"><i class="fa fa-university"></i> @item.STATION_NAME_A </h1></a>
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

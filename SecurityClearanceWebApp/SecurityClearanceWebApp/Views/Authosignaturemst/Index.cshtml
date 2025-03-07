@@ -1,0 +1,722 @@
+﻿@using APP.Util;
+@model IEnumerable<SecurityClearanceWebApp.Models.RA42_AUTHORAIZATION_SIGNAURE_MST>
+
+@{
+    ViewBag.Title = "Index";
+    string align = "text-right";
+    string alignInverse = "text-left";
+    string dir = "ltr";
+    var table = "data-table1";
+
+    if (ViewBag.lang == "ar")
+    {
+        align = "text-left";
+        alignInverse = "text-right";
+        dir = "rtl";
+        table = "data-table";
+
+    }
+    var app_name = Resources.Common.ResourceManager.GetString("app_name" + "_" + ViewBag.lang);
+    var no_file_format = Resources.Passes.ResourceManager.GetString("file_format" + "_" + ViewBag.lang);
+    var urlHttp = Resources.Common.ResourceManager.GetString("urlHttp" + "_" + ViewBag.lang);
+
+}
+
+
+
+
+<div class="container-fluid" dir="@dir">
+    <div class="row">
+        @{
+            Html.RenderPartial("settings_nav_links");
+
+        }
+        <div class="col-md-10">
+            @if (TempData["Erorr"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Erorr"]</div>
+            }
+            @if (TempData["Pending"] != null)
+            {
+                <div class="alert alert-success">@TempData["Pending"]</div>
+
+            }
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 justify-content-center text-primary">
+                            <h4>
+                                <i class="@ViewBag.controllerIconClass"></i>&nbsp;
+                                @Resources.Settings.ResourceManager.GetString("autho_signature" + "_" + ViewBag.lang)
+                            </h4>
+                        </div>
+                        <div class="col-6 text-white @align">
+                            <a class="btn btn-success" href="#" onclick="AddNew(0)">
+                                <i class="fa fa-plus-circle"></i>
+                                &nbsp;
+                                @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)
+                            </a>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered table-hover table-responsive @table text-center" style="display: table">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Force" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Station" + "_" + ViewBag.lang)
+                                </th>
+                                <th>
+                                    @Resources.Settings.ResourceManager.GetString("Signature" + "_" + ViewBag.lang)
+                                </th>
+
+
+
+                                <th style="border-right: 1px solid #ccc;">
+                                    @Resources.Settings.ResourceManager.GetString("ACTIONS" + "_" + ViewBag.lang)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int rowNo = 0;}
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                @{rowNo++;}
+                                <td>@rowNo</td>
+                                <td>
+                                    @if (Language.GetCurrentLang() == "en")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_E)
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_STATIONS_MST.RA42_FORCES_MST.FORCE_NAME_A)
+
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (Language.GetCurrentLang() == "en")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_STATIONS_MST.STATION_NAME_E)
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.RA42_STATIONS_MST.STATION_NAME_A)
+
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (item.SIGNATURE != null)
+                                    {
+                                        <img src="~/Files/Signatures/@item.SIGNATURE" onerror="this.onerror = null; this.src='@Url.Content("~/Content/images/adminpic.png")'" alt="logo image" width="60" height="50">
+                                    }
+                                </td>
+
+
+                               
+
+
+                                <td style="border-right: 1px solid #ccc;">
+                                    <div class="btn-group" dir="ltr">
+                                        <a class="btn btn-primary details btn-sm" href="#" onclick="Details(@item.AUTHO_SIGNATURE_CODE)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a class="btn btn-warning btn-sm" href="#" onclick="EditRecord(@item.AUTHO_SIGNATURE_CODE)">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-danger btn-sm text-white" href="#" onclick="DeleteRecord(@item.AUTHO_SIGNATURE_CODE)">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*Create A PopUp Modal For DeleteConfirmation*@
+
+<div class="modal fade" id="DeleteConfirmation" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_dlt"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <h4>
+                    @Resources.Common.ResourceManager.GetString("delete_question" + "_" + ViewBag.lang)
+                </h4>
+
+
+                <div class="col-md-12">
+                    <h6 class="details-info-title">
+                        @Resources.Settings.ResourceManager.GetString("Station" + "_" + ViewBag.lang)
+                    </h6>
+                    <h6 class="details-info-content text-primary" id="NAME_A"></h6>
+                    <hr />
+                </div>
+
+                <div class="col-md-6">
+                    <h6 class="details-info-title">
+                        @Resources.Settings.ResourceManager.GetString("Signature" + "_" + ViewBag.lang)
+                    </h6>
+                    <br />
+                    <div id="dimg"></div>
+                    <hr />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success" data-dismiss="modal" id="r"> <i class="fa fa-thumbs-up"></i> @Resources.Common.ResourceManager.GetString("cancel" + "_" + ViewBag.lang)</a>
+                &thinsp;
+                <a href="#" class="btn btn-danger" onclick="ConfirmDelete()">
+                    <i class="fa fa-trash"></i>
+                    @Resources.Common.ResourceManager.GetString("delete_confirm" + "_" + ViewBag.lang)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Details" dir="@dir">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle_details"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+                <div class="col-md-12">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Station" + "_" + ViewBag.lang)</h6>
+                    <h6 class="details-info-content text-primary" id="N"></h6>
+                    <hr />
+                </div>
+
+                <div class="col-md-6">
+                    <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("Signature" + "_" + ViewBag.lang)</h6>
+                    <br />
+                    <div id="iimg"></div>
+                    <hr />
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_BY" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="CRD_BY"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("CRD_DT" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="CRD_DT"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_BY" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="UPD_BY"></h6>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="details-info-title">@Resources.Settings.ResourceManager.GetString("UPD_DT" + "_" + ViewBag.lang)</h6>
+                        <h6 class="details-info-content text-primary" id="UPD_DT"></h6>
+                        <hr />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@* create signature and edit *@
+<div aria-labelledby="exampleModalLongTitle" class="modal fade" id="MyModal" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true" dir="@dir">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h4 id="ModalTitle"></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+                <form id="form" method="post" enctype="multipart/form-data">
+                    <fieldset id="SubmitForm">
+                        <input type="hidden" name="AUTHO_SIGNATURE_CODE" id="AUTHO_SIGNATURE_CODE" />
+                        <div class="col-md-6">
+                            @Resources.Settings.ResourceManager.GetString("Station" + "_" + ViewBag.lang)
+                            <div class="form-group">
+
+                                <select name="STATION_ID" class="form-control" id="DropDwn1">
+                                    @if (ViewBag.STATIONS_CODE != null)
+                                    {
+                                        foreach (var option in ViewBag.STATIONS_CODE)
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
+
+                                    }
+                                </select>
+
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="control-lable">
+                                        <div data-tool="marker">
+                                            @Resources.Settings.ResourceManager.GetString("Signature" + "_" + ViewBag.lang)
+                                        </div>
+                                    </div>
+                                    <div id="img1"></div>
+                                    <br />
+                                    <canvas id="canvas" width="400" height="200" style="border: 1px solid #ccc;"></canvas>
+                                    <br />
+                                    <span class="btn btn-outline-secondary" id="reset"><i class="fa fa-eraser"></i> @Resources.Common.ResourceManager.GetString("eraser" + "_" + ViewBag.lang)</span>
+                                    <br />
+                                    <br />
+
+
+                                </div>
+
+                                <input type="hidden" id="ImageVal" runate="server" name="ImageVal" />
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            @Resources.Settings.ResourceManager.GetString("Signature" + "_" + ViewBag.lang)
+                            <div class="form-group">
+                                <input type="file" class="form-control" name="SIGNATURE_IMAGE" accept="image/*" id="SIGNATURE_IMAGE" onchange="showpreview(this);" />
+
+                            </div>
+                            <div class="col-md-1 p-2">
+                                <img src="~/Content/images/adminpic.png" style="display: none;" width="50" height="50" id="imagePreview" />
+
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <a href="#" class="btn btn-block text-center" id="SaveRecord"></a>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @*<script src="~/Scripts/jquery.min.js"></script>*@
+    <script src="~/Scripts/sketch.min.js"></script>
+    <link href="~/Content/Kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/Kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="~/Scripts/Kendo/js/kendo.all.min.js"></script>
+    <script src="~/Scripts/jquery.form.min.js"></script>
+    <script>
+
+         function showpreview(input) {
+
+            if (input.files && input.files[0]) {
+
+                var val = $(input).val().toLowerCase(),
+                    regex = new RegExp("(.*?)\.(jpg|jpeg|JPEG|JPG|png|PNG|GIF|gif)$");
+
+                if (!(regex.test(val))) {
+                    $(input).val('');
+                    $('#imagePreview').css('display', 'none');
+
+                    alert('الرجاء اختيار صورة ');
+
+                }
+                else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imagePreview').css('display', 'inline');
+                        $('#imagePreview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        }
+
+        function AddNew(id) {
+             $("#form")[0].reset();
+            $("#AUTHO_SIGNATURE_CODE").val(0);
+            $("#img1").hide();
+           // $("#reset").show();
+            var canvas = document.getElementById("canvas");
+            var w = canvas.width;
+            canvas.width = 10;
+            canvas.width = w;
+            $("#ModalTitle").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-plus-circle'></i> @Resources.Common.ResourceManager.GetString("create" + "_" + ViewBag.lang)").removeClass('btn-warning').addClass("btn-success");
+            $("#MyModal").modal();
+
+        }
+
+        //Show The Popup Modal For Edit Student Record
+
+        function EditRecord(Id) {
+            var url = "./GetObjectById?Id=" + Id;
+            console.log(Id);
+
+            $("#ModalTitle").html("<i class='fa fa-edit'></i> @Resources.Common.ResourceManager.GetString("edit" + "_" + ViewBag.lang)");
+            $("#SaveRecord").html("<i class='fa fa-save'></i> @Resources.Common.ResourceManager.GetString("save" + "_" + ViewBag.lang)").removeClass('btn-success').addClass("btn-warning");
+            $("#MyModal").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    //var obj = JSON.parse(data);
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var image = obj.SIGNATURE != null ? obj.SIGNATURE : "";
+                    $("#AUTHO_SIGNATURE_CODE").val(obj.AUTHO_SIGNATURE_CODE);
+                    $("#DropDwn1").val(obj.STATION_ID).trigger('change');
+                    var div = document.getElementById("img1");
+                    var img = document.createElement("IMG");
+                    div.innerHTML = "";
+
+                    if (image != "") {
+                        console.log(image);
+                        img.setAttribute("src", "@urlHttp@app_name/Files/Signatures/" + image);
+                        img.setAttribute("width", "100");
+                        img.setAttribute("height", "100");
+                        div.appendChild(img);
+                        var canvas = document.getElementById("canvas");
+                        var w = canvas.width;
+                        canvas.width = 10;
+                        canvas.width = w;
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 10, 10);
+                    }
+                    else {
+
+
+                    }
+
+
+
+
+                }
+            })
+        }
+
+
+        $("#SaveRecord").click(function () {
+
+            $('#canvas').sketch();
+            $(".tools a").eq(0).attr("style", "color:#000");
+            $(".tools a").click(function () {
+                $(".tools a").removeAttr("style");
+                $(this).attr("style", "color:#000");
+            });
+            //$("#btnSave").bind("click", function () {
+            //    var base64 = $('#colors_sketch')[0].toDataURL();
+            //    $('[Id*=ImageVal]').val(base64);
+            //});
+
+
+            var image = document.getElementById("canvas").toDataURL("image/png");
+                image = image.replace('data:image/png;base64,', '');
+                $("#ImageVal").val(image);
+
+
+            var formData = new FormData();
+
+            formData.append("SIGNATURE", image); //append the image file
+            formData.append("SIGNATURE_IMAGE", $('#SIGNATURE_IMAGE')[0].files[0]); //append the image file
+            console.log($('#SIGNATURE_IMAGE')[0].files[0]);
+            var other_data = $('#SubmitForm').serializeArray();
+            $.each(other_data, function (key, input) { //append other input value
+                formData.append(input.name, input.value);
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "./SaveDataInDatabase",
+                data: formData,
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                success: function (result) {
+                    //alert("Success");
+                    window.location.href = "./index";
+                    //$("#MyModal").modal("hide"); //this line is unnecessary because the user has been redirect
+                }
+            })
+        })
+
+
+
+         //Show The Popup Modal For DeleteComfirmation
+        function Details(Id) {
+            $("#AUTHO_SIGNATURE_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_details").html("<i class='fa fa-eye'></i> @Resources.Common.ResourceManager.GetString("details" + "_" + ViewBag.lang)");
+            $("#Details").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    var obj = JSON.parse(JSON.stringify(data));
+                    var crd_by = obj.CRD_BY != null ? obj.CRD_BY : "";
+                    var upd_by = obj.UPD_BY != null ? obj.UPD_BY : "";
+                    var station = obj.STATION_NAME_A != null ? obj.STATION_NAME_A : "";
+                    var crd_dt = obj.CRD_DT != null ? dtConvFromJSON(obj.CRD_DT) : "";
+                    var upd_dt = obj.UPD_DT != null ? dtConvFromJSON(obj.UPD_DT) : "";
+                    var image = obj.SIGNATURE != null ? obj.SIGNATURE : "";
+
+                    $("#N").text(station);
+
+                    var div = document.getElementById("iimg");
+                    var img = document.createElement("IMG");
+                    div.innerHTML = "";
+
+                    if (image != "") {
+
+                        img.setAttribute("src", "@urlHttp@app_name/Files/Signatures/" + image);
+                        img.setAttribute("width", "100");
+                        img.setAttribute("height", "100");
+                        div.appendChild(img);
+                    }
+                    else {
+
+
+                    }
+                    $("#CRD_BY").text(crd_by);
+                    $("#CRD_DT").text(crd_dt);
+                    $("#UPD_BY").text(upd_by);
+                    $("#UPD_DT").text(upd_dt);
+
+                }
+            })
+
+        }
+        //Show The Popup Modal For DeleteComfirmation
+        function DeleteRecord(Id) {
+            $("#AUTHO_SIGNATURE_CODE").val(Id);
+            var url = "./GetObjectById?Id=" + Id;
+            //console.log(Id);
+            $("#ModalTitle_dlt").html("<i class='fa fa-trash'></i> @Resources.Common.ResourceManager.GetString("delete" + "_" + ViewBag.lang)");
+            $("#DeleteConfirmation").modal();
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    var obj = JSON.parse(JSON.stringify(data));
+
+                    var image = obj.SIGNATURE != null ? obj.SIGNATURE : "";
+                    var obj = JSON.parse(JSON.stringify(data));
+                    $("#ID").val(obj.AUTHO_SIGNATURE_CODE);
+                    $("#NAME_A").text(obj.STATION_NAME_A);
+
+                    var div = document.getElementById("dimg");
+                    var img = document.createElement("IMG");
+                    div.innerHTML = "";
+
+                    if (image != "") {
+
+                        img.setAttribute("src", "@urlHttp@app_name/Files/Signatures/" + image);
+                        img.setAttribute("width", "100");
+                        img.setAttribute("height", "100");
+                        div.appendChild(img);
+                    }
+                    else {
+
+
+                    }
+
+                }
+            })
+
+        }
+        function ConfirmDelete () {
+            var Id = $("#AUTHO_SIGNATURE_CODE").val();
+            //console.log(Id);
+            $.ajax({
+                type: "POST",
+                url: "./DltRecordById?Id=" + Id,
+                success: function (result) {
+                    $("#DeleteConfirmation").modal("hide");
+                    window.location.href = "./index";
+
+                }
+            })
+        }
+
+        function dtConvFromJSON(data) {
+            jsonDate = data;
+            debugger;
+            var d = new Date(parseInt(jsonDate.substr(6)));
+            var m, day;
+            m = d.getMonth() + 1;
+            if (m < 10)
+                m = '0' + m
+            if (d.getDate() < 10)
+                day = '0' + d.getDate()
+            else
+                day = d.getDate();
+            var formattedDate = d.getFullYear() + "/ " + m + "/ " + day;
+            var hours = (+d.getHours());
+            var minutes = (+d.getMinutes());
+            var formattedTime = hours + ":" + minutes + ":" + (+d.getSeconds());
+            formattedDate = formattedTime + " " + formattedDate;
+            return formattedDate;
+        }
+
+
+
+
+    </script>
+
+    <script>
+        class Signature {
+            constructor() {
+                this.color = "#000000";
+                this.sign = false;
+                this.begin_sign = false;
+                this.width_line = 4;
+                this.canvas = document.getElementById('canvas');
+                this.offsetLeft = this.canvas.offsetLeft;
+                this.offsetTop = this.canvas.offsetTop;
+                this.context = canvas.getContext('2d');
+                this.context.lineJoin = 'round';
+                this.context.lineCap = 'round';
+                this.whenMouseDown();
+                this.whenMouseUp();
+                this.whenMouseMove();
+                this.createSignature();
+                this.clearCanvas();
+                this.resetCanvas();
+            }
+
+            updateMousePosition(mX, mY) {
+                let rect = this.canvas.getBoundingClientRect();
+                let scaleX = this.canvas.width / rect.width;
+                let scaleY = this.canvas.height / rect.height;
+                this.cursorX = (mX - rect.left) * scaleX;
+                this.cursorY = (mY - rect.top) * scaleY;
+            }
+
+            whenMouseDown() {
+                document.addEventListener("mousedown", ({
+                    pageX,
+                    pageY
+                }) => {
+                    this.sign = true;
+                    this.updateMousePosition(pageX, pageY);
+                })
+            }
+
+            whenMouseUp() {
+                document.addEventListener("mouseup", () => {
+                    this.sign = false;
+                    this.begin_sign = false;
+                })
+            }
+
+            whenMouseMove() {
+                this.canvas.addEventListener('mousemove', ({
+                    pageX,
+                    pageY
+                }) => {
+                    if (this.sign) {
+                        this.updateMousePosition(pageX, pageY);
+                        this.createSignature();
+                    }
+                })
+            }
+
+            createSignature() {
+                if (!this.begin_sign) {
+                    this.context.beginPath();
+                    this.context.moveTo(this.cursorX, this.cursorY);
+                    this.begin_sign = true;
+                } else {
+                    this.context.lineTo(this.cursorX, this.cursorY);
+                    this.context.strokeStyle = this.color;
+                    this.context.lineWidth = this.width_line;
+                    this.context.stroke();
+                }
+            }
+
+            clearCanvas() {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+
+            resetCanvas() {
+                document.getElementById("reset").addEventListener("click", () => {
+                    this.clearCanvas();
+                })
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", event => {
+            new Signature();
+        });
+
+    </script>
+
+
+
+}
+

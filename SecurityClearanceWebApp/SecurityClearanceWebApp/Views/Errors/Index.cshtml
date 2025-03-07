@@ -1,0 +1,63 @@
+﻿@using APP.Util
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error</title>
+    <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/fontawesome.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/site.css")">
+    <style>
+        body {
+             background-color: whitesmoke;
+            background: url("@Url.Content("~/Content/images/back013.png")")
+        }
+    </style>
+</head>
+<body>
+<div>
+
+    <section class="body-content-section">
+        <div class="container ">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="row align-content-center align-self-center">
+                        <div class="col-md-4 text-danger">
+                            <span class="fas fa-exclamation-triangle fa-10x"></span>
+                            
+                        </div>
+                        <div class="col-md-8">
+                        
+                            <h2 class="text-danger text-right" style="font-size: 50px;">
+                                <strong> هناك خطأ ما </strong>
+                            </h2>
+                            <hr/>
+                            <p class="text-center" style="font-size: 20px;">
+                                الرجاء الاتصال على رقم
+                                <span class="text-primary px-2">
+                                    339100 
+                                </span>
+                                
+                                <br />
+                                <br />
+                                <a href="@Url.Action("Index", "Home")"
+                                   class="btn btn-sm btn-outline-dark">
+                                    <span class="fa fa-home"></span>
+                                    رجوع
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
